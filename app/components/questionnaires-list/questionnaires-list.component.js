@@ -39,6 +39,23 @@ var QuestionnaireListComponent = (function () {
         });
     };
     QuestionnaireListComponent.prototype.delete = function (questionnaire) {
+        var qserv = this.questionnaireService;
+        var dialog = BootstrapDialog.show({
+            title: 'Deleting questionnaire',
+            message: 'Are you sure you want to delete questionnaire: \n(' + questionnaire.id + ') ' + questionnaire.description,
+            buttons: [{
+                    label: 'Yes',
+                    action: function (d) {
+                        d.close();
+                        qserv.delete(questionnaire.id).then(function () { return alert('deleted'); });
+                    }
+                }, {
+                    label: 'No',
+                    action: function (d) {
+                        d.close();
+                    }
+                }]
+        });
     };
     QuestionnaireListComponent.prototype.gotoEdit = function (questionnaire) {
         this.router.navigate(['/edit', questionnaire.id]);

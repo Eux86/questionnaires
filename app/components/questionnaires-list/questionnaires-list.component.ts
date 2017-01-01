@@ -5,13 +5,14 @@ import { Router } from '@angular/router';
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 
+declare function BootstrapDialog(options: any): any;
+
 @Component({
   moduleId: module.id,
   selector: 'questionnaires-list',
   templateUrl: 'questionnaires-list.component.html',
   styleUrls: ['questionnaires-list.component.css'],
 })
-
 
 export class QuestionnaireListComponent implements OnInit {
   constructor(
@@ -47,8 +48,26 @@ export class QuestionnaireListComponent implements OnInit {
     )
   }
 
+  
+
   delete (questionnaire: Questionnaire): void{
-    
+    let qserv = this.questionnaireService;
+    let dialog = BootstrapDialog.show({
+            title: 'Deleting questionnaire',
+            message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
+            buttons: [{
+                label: 'Yes',
+                action: function(d) {
+                  d.close();
+                  qserv.delete(questionnaire.id).then(()=>alert('deleted'));
+                }
+            }, {
+                label: 'No',
+                action: function(d) {
+                  d.close();
+                }
+            }]
+        });
   }
 
   gotoEdit(questionnaire: Questionnaire){
