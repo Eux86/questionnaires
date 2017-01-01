@@ -1,0 +1,16 @@
+.sentence-edit{
+
+}
+.sentence-edit .tools{
+    border: 1px;
+    border-style: solid;
+    border-color: dimgray;
+    padding: 10px;
+}
+.sentence-edit select{
+    width: 100%;
+}
+.sentenceManagementLink {
+    float: right;
+    font-size: 10px;
+}

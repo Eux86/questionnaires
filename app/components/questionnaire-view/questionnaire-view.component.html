@@ -1,0 +1,24 @@
+<div class="questionnaire-view">
+    <label>Description: </label>
+    <span>{{questionnaire.description}}</span>
+    <div *ngFor="let section of questionnaire.sections; let s = index" class="section-view">
+        <h2 class="description">
+            <span>{{section.description}}</span>
+        </h2>
+        <div *ngFor="let question of section.questions; let i = index" class="question-view">
+            <div class="questionHeader contrastBackground">
+                <span>Question n. {{i+1}}</span>
+            </div>
+            <p>{{question.sentence.text}}</p>
+            <div class="answer-view clearFloat" 
+                *ngFor="let answer of question.answers; let a = index"
+                 [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
+                <input type="checkbox" [(ngModel)]="answer.selected" />
+                <div>{{answer.sentence.text}} <span>{{answer.isCorrect}}</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="centerContent">
+        <button class="checkButton accentButton" (click)="checkAnswers(questionnaire)">CHECK</button>
+    </div>
+</div>

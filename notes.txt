@@ -1,0 +1,4 @@
+Note
+
+Bootstrap Dialog
+https://github.com/nakupanda/bootstrap3-dialog

@@ -1,0 +1,16 @@
+<div>
+    <button (click)="createQuestionnaire()" class="btn btn-default" style="float: right">Create new questionnaire</button>
+</div>
+<table class="table">
+    <tr *ngFor="let questionnaire of questionnaires">
+        <td>
+            <button class="btn btn-xs btn-default" (click)="delete(questionnaire)">DEL</button>
+            <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
+            <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
+            <span><a (click)="gotoView(questionnaire)">{{questionnaire.description}}</a></span>
+        </td>
+    </tr>
+</table>
+<div>
+    <button (click)="createQuestionnaire()" class="btn btn-default" style="float: right">Create new questionnaire</button>
+</div>

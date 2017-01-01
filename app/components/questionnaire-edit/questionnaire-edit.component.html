@@ -1,0 +1,55 @@
+<div class="questionnaire-edit">
+    <div class="toolbar">
+        <button (click)="update()" class="accentButton">Save</button>
+    </div>
+    <div class="detailsArea">
+        <div class="contrastBackground" style="padding:5px; margin-bottom:20px;">Details:</div>
+        <label>Description: </label>
+        <input type="text" [(ngModel)]="questionnaire.description" placeholder="Add a description" />
+    </div>
+    <div *ngFor="let section of questionnaire.sections; let s = index" class="section-edit">
+        <h2 class="description">
+            <input type="text" [(ngModel)]="section.description" placeholder="Section name" />
+            <button (click)="remove(questionnaire.sections,s)">X</button>
+        </h2>
+        <div *ngFor="let question of section.questions; let i = index" class="question-edit">
+            <div class="tools contrastBackground">
+                <span>Question n. {{i+1}}</span>
+                <button (click)="remove(section.questions,i)">X</button>
+            </div>
+            <sentence-edit [(sentence)]="question.sentence"></sentence-edit>
+            <h3>Answers:</h3>
+            <table>
+                <tr class="answer-edit" *ngFor="let answer of question.answers; let a = index">
+                    <td>
+                        <input type="checkbox" style="float:left" [(ngModel)]="answer.isCorrect" />
+                    </td>
+                    <td style="width:100%"> 
+                        <sentence-edit [(sentence)]="answer.sentence" ></sentence-edit>
+                    </td>
+                    <td>
+                        <button (click)="remove(question.answers,a)">X</button>
+                    </td>
+                </tr>
+            </table>
+            <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+                 style="height: 30px; margin-top:10px;"
+                 (click)="addAnswer(question)">
+                <span>Click to add a new Answer</span>
+            </div>
+        </div>
+        <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+             style="height:80px"
+             (click)="addQuestion(section)">
+            <span>Click to add a new Question</span>
+        </div>
+    </div>
+    <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+         style="height:80px"
+         (click)="addSection(questionnaire)">
+        <span>Click to add a new Section</span>
+    </div>
+    <div class="toolbar">
+        <button (click)="update()" class="accentButton">Save</button>
+    </div>
+</div>

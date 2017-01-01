@@ -1,0 +1,20 @@
+<input ng2-auto-complete 
+          [source]="sentences"
+          [(ngModel)]="selected"
+          placeholder="Write a sentence to select an existing one"
+          value-property-name="id"
+          display-property-name="text"
+          accept-user-input="false"
+          max-num-list="10" />
+
+<hr>
+<div *ngIf="selected!==undefined">
+Id: {{selected.id}}<br/>
+Text: {{selected.text}}<br/>
+</div>
+<sentence-edit [sentence]="selected"></sentence-edit>
+<hr>
+<p *ngFor="let sentence of sentences; let i = index">
+    <button (click)="selected=sentences[i]">E</button><span  style="width:100%">"{{sentence.text}}</span>
+</p>
+<hr>
