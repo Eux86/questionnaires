@@ -39,15 +39,20 @@ var QuestionnaireListComponent = (function () {
         });
     };
     QuestionnaireListComponent.prototype.delete = function (questionnaire) {
-        var qserv = this.questionnaireService;
-        var dialog = BootstrapDialog.show({
+        var _this = this;
+        BootstrapDialog.show({
             title: 'Deleting questionnaire',
             message: 'Are you sure you want to delete questionnaire: \n(' + questionnaire.id + ') ' + questionnaire.description,
             buttons: [{
                     label: 'Yes',
                     action: function (d) {
                         d.close();
-                        qserv.delete(questionnaire.id).then(function () { return alert('deleted'); });
+                        _this.questionnaireService.delete(questionnaire.id).then(function () {
+                            var index = _this.questionnaires.indexOf(questionnaire, 0);
+                            if (index > -1) {
+                                _this.questionnaires.splice(index, 1);
+                            }
+                        });
                     }
                 }, {
                     label: 'No',

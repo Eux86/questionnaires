@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 
-declare function BootstrapDialog(options: any): any;
+declare var BootstrapDialog: any;
 
 @Component({
   moduleId: module.id,
@@ -18,7 +18,10 @@ export class QuestionnaireListComponent implements OnInit {
   constructor(
     private questionnaireService: QuestionnaireService,
     private router: Router
-  ) { }
+  ) 
+  {
+    
+  }
 
   questionnaires: Questionnaire[];
   test: Questionnaire = new Questionnaire();
@@ -48,18 +51,22 @@ export class QuestionnaireListComponent implements OnInit {
     )
   }
 
-  
 
   delete (questionnaire: Questionnaire): void{
-    let qserv = this.questionnaireService;
-    let dialog = BootstrapDialog.show({
+    let _this = this;
+    BootstrapDialog.show({
             title: 'Deleting questionnaire',
             message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
             buttons: [{
                 label: 'Yes',
                 action: function(d) {
                   d.close();
-                  qserv.delete(questionnaire.id).then(()=>alert('deleted'));
+                  _this.questionnaireService.delete(questionnaire.id).then(()=>{
+                    var index = _this.questionnaires.indexOf(questionnaire, 0);
+                    if (index > -1) {
+                      _this.questionnaires.splice(index, 1);
+                    }
+                  });
                 }
             }, {
                 label: 'No',
