@@ -40,27 +40,27 @@ var QuestionnaireListComponent = (function () {
     };
     QuestionnaireListComponent.prototype.delete = function (questionnaire) {
         var _this = this;
-        BootstrapDialog.show({
-            title: 'Deleting questionnaire',
-            message: 'Are you sure you want to delete questionnaire: \n(' + questionnaire.id + ') ' + questionnaire.description,
-            buttons: [{
-                    label: 'Yes',
-                    action: function (d) {
-                        d.close();
-                        _this.questionnaireService.delete(questionnaire.id).then(function () {
-                            var index = _this.questionnaires.indexOf(questionnaire, 0);
-                            if (index > -1) {
-                                _this.questionnaires.splice(index, 1);
-                            }
-                        });
-                    }
-                }, {
-                    label: 'No',
-                    action: function (d) {
-                        d.close();
-                    }
-                }]
-        });
+        // BootstrapDialog.show({
+        //         title: 'Deleting questionnaire',
+        //         message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
+        //         buttons: [{
+        //             label: 'Yes',
+        //             action: function(d) {
+        //               d.close();
+        //               _this.questionnaireService.delete(questionnaire.id).then(()=>{
+        //                 var index = _this.questionnaires.indexOf(questionnaire, 0);
+        //                 if (index > -1) {
+        //                   _this.questionnaires.splice(index, 1);
+        //                 }
+        //               });
+        //             }
+        //         }, {
+        //             label: 'No',
+        //             action: function(d) {
+        //               d.close();
+        //             }
+        //         }]
+        //     });
     };
     QuestionnaireListComponent.prototype.gotoEdit = function (questionnaire) {
         this.router.navigate(['/edit', questionnaire.id]);

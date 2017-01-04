@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service';
 
-declare var BootstrapDialog: any;
-
 @Component({
   moduleId: module.id,
   selector: 'questionnaires-list',
@@ -33,6 +31,7 @@ export class QuestionnaireListComponent implements OnInit {
     this.questionnaireService.getQuestionnaires().then(qs=>{
       this.test = (qs.find(q=> q.id == 2));
     });
+    
   }
 
   getList(): void {
@@ -54,27 +53,27 @@ export class QuestionnaireListComponent implements OnInit {
 
   delete (questionnaire: Questionnaire): void{
     let _this = this;
-    BootstrapDialog.show({
-            title: 'Deleting questionnaire',
-            message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
-            buttons: [{
-                label: 'Yes',
-                action: function(d) {
-                  d.close();
-                  _this.questionnaireService.delete(questionnaire.id).then(()=>{
-                    var index = _this.questionnaires.indexOf(questionnaire, 0);
-                    if (index > -1) {
-                      _this.questionnaires.splice(index, 1);
-                    }
-                  });
-                }
-            }, {
-                label: 'No',
-                action: function(d) {
-                  d.close();
-                }
-            }]
-        });
+    // BootstrapDialog.show({
+    //         title: 'Deleting questionnaire',
+    //         message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
+    //         buttons: [{
+    //             label: 'Yes',
+    //             action: function(d) {
+    //               d.close();
+    //               _this.questionnaireService.delete(questionnaire.id).then(()=>{
+    //                 var index = _this.questionnaires.indexOf(questionnaire, 0);
+    //                 if (index > -1) {
+    //                   _this.questionnaires.splice(index, 1);
+    //                 }
+    //               });
+    //             }
+    //         }, {
+    //             label: 'No',
+    //             action: function(d) {
+    //               d.close();
+    //             }
+    //         }]
+    //     });
   }
 
   gotoEdit(questionnaire: Questionnaire){

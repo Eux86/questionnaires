@@ -1,6 +1,24 @@
 body {
-  padding-top: 60px;
+  margin: 3px;
+  font-family: Roboto, sans-serif;
 }
 a {
   cursor: pointer;
+}
+
+md-card {
+  max-width: 80%;
+  margin: 2em auto;
+  text-align: center;
+}
+
+md-toolbar-row {
+  justify-content: flex-start ;
+}
+
+.done {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  color: white;
 }
