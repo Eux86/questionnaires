@@ -22,7 +22,7 @@ import { InMemoryQuestionnairesData }  from './mockupdb/in-memory-questionnaires
 
 import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
 
-import {MenuItem,InputTextModule,ButtonModule,ToolbarModule,TabMenuModule,DataListModule,MenubarModule} from 'primeng/primeng';
+
 
 @NgModule({
   imports: [ 
@@ -32,7 +32,6 @@ import {MenuItem,InputTextModule,ButtonModule,ToolbarModule,TabMenuModule,DataLi
     HttpModule,
     InMemoryWebApiModule.forRoot(InMemoryQuestionnairesData),
     Ng2AutoCompleteModule,
-    InputTextModule,ButtonModule,ToolbarModule,TabMenuModule,DataListModule,MenubarModule,
   ],
   declarations: [ 
     AppComponent,

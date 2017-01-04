@@ -1,2 +1,4 @@
 Note
-https://alligator.io/angular/angular-material-2/
+
+Bootstrap Dialog
+https://github.com/nakupanda/bootstrap3-dialog
