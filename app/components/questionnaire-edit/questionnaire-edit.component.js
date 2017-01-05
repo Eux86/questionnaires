@@ -13,12 +13,12 @@ var router_1 = require("@angular/router");
 var common_1 = require("@angular/common");
 var data_model_1 = require("../../data-model");
 var questionnaire_service_1 = require("../../services/questionnaire.service");
+var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
 var QuestionnaireEditComponent = (function () {
     function QuestionnaireEditComponent(questionnaireService, route, location) {
         this.questionnaireService = questionnaireService;
         this.route = route;
         this.location = location;
-        //@Input()
         this.questionnaire = new data_model_1.Questionnaire();
     }
     QuestionnaireEditComponent.prototype.ngOnInit = function () {
@@ -46,17 +46,21 @@ var QuestionnaireEditComponent = (function () {
         }
     };
     QuestionnaireEditComponent.prototype.update = function () {
-        var _this = this;
-        var newSentences = this.getNewSentences(this.questionnaire);
-        if (this.confirmNewSentencesCreation(newSentences)) {
-            this.questionnaireService.update(this.questionnaire).then(function (q) {
-                _this.questionnaire = q;
-                _this.onUpdate(q);
-            });
-        }
+        this.newSentences = this.getNewSentences(this.questionnaire);
+        this.modalNewSentences.open();
+        // if (this.confirmNewSentencesCreation(newSentences)){
+        //   this.questionnaireService.update(this.questionnaire).then(q=>{
+        //     this.questionnaire = q;
+        //     this.onUpdate(q);
+        //   });
+        // }
     };
-    QuestionnaireEditComponent.prototype.onUpdate = function (q) {
-        alert('Updated: ' + q.sections[0].description);
+    QuestionnaireEditComponent.prototype.updateConfirm = function () {
+        var _this = this;
+        this.questionnaireService.update(this.questionnaire).then(function (q) {
+            _this.questionnaire = q;
+            _this.modalSaved.open();
+        });
     };
     QuestionnaireEditComponent.prototype.getNewSentences = function (questionnaire) {
         var newSentences = [];
@@ -74,19 +78,16 @@ var QuestionnaireEditComponent = (function () {
         });
         return newSentences;
     };
-    QuestionnaireEditComponent.prototype.confirmNewSentencesCreation = function (sentences) {
-        if (sentences !== undefined && sentences.length > 0) {
-            var message_1 = 'New sentences will be created: do you want to procede?';
-            var i_1 = 1;
-            sentences.forEach(function (sentence) {
-                message_1 += '\n' + i_1++ + ') ' + sentence; // When it is a new sentence, the autocomplete field registers the sentence as a string, not as a Sentence
-            });
-            alert(message_1);
-        }
-        return true;
-    };
     return QuestionnaireEditComponent;
 }());
+__decorate([
+    core_1.ViewChild('modalSaved'),
+    __metadata("design:type", ng2_bs3_modal_1.ModalComponent)
+], QuestionnaireEditComponent.prototype, "modalSaved", void 0);
+__decorate([
+    core_1.ViewChild('modalNewSentences'),
+    __metadata("design:type", ng2_bs3_modal_1.ModalComponent)
+], QuestionnaireEditComponent.prototype, "modalNewSentences", void 0);
 QuestionnaireEditComponent = __decorate([
     core_1.Component({
         moduleId: module.id,

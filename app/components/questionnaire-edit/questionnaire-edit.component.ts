@@ -1,9 +1,10 @@
-import { Component, Input, OnInit }         from '@angular/core';
+import { Component, Input, OnInit, ViewChild  }         from '@angular/core';
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 import { Location }                         from '@angular/common';
 
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service'
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
   moduleId: module.id,
@@ -12,14 +13,21 @@ import { QuestionnaireService } from '../../services/questionnaire.service'
   styleUrls: ['questionnaire-edit.component.css'],
 })
 export class QuestionnaireEditComponent implements OnInit {
-  //@Input()
+  
+  @ViewChild('modalSaved')
+  modalSaved: ModalComponent;
+  @ViewChild('modalNewSentences')
+  modalNewSentences: ModalComponent;
+
   questionnaire: Questionnaire = new Questionnaire();
+  newSentences: Sentence[];
 
   constructor(
     private questionnaireService: QuestionnaireService,
     private route: ActivatedRoute,
 		private location: Location
-  ) { }
+  ) { 
+  }
   
 
   ngOnInit(): void {
@@ -53,17 +61,20 @@ export class QuestionnaireEditComponent implements OnInit {
   }
 
   update():void{
-    let newSentences = this.getNewSentences(this.questionnaire);
-    if (this.confirmNewSentencesCreation(newSentences)){
-      this.questionnaireService.update(this.questionnaire).then(q=>{
-        this.questionnaire = q;
-        this.onUpdate(q);
-      });
-    }
+    this.newSentences = this.getNewSentences(this.questionnaire);
+    this.modalNewSentences.open();
+    // if (this.confirmNewSentencesCreation(newSentences)){
+    //   this.questionnaireService.update(this.questionnaire).then(q=>{
+    //     this.questionnaire = q;
+    //     this.onUpdate(q);
+    //   });
+    // }
   }
-
-  onUpdate(q: Questionnaire):void{
-    alert('Updated: '+q.sections[0].description);
+  updateConfirm():void{
+    this.questionnaireService.update(this.questionnaire).then(q=>{
+        this.questionnaire = q;
+        this.modalSaved.open();
+      });
   }
 
   getNewSentences(questionnaire: Questionnaire):Sentence[]{
@@ -83,15 +94,15 @@ export class QuestionnaireEditComponent implements OnInit {
     return newSentences;
   }
 
-  confirmNewSentencesCreation(sentences: Sentence[]):boolean{
-    if (sentences!==undefined && sentences.length>0){
-      let message: String = 'New sentences will be created: do you want to procede?';
-      let i = 1;
-      sentences.forEach(sentence => {
-        message+='\n'+i++ +') '+sentence; // When it is a new sentence, the autocomplete field registers the sentence as a string, not as a Sentence
-      });
-      alert(message)
-    }
-    return true;
-  }
+  // confirmNewSentencesCreation(sentences: Sentence[]):boolean{
+  //   if (sentences!==undefined && sentences.length>0){
+  //     let message: String = 'New sentences will be created: do you want to procede?';
+  //     let i = 1;
+  //     sentences.forEach(sentence => {
+  //       message+='\n'+i++ +') '+sentence; // When it is a new sentence, the autocomplete field registers the sentence as a string, not as a Sentence
+  //     });
+  //     alert(message)
+  //   }
+  //   return true;
+  // }
 }

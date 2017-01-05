@@ -24,15 +24,12 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   questionnaires: Questionnaire[];
-  test: Questionnaire = new Questionnaire();
+  selected: Questionnaire = new Questionnaire();
 
   ngOnInit(): void {
     this.getList();
 
     // COPIA IN QUESTIONNAIRE-EDIT
-    this.questionnaireService.getQuestionnaires().then(qs=>{
-      this.test = (qs.find(q=> q.id == 2));
-    });
   }
 
   getList(): void {
@@ -53,28 +50,12 @@ export class QuestionnaireListComponent implements OnInit {
 
 
   delete (questionnaire: Questionnaire): void{
-    let _this = this;
-    BootstrapDialog.show({
-            title: 'Deleting questionnaire',
-            message: 'Are you sure you want to delete questionnaire: \n('+questionnaire.id+') '+questionnaire.description,
-            buttons: [{
-                label: 'Yes',
-                action: function(d) {
-                  d.close();
-                  _this.questionnaireService.delete(questionnaire.id).then(()=>{
-                    var index = _this.questionnaires.indexOf(questionnaire, 0);
-                    if (index > -1) {
-                      _this.questionnaires.splice(index, 1);
-                    }
-                  });
-                }
-            }, {
-                label: 'No',
-                action: function(d) {
-                  d.close();
-                }
-            }]
-        });
+    this.questionnaireService.delete(questionnaire.id).then(()=>{
+      var index = this.questionnaires.indexOf(questionnaire, 0);
+      if (index > -1) {
+        this.questionnaires.splice(index, 1);
+      }
+    });
   }
 
   gotoEdit(questionnaire: Questionnaire){

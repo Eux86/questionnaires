@@ -4,7 +4,7 @@
 <table class="table">
     <tr *ngFor="let questionnaire of questionnaires">
         <td>
-            <button class="btn btn-xs btn-default" (click)="delete(questionnaire)">DEL</button>
+            <button class="btn btn-xs btn-default" (click)="modalDelete.open()">DEL</button>
             <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
             <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
             <span><a (click)="gotoView(questionnaire)">{{questionnaire.description}}</a></span>
@@ -14,3 +14,18 @@
 <div>
     <button (click)="createQuestionnaire()" class="btn btn-default" style="float: right">Create new questionnaire</button>
 </div>
+
+
+
+<modal #modalDelete (onClose)="delete(selected)">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Deleting:</h4>
+    </modal-header>
+    <modal-body>
+        Are you sure you want to delete selected questionnaire?<br/> ({{selected.id}}) {{selected.description}}
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalDelete.close()">Yes</button>
+    </modal-footer>
+</modal>

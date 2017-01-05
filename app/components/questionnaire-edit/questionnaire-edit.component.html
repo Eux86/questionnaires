@@ -53,3 +53,35 @@
         <button (click)="update()" class="accentButton">Save</button>
     </div>
 </div>
+
+
+
+<modal #modalSaved>
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Saved</h4>
+    </modal-header>
+    <modal-body>
+        Questionnaire saved:<br/> ({{questionnaire.id}}) {{questionnaire.description}}
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Ok</button>
+    </modal-footer>
+</modal>
+
+<modal #modalNewSentences (onClose)="updateConfirm()">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Saved</h4>
+    </modal-header>
+    <modal-body>
+        New sentences will be created: do you want to procede:<br/> 
+        <ul>
+            <li *ngFor="let sentence of newSentences; let i = index">
+                {{sentence.text}}
+            </li>
+        </ul>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalNewSentences.dismiss()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalNewSentences.close()">Yes</button>
+    </modal-footer>
+</modal>
