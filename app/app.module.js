@@ -22,8 +22,8 @@ var sentences_list_component_1 = require("./components/sentences-list/sentences-
 var questionnaire_service_1 = require("./services/questionnaire.service");
 var app_routing_module_1 = require("./app-routing.module");
 // Imports for loading & configuring the in-memory web api
-var angular_in_memory_web_api_1 = require("angular-in-memory-web-api");
-var in_memory_questionnaires_service_1 = require("./mockupdb/in-memory-questionnaires.service");
+// import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+// import { InMemoryQuestionnairesData }  from './mockupdb/in-memory-questionnaires.service';
 var ng2_auto_complete_1 = require("ng2-auto-complete");
 var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
 var AppModule = (function () {
@@ -38,7 +38,7 @@ AppModule = __decorate([
             forms_1.FormsModule,
             app_routing_module_1.AppRoutingModule,
             http_1.HttpModule,
-            angular_in_memory_web_api_1.InMemoryWebApiModule.forRoot(in_memory_questionnaires_service_1.InMemoryQuestionnairesData),
+            // InMemoryWebApiModule.forRoot(InMemoryQuestionnairesData),
             ng2_auto_complete_1.Ng2AutoCompleteModule,
             ng2_bs3_modal_1.Ng2Bs3ModalModule,
         ],

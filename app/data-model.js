@@ -1,36 +1,36 @@
 "use strict";
 var Sentence = (function () {
     function Sentence() {
-        this.text = "";
+        this.Text = "";
     }
     return Sentence;
 }());
 exports.Sentence = Sentence;
 var Answer = (function () {
     function Answer() {
-        this.sentence = new Sentence();
+        this.Sentence = new Sentence();
     }
     return Answer;
 }());
 exports.Answer = Answer;
 var Question = (function () {
     function Question() {
-        this.sentence = new Sentence();
-        this.answers = [new Answer()];
+        this.Sentence = new Sentence();
+        this.Answers = [new Answer()];
     }
     return Question;
 }());
 exports.Question = Question;
 var Section = (function () {
     function Section() {
-        this.questions = [new Question()];
+        this.Questions = [new Question()];
     }
     return Section;
 }());
 exports.Section = Section;
 var Questionnaire = (function () {
     function Questionnaire() {
-        this.sections = [new Section()];
+        this.Sections = [new Section()];
     }
     return Questionnaire;
 }());

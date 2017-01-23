@@ -43,14 +43,14 @@ export class QuestionnaireListComponent implements OnInit {
   createQuestionnaire(){
     this.questionnaireService.create().then(
       newQuest => {
-        this.router.navigate(['/edit/',newQuest.id]);
+        this.router.navigate(['/edit/',newQuest.Id]);
       }
     )
   }
 
 
   delete (questionnaire: Questionnaire): void{
-    this.questionnaireService.delete(questionnaire.id).then(()=>{
+    this.questionnaireService.delete(questionnaire.Id).then(()=>{
       var index = this.questionnaires.indexOf(questionnaire, 0);
       if (index > -1) {
         this.questionnaires.splice(index, 1);
@@ -59,11 +59,11 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   gotoEdit(questionnaire: Questionnaire){
-    this.router.navigate(['/edit',questionnaire.id]);
+    this.router.navigate(['/edit',questionnaire.Id]);
   }
 
   gotoView(questionnaire: Questionnaire){
-    this.router.navigate(['/view',questionnaire.id]);
+    this.router.navigate(['/view',questionnaire.Id]);
   }
 
 //   onSelect(hero: Hero): void {
@@ -71,7 +71,7 @@ export class QuestionnaireListComponent implements OnInit {
 //   }
 
 //   gotoDetail(): void {
-//     this.router.navigate(['/detail',this.selectedHero.id]);
+//     this.router.navigate(['/detail',this.selectedHero.Id]);
 //   }
 
 //   add(name: string): void {
@@ -86,7 +86,7 @@ export class QuestionnaireListComponent implements OnInit {
 
 //   delete (hero: Hero): void{
 //     this.heroService
-//         .delete(hero.id).then(()=> {
+//         .delete(hero.Id).then(()=> {
 //           this.heroes = this.heroes.filter(h=>h !== hero);
 //           if (this.selectedHero === hero) {
 //             this.selectedHero = null;

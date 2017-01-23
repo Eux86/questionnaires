@@ -8,8 +8,14 @@ import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 @Injectable()
 export class QuestionnaireService{
-    private questionnaireUrl = 'app/questionnaires';
-    private sentencesUrl = 'app/sentences';
+    private prefix = 'http://localhost:3010/api/'; //app/
+    private questionnaireUrl = this.prefix+'questionnaire';
+    private sentencesUrl =  this.prefix+'sentence';
+
+    // private prefix = 'http://localhost:53464/api/'; //app/
+    // private questionnaireUrl = this.prefix+'questionnaires';
+    // private sentencesUrl =  this.prefix+'sentences';
+
     private headers = new Headers({'Content-Type': 'application/json'});
     
     constructor (private http: Http) {}
@@ -17,7 +23,10 @@ export class QuestionnaireService{
     getQuestionnaires(): Promise<Questionnaire[]>{
         return this.http.get(this.questionnaireUrl)
                 .toPromise()
-                .then(response=>response.json().data as Questionnaire[])
+                .then(function(response) {
+                    let ret = response.json() as Questionnaire[];
+                    return ret;
+                })
                 .catch(this.handleError);
     }
     
@@ -25,7 +34,7 @@ export class QuestionnaireService{
     // and one of them should NOT return the IsCorrect field of the answers
     getQuestionnaire(id: Number): Promise<Questionnaire>{
         return this.getQuestionnaires().then(qs=>
-            qs.find(q=> q.id == id)
+            qs.find(q=> q.Id == id)
         );
     }
 
@@ -37,7 +46,7 @@ export class QuestionnaireService{
     }
 
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
-        const url = `${this.questionnaireUrl}/${questionnaire.id}`;
+        const url = `${this.questionnaireUrl}/${questionnaire.Id}`;
         return this.http
         .post(this.questionnaireUrl, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
@@ -62,14 +71,14 @@ export class QuestionnaireService{
     }
 
     checkQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire>{
-        return this.getQuestionnaire(questionnaire.id).then(q=>q);
+        return this.getQuestionnaire(questionnaire.Id).then(q=>q);
     }
 
     // getHero(id): Promise<Hero> {
-    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.id == id));
+    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.Id == id));
     // }
     // update(hero: Hero): Promise<Hero>{
-    //     const url = `${this.heroesUrl}/${hero.id}`;
+    //     const url = `${this.heroesUrl}/${hero.Id}`;
     //     return this.http
     //         .put(url, JSON.stringify(hero), {headers: this.headers})
     //         .toPromise()

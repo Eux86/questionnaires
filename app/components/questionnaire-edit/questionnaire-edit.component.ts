@@ -43,15 +43,15 @@ export class QuestionnaireEditComponent implements OnInit {
   }
 
   addSection(questionnaire: Questionnaire): void {
-    questionnaire.sections.push(new Section())
+    questionnaire.Sections.push(new Section())
   }
 
   addQuestion(section: Section): void {
-    section.questions.push(new Question())
+    section.Questions.push(new Question())
   }
 
   addAnswer(question: Question): void {
-    question.answers.push(new Answer())
+    question.Answers.push(new Answer())
   }
   
   remove(array,index):void{
@@ -79,14 +79,14 @@ export class QuestionnaireEditComponent implements OnInit {
 
   getNewSentences(questionnaire: Questionnaire):Sentence[]{
     let newSentences = [];
-    questionnaire.sections.forEach(section => {
-      section.questions.forEach(question => {
-        if (question.sentence.id===undefined){
-          newSentences.push(question.sentence);
+    questionnaire.Sections.forEach(section => {
+      section.Questions.forEach(question => {
+        if (question.Sentence.Id===undefined){
+          newSentences.push(question.Sentence);
         }
-        question.answers.forEach(answer => {
-          if (answer.sentence.id===undefined){
-            newSentences.push(answer.sentence);
+        question.Answers.forEach(answer => {
+          if (answer.Sentence.Id===undefined){
+            newSentences.push(answer.Sentence);
           } 
         });
       });

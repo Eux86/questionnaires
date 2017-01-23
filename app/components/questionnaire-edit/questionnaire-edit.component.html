@@ -5,19 +5,19 @@
     <div class="detailsArea">
         <div class="contrastBackground" style="padding:5px; margin-bottom:20px;">Details:</div>
         <label>Description: </label>
-        <input type="text" [(ngModel)]="questionnaire.description" placeholder="Add a description" />
+        <input type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
     </div>
-    <div *ngFor="let section of questionnaire.sections; let s = index" class="section-edit">
+    <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-edit">
         <h2 class="description">
-            <input type="text" [(ngModel)]="section.description" placeholder="Section name" />
-            <button (click)="remove(questionnaire.sections,s)">X</button>
+            <input type="text" [(ngModel)]="section.Description" placeholder="Section name" />
+            <button (click)="remove(questionnaire.Sections,s)">X</button>
         </h2>
-        <div *ngFor="let question of section.questions; let i = index" class="question-edit">
+        <div *ngFor="let question of section.Questions; let i = index" class="question-edit">
             <div class="tools contrastBackground">
                 <span>Question n. {{i+1}}</span>
-                <button (click)="remove(section.questions,i)">X</button>
+                <button (click)="remove(section.Questions,i)">X</button>
             </div>
-            <sentence-edit [(sentence)]="question.sentence"></sentence-edit>
+            <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
             <h3>Answers:</h3>
             <table>
                 <tr class="answer-edit" *ngFor="let answer of question.answers; let a = index">
@@ -25,7 +25,7 @@
                         <input type="checkbox" style="float:left" [(ngModel)]="answer.isCorrect" />
                     </td>
                     <td style="width:100%"> 
-                        <sentence-edit [(sentence)]="answer.sentence" ></sentence-edit>
+                        <sentence-edit [(sentence)]="answer.Sentence" ></sentence-edit>
                     </td>
                     <td>
                         <button (click)="remove(question.answers,a)">X</button>
@@ -61,7 +61,7 @@
         <h4 class="modal-title">Saved</h4>
     </modal-header>
     <modal-body>
-        Questionnaire saved:<br/> ({{questionnaire.id}}) {{questionnaire.description}}
+        Questionnaire saved:<br/> ({{questionnaire.id}}) {{questionnaire.Description}}
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Ok</button>

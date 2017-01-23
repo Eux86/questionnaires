@@ -33,12 +33,12 @@ var QuestionnaireViewComponent = (function () {
     };
     QuestionnaireViewComponent.prototype.checkAnswers = function (questionnaire) {
         this.questionnaireService.checkQuestionnaire(questionnaire).then(function (correct) {
-            questionnaire.sections.forEach(function (section, sectionIndex) {
-                section.questions.forEach(function (question, questionIndex) {
-                    question.answers.forEach(function (answer, answerIndex) {
-                        answer.isCorrect = correct.sections[sectionIndex]
-                            .questions[questionIndex]
-                            .answers[answerIndex].isCorrect;
+            questionnaire.Sections.forEach(function (section, sectionIndex) {
+                section.Questions.forEach(function (question, questionIndex) {
+                    question.Answers.forEach(function (answer, answerIndex) {
+                        answer.IsCorrect = correct.Sections[sectionIndex]
+                            .Questions[questionIndex]
+                            .Answers[answerIndex].IsCorrect;
                     });
                 });
             });
@@ -46,10 +46,10 @@ var QuestionnaireViewComponent = (function () {
         this.showCheckResults = true;
     };
     QuestionnaireViewComponent.prototype.isRighAnswer = function (answer) {
-        return answer.isCorrect && this.showCheckResults;
+        return answer.IsCorrect && this.showCheckResults;
     };
     QuestionnaireViewComponent.prototype.isWrongAnswer = function (answer) {
-        return answer.selected && !answer.isCorrect && this.showCheckResults;
+        return answer.Selected && !answer.IsCorrect && this.showCheckResults;
     };
     return QuestionnaireViewComponent;
 }());

@@ -1,9 +1,9 @@
 <div class="questionnaire-view">
     <label>Description: </label>
-    <span>{{questionnaire.description}}</span>
-    <div *ngFor="let section of questionnaire.sections; let s = index" class="section-view">
+    <span>{{questionnaire.Description}}</span>
+    <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-view">
         <h2 class="description">
-            <span>{{section.description}}</span>
+            <span>{{section.Description}}</span>
         </h2>
         <div *ngFor="let question of section.questions; let i = index" class="question-view">
             <div class="questionHeader contrastBackground">
@@ -14,7 +14,7 @@
                 *ngFor="let answer of question.answers; let a = index"
                  [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
                 <input type="checkbox" [(ngModel)]="answer.selected" />
-                <div>{{answer.sentence.text}} <span>{{answer.isCorrect}}</span></div>
+                <div>{{answer.sentence.text}} <span>{{answer.IsCorrect}}</span></div>
             </div>
         </div>
     </div>

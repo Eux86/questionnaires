@@ -36,12 +36,12 @@ export class QuestionnaireViewComponent implements OnInit {
 
   checkAnswers(questionnaire: Questionnaire):void{
     this.questionnaireService.checkQuestionnaire(questionnaire).then(correct=>{
-      questionnaire.sections.forEach((section,sectionIndex) => {
-        section.questions.forEach((question,questionIndex) => {
-          question.answers.forEach((answer,answerIndex) => {
-            answer.isCorrect = correct.sections[sectionIndex]
-                                      .questions[questionIndex]
-                                      .answers[answerIndex].isCorrect;
+      questionnaire.Sections.forEach((section,sectionIndex) => {
+        section.Questions.forEach((question,questionIndex) => {
+          question.Answers.forEach((answer,answerIndex) => {
+            answer.IsCorrect = correct.Sections[sectionIndex]
+                                      .Questions[questionIndex]
+                                      .Answers[answerIndex].IsCorrect;
           });
         });
       });
@@ -50,9 +50,9 @@ export class QuestionnaireViewComponent implements OnInit {
   }
 
   isRighAnswer(answer: Answer):boolean{
-    return answer.isCorrect && this.showCheckResults;
+    return answer.IsCorrect && this.showCheckResults;
   }
   isWrongAnswer(answer: Answer):boolean{
-    return answer.selected && !answer.isCorrect && this.showCheckResults;
+    return answer.Selected && !answer.IsCorrect && this.showCheckResults;
   }
 }

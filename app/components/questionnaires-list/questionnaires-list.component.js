@@ -31,12 +31,12 @@ var QuestionnaireListComponent = (function () {
     QuestionnaireListComponent.prototype.createQuestionnaire = function () {
         var _this = this;
         this.questionnaireService.create().then(function (newQuest) {
-            _this.router.navigate(['/edit/', newQuest.id]);
+            _this.router.navigate(['/edit/', newQuest.Id]);
         });
     };
     QuestionnaireListComponent.prototype.delete = function (questionnaire) {
         var _this = this;
-        this.questionnaireService.delete(questionnaire.id).then(function () {
+        this.questionnaireService.delete(questionnaire.Id).then(function () {
             var index = _this.questionnaires.indexOf(questionnaire, 0);
             if (index > -1) {
                 _this.questionnaires.splice(index, 1);
@@ -44,10 +44,10 @@ var QuestionnaireListComponent = (function () {
         });
     };
     QuestionnaireListComponent.prototype.gotoEdit = function (questionnaire) {
-        this.router.navigate(['/edit', questionnaire.id]);
+        this.router.navigate(['/edit', questionnaire.Id]);
     };
     QuestionnaireListComponent.prototype.gotoView = function (questionnaire) {
-        this.router.navigate(['/view', questionnaire.id]);
+        this.router.navigate(['/view', questionnaire.Id]);
     };
     return QuestionnaireListComponent;
 }());

@@ -32,13 +32,13 @@ var QuestionnaireEditComponent = (function () {
         });
     };
     QuestionnaireEditComponent.prototype.addSection = function (questionnaire) {
-        questionnaire.sections.push(new data_model_1.Section());
+        questionnaire.Sections.push(new data_model_1.Section());
     };
     QuestionnaireEditComponent.prototype.addQuestion = function (section) {
-        section.questions.push(new data_model_1.Question());
+        section.Questions.push(new data_model_1.Question());
     };
     QuestionnaireEditComponent.prototype.addAnswer = function (question) {
-        question.answers.push(new data_model_1.Answer());
+        question.Answers.push(new data_model_1.Answer());
     };
     QuestionnaireEditComponent.prototype.remove = function (array, index) {
         if (index > -1) {
@@ -64,14 +64,14 @@ var QuestionnaireEditComponent = (function () {
     };
     QuestionnaireEditComponent.prototype.getNewSentences = function (questionnaire) {
         var newSentences = [];
-        questionnaire.sections.forEach(function (section) {
-            section.questions.forEach(function (question) {
-                if (question.sentence.id === undefined) {
-                    newSentences.push(question.sentence);
+        questionnaire.Sections.forEach(function (section) {
+            section.Questions.forEach(function (question) {
+                if (question.Sentence.Id === undefined) {
+                    newSentences.push(question.Sentence);
                 }
-                question.answers.forEach(function (answer) {
-                    if (answer.sentence.id === undefined) {
-                        newSentences.push(answer.sentence);
+                question.Answers.forEach(function (answer) {
+                    if (answer.Sentence.Id === undefined) {
+                        newSentences.push(answer.Sentence);
                     }
                 });
             });

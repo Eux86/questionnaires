@@ -15,21 +15,28 @@ var data_model_1 = require("../data-model");
 var QuestionnaireService = (function () {
     function QuestionnaireService(http) {
         this.http = http;
-        this.questionnaireUrl = 'app/questionnaires';
-        this.sentencesUrl = 'app/sentences';
+        this.prefix = 'http://localhost:3010/api/'; //app/
+        this.questionnaireUrl = this.prefix + 'questionnaire';
+        this.sentencesUrl = this.prefix + 'sentence';
+        // private prefix = 'http://localhost:53464/api/'; //app/
+        // private questionnaireUrl = this.prefix+'questionnaires';
+        // private sentencesUrl =  this.prefix+'sentences';
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     QuestionnaireService.prototype.getQuestionnaires = function () {
         return this.http.get(this.questionnaireUrl)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) {
+            var ret = response.json();
+            return ret;
+        })
             .catch(this.handleError);
     };
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     QuestionnaireService.prototype.getQuestionnaire = function (id) {
         return this.getQuestionnaires().then(function (qs) {
-            return qs.find(function (q) { return q.id == id; });
+            return qs.find(function (q) { return q.Id == id; });
         });
     };
     QuestionnaireService.prototype.getSentences = function () {
@@ -39,7 +46,7 @@ var QuestionnaireService = (function () {
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.update = function (questionnaire) {
-        var url = this.questionnaireUrl + "/" + questionnaire.id;
+        var url = this.questionnaireUrl + "/" + questionnaire.Id;
         return this.http
             .post(this.questionnaireUrl, JSON.stringify(questionnaire), { headers: this.headers })
             .toPromise()
@@ -61,13 +68,13 @@ var QuestionnaireService = (function () {
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.checkQuestionnaire = function (questionnaire) {
-        return this.getQuestionnaire(questionnaire.id).then(function (q) { return q; });
+        return this.getQuestionnaire(questionnaire.Id).then(function (q) { return q; });
     };
     // getHero(id): Promise<Hero> {
-    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.id == id));
+    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.Id == id));
     // }
     // update(hero: Hero): Promise<Hero>{
-    //     const url = `${this.heroesUrl}/${hero.id}`;
+    //     const url = `${this.heroesUrl}/${hero.Id}`;
     //     return this.http
     //         .put(url, JSON.stringify(hero), {headers: this.headers})
     //         .toPromise()
