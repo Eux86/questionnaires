@@ -65,7 +65,9 @@ export class QuestionnaireService{
     delete(id: number): Promise<void>{
         const url = `${this.questionnaireUrl}/${id}`;
         return this.http
-        .delete(url, {headers: this.headers})
+        .delete(url, {
+            headers: this.headers,
+        })
         .toPromise().then( () => null)
         .catch(this.handleError);
     }

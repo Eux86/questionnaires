@@ -4,7 +4,7 @@
 <table class="table">
     <tr *ngFor="let questionnaire of questionnaires">
         <td>
-            <button class="btn btn-xs btn-default" (click)="modalDelete.open()">DEL</button>
+            <button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
             <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
             <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
             <span><a (click)="gotoView(questionnaire)">{{questionnaire.Description}}</a></span>

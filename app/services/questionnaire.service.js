@@ -63,7 +63,9 @@ var QuestionnaireService = (function () {
     QuestionnaireService.prototype.delete = function (id) {
         var url = this.questionnaireUrl + "/" + id;
         return this.http
-            .delete(url, { headers: this.headers })
+            .delete(url, {
+            headers: this.headers,
+        })
             .toPromise().then(function () { return null; })
             .catch(this.handleError);
     };
