@@ -41,7 +41,10 @@ export class QuestionnaireService{
     getSentences(): Promise<Sentence[]>{
         return this.http.get(this.sentencesUrl)
                     .toPromise()
-                    .then(response=>response.json().data as Sentence[])
+                    .then(function(response) {
+                        let ret = response.json() as Sentence[];
+                        return ret;
+                    })
                     .catch(this.handleError);
     }
 

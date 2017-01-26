@@ -42,7 +42,10 @@ var QuestionnaireService = (function () {
     QuestionnaireService.prototype.getSentences = function () {
         return this.http.get(this.sentencesUrl)
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (response) {
+            var ret = response.json();
+            return ret;
+        })
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.update = function (questionnaire) {
