@@ -20,15 +20,15 @@
             <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
             <h3>Answers:</h3>
             <table>
-                <tr class="answer-edit" *ngFor="let answer of question.answers; let a = index">
+                <tr class="answer-edit" *ngFor="let answer of question.Answers; let a = index">
                     <td>
-                        <input type="checkbox" style="float:left" [(ngModel)]="answer.isCorrect" />
+                        <input type="checkbox" style="float:left" [(ngModel)]="answer.IsCorrect" />
                     </td>
                     <td style="width:100%"> 
                         <sentence-edit [(sentence)]="answer.Sentence" ></sentence-edit>
                     </td>
                     <td>
-                        <button (click)="remove(question.answers,a)">X</button>
+                        <button (click)="remove(question.Answers,a)">X</button>
                     </td>
                 </tr>
             </table>
@@ -61,7 +61,7 @@
         <h4 class="modal-title">Saved</h4>
     </modal-header>
     <modal-body>
-        Questionnaire saved:<br/> ({{questionnaire.id}}) {{questionnaire.Description}}
+        Questionnaire saved:<br/> ({{questionnaire.Id}}) {{questionnaire.Description}}
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Ok</button>
@@ -76,7 +76,7 @@
         New sentences will be created: do you want to procede:<br/> 
         <ul>
             <li *ngFor="let sentence of newSentences; let i = index">
-                {{sentence.text}}
+                {{sentence.Text}}
             </li>
         </ul>
     </modal-body>
