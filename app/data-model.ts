@@ -17,6 +17,7 @@ export class Section {
 	Id: number;
 	Description: string;
     Questions: Question[] = [new Question()];
+	Deleted: Boolean;
 }
 export class Questionnaire {
 	Id: number ;

@@ -40,6 +40,10 @@ var QuestionnaireEditComponent = (function () {
     QuestionnaireEditComponent.prototype.addAnswer = function (question) {
         question.Answers.push(new data_model_1.Answer());
     };
+    QuestionnaireEditComponent.prototype.delete = function (deletable) {
+        deletable.Deleted = true;
+    };
+    // DO NOT USE! USE DELETE
     QuestionnaireEditComponent.prototype.remove = function (array, index) {
         if (index > -1) {
             array.splice(index, 1);
@@ -66,11 +70,11 @@ var QuestionnaireEditComponent = (function () {
         var newSentences = [];
         questionnaire.Sections.forEach(function (section) {
             section.Questions.forEach(function (question) {
-                if (question.Sentence.Id === undefined) {
+                if (question.Sentence != null && question.Sentence.Id === undefined) {
                     newSentences.push(question.Sentence);
                 }
                 question.Answers.forEach(function (answer) {
-                    if (answer.Sentence.Id === undefined) {
+                    if (answer.Sentence != null && answer.Sentence.Id === undefined) {
                         newSentences.push(answer.Sentence);
                     }
                 });

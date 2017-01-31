@@ -53,7 +53,12 @@ export class QuestionnaireEditComponent implements OnInit {
   addAnswer(question: Question): void {
     question.Answers.push(new Answer())
   }
+
+  delete(deletable:any){
+    deletable.Deleted = true;
+  }
   
+  // DO NOT USE! USE DELETE
   remove(array,index):void{
     if (index > -1) {
       array.splice(index, 1);
@@ -81,11 +86,11 @@ export class QuestionnaireEditComponent implements OnInit {
     let newSentences = [];
     questionnaire.Sections.forEach(section => {
       section.Questions.forEach(question => {
-        if (question.Sentence.Id===undefined){
+        if (question.Sentence !=null && question.Sentence.Id===undefined){
           newSentences.push(question.Sentence);
         }
         question.Answers.forEach(answer => {
-          if (answer.Sentence.Id===undefined){
+          if (answer.Sentence !=null && answer.Sentence.Id===undefined){
             newSentences.push(answer.Sentence);
           } 
         });
