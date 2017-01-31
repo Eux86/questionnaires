@@ -1,28 +1,32 @@
-export class Sentence {
+export class Deletable {
+	Deleted: Boolean;
+}
+
+export class Sentence  extends Deletable {
 	Id: number;
 	Text: string = "";
 }
-export class Answer {
+export class Answer  extends Deletable {
 	Id: number;
 	Sentence: Sentence = new Sentence();
     IsCorrect: boolean;
 	Selected: boolean;
 }
-export class Question {
+export class Question  extends Deletable {
 	Id: number;
 	Sentence: Sentence = new Sentence();
     Answers: Answer[] = [new Answer()];
 }
-export class Section {
+export class Section  extends Deletable {
 	Id: number;
 	Description: string;
     Questions: Question[] = [new Question()];
-	Deleted: Boolean;
 }
-export class Questionnaire {
+export class Questionnaire extends Deletable {
 	Id: number ;
 	Date: Date;
 	Description: string;
     Sections: Section[] = [new Section()];
 }
+
 
