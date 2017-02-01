@@ -5,8 +5,10 @@
           placeholder="Write a sentence to select an existing one"
           value-property-name="Id"
           display-property-name="Text"
-          accept-user-input="false"
+          accept-user-input="true"
           max-num-list="10" />
     <!--<span>id:{{sentence.id}} - text: {{sentence.text}}</span>-->
+    <div *ngIf="isNew">This is a new sentence.</div>
+     <!--Click <a>here</a> to add it to the database</div>-->
     <div class="sentenceManagementLink"><a (click)="goToSentenceManagement()">manage sentences</a></div>
 </div>

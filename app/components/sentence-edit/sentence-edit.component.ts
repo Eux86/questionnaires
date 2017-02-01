@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { OnInit } from '@angular/core'
+import { OnInit,OnChanges,SimpleChanges } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 
 import { Sentence } from '../../data-model';
@@ -13,9 +13,10 @@ import { QuestionnaireService } from '../../services/questionnaire.service'
 })
 
 
-export class SentenceEditComponent implements OnInit {
+export class SentenceEditComponent implements OnInit,OnChanges {
     sentenceValue: Sentence = new Sentence();
     sentences: Sentence[];
+    isNew: boolean
 
     @Input() 
     get sentence() {
@@ -40,6 +41,10 @@ export class SentenceEditComponent implements OnInit {
             }
         )
         // this.selected=this.sentence;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void{
+        this.isNew = typeof this.sentenceValue === 'string';
     }
 
     goToSentenceManagement(): void {

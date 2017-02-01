@@ -80,11 +80,38 @@ export class QuestionnaireEditComponent implements OnInit {
   }
   updateConfirm():void{
     this.sentenceService.createMany(this.newSentences).then(sentences=>
-      this.questionnaireService.update(this.questionnaire).then(q=>{
-        this.questionnaire = q;
-        this.modalSaved.open();
+      {
+        this.questionnaire = this.updateSentenceId(this.questionnaire,sentences);
+        return this.questionnaireService.update(this.questionnaire).then(q=>{
+          this.questionnaire = q;
+          this.modalSaved.open();
       })
+      }
     );
+  }
+
+  updateSentenceId(questionnaire: Questionnaire, sentences: Sentence[]):Questionnaire{
+    questionnaire.Sections.forEach(section => {
+      section.Questions.forEach(question => {
+        if (question.Sentence !=null && question.Sentence.Id===undefined){
+          sentences.forEach(s => {
+            if (s.Text == question.Sentence.Text){
+              question.Sentence.Id = s.Id;
+            }
+          });
+        }
+        question.Answers.forEach(answer => {
+          if (answer.Sentence !=null && answer.Sentence.Id===undefined){
+            sentences.forEach(s => {
+            if (s.Text == answer.Sentence.Text){
+              answer.Sentence.Id = s.Id;
+            }
+          });
+          } 
+        });
+      });
+    });
+    return questionnaire;
   }
 
   getNewSentences(questionnaire: Questionnaire):Sentence[]{
@@ -92,11 +119,25 @@ export class QuestionnaireEditComponent implements OnInit {
     questionnaire.Sections.forEach(section => {
       section.Questions.forEach(question => {
         if (!question.Deleted && question.Sentence !=null && question.Sentence.Id===undefined){
-          newSentences.push(question.Sentence);
+          let sentence = new Sentence();
+            // I know that if it's new it is a string
+            let temp:any;
+            temp = question.Sentence;
+            sentence.Text = temp;
+            sentence.Id = 0;
+            //--------------------------------
+            newSentences.push(sentence);
         }
         question.Answers.forEach(answer => {
           if (!answer.Deleted && answer.Sentence !=null && answer.Sentence.Id===undefined){
-            newSentences.push(answer.Sentence);
+            let sentence = new Sentence();
+            // I know that if it's new it is a string
+            let temp:any;
+            temp = answer.Sentence;
+            sentence.Text = temp;
+            sentence.Id = 0;
+            //--------------------------------
+            newSentences.push(sentence);
           } 
         });
       });

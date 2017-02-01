@@ -37,6 +37,9 @@ var SentenceEditComponent = (function () {
         });
         // this.selected=this.sentence;
     };
+    SentenceEditComponent.prototype.ngOnChanges = function (changes) {
+        this.isNew = typeof this.sentenceValue === 'string';
+    };
     SentenceEditComponent.prototype.goToSentenceManagement = function () {
         this.router.navigate(['/sentences']);
     };
