@@ -13,10 +13,12 @@ var router_1 = require("@angular/router");
 var common_1 = require("@angular/common");
 var data_model_1 = require("../../data-model");
 var questionnaire_service_1 = require("../../services/questionnaire.service");
+var sentence_service_1 = require("../../services/sentence.service");
 var ng2_bs3_modal_1 = require("ng2-bs3-modal/ng2-bs3-modal");
 var QuestionnaireEditComponent = (function () {
-    function QuestionnaireEditComponent(questionnaireService, route, location) {
+    function QuestionnaireEditComponent(questionnaireService, sentenceService, route, location) {
         this.questionnaireService = questionnaireService;
+        this.sentenceService = sentenceService;
         this.route = route;
         this.location = location;
         this.questionnaire = new data_model_1.Questionnaire();
@@ -61,20 +63,22 @@ var QuestionnaireEditComponent = (function () {
     };
     QuestionnaireEditComponent.prototype.updateConfirm = function () {
         var _this = this;
-        this.questionnaireService.update(this.questionnaire).then(function (q) {
-            _this.questionnaire = q;
-            _this.modalSaved.open();
+        this.sentenceService.createMany(this.newSentences).then(function (sentences) {
+            return _this.questionnaireService.update(_this.questionnaire).then(function (q) {
+                _this.questionnaire = q;
+                _this.modalSaved.open();
+            });
         });
     };
     QuestionnaireEditComponent.prototype.getNewSentences = function (questionnaire) {
         var newSentences = [];
         questionnaire.Sections.forEach(function (section) {
             section.Questions.forEach(function (question) {
-                if (question.Sentence != null && question.Sentence.Id === undefined) {
+                if (!question.Deleted && question.Sentence != null && question.Sentence.Id === undefined) {
                     newSentences.push(question.Sentence);
                 }
                 question.Answers.forEach(function (answer) {
-                    if (answer.Sentence != null && answer.Sentence.Id === undefined) {
+                    if (!answer.Deleted && answer.Sentence != null && answer.Sentence.Id === undefined) {
                         newSentences.push(answer.Sentence);
                     }
                 });
@@ -100,6 +104,7 @@ QuestionnaireEditComponent = __decorate([
         styleUrls: ['questionnaire-edit.component.css'],
     }),
     __metadata("design:paramtypes", [questionnaire_service_1.QuestionnaireService,
+        sentence_service_1.SentenceService,
         router_1.ActivatedRoute,
         common_1.Location])
 ], QuestionnaireEditComponent);

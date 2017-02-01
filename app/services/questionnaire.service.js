@@ -57,10 +57,14 @@ var QuestionnaireService = (function () {
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.create = function () {
+        var q = new data_model_1.Questionnaire();
+        q.Date = new Date();
         return this.http
-            .post(this.questionnaireUrl, JSON.stringify(new data_model_1.Questionnaire()), { headers: this.headers })
+            .post(this.questionnaireUrl, JSON.stringify(q), { headers: this.headers })
             .toPromise()
-            .then(function (res) { return res.json().data; })
+            .then(function (res) {
+            return res.json();
+        })
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.delete = function (id) {
@@ -75,31 +79,6 @@ var QuestionnaireService = (function () {
     QuestionnaireService.prototype.checkQuestionnaire = function (questionnaire) {
         return this.getQuestionnaire(questionnaire.Id).then(function (q) { return q; });
     };
-    // getHero(id): Promise<Hero> {
-    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.Id == id));
-    // }
-    // update(hero: Hero): Promise<Hero>{
-    //     const url = `${this.heroesUrl}/${hero.Id}`;
-    //     return this.http
-    //         .put(url, JSON.stringify(hero), {headers: this.headers})
-    //         .toPromise()
-    //         .then(() => hero) // sembra solo un placeholder che non fa nulla. Il catch va solo dopo il then
-    //         .catch(this.handleError);
-    // }
-    // create(name: string): Promise<Hero> {
-    //     return this.http
-    //     .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
-    //     .toPromise()
-    //     .then(res => res.json().data)
-    //     .catch(this.handleError);
-    // }
-    // delete(id: number): Promise<void>{
-    //     const url = `${this.heroesUrl}/${id}`;
-    //     return this.http
-    //     .delete(url, {headers: this.headers})
-    //     .toPromise().then( () => null)
-    //     .catch(this.handleError);
-    // }
     QuestionnaireService.prototype.handleError = function (error) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

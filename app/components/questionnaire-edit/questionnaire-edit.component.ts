@@ -4,6 +4,8 @@ import { Location }                         from '@angular/common';
 
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service'
+import { SentenceService } from '../../services/sentence.service'
+
 import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
@@ -24,6 +26,7 @@ export class QuestionnaireEditComponent implements OnInit {
 
   constructor(
     private questionnaireService: QuestionnaireService,
+    private sentenceService: SentenceService,
     private route: ActivatedRoute,
 		private location: Location
   ) { 
@@ -76,21 +79,23 @@ export class QuestionnaireEditComponent implements OnInit {
     // }
   }
   updateConfirm():void{
-    this.questionnaireService.update(this.questionnaire).then(q=>{
+    this.sentenceService.createMany(this.newSentences).then(sentences=>
+      this.questionnaireService.update(this.questionnaire).then(q=>{
         this.questionnaire = q;
         this.modalSaved.open();
-      });
+      })
+    );
   }
 
   getNewSentences(questionnaire: Questionnaire):Sentence[]{
     let newSentences = [];
     questionnaire.Sections.forEach(section => {
       section.Questions.forEach(question => {
-        if (question.Sentence !=null && question.Sentence.Id===undefined){
+        if (!question.Deleted && question.Sentence !=null && question.Sentence.Id===undefined){
           newSentences.push(question.Sentence);
         }
         question.Answers.forEach(answer => {
-          if (answer.Sentence !=null && answer.Sentence.Id===undefined){
+          if (!answer.Deleted && answer.Sentence !=null && answer.Sentence.Id===undefined){
             newSentences.push(answer.Sentence);
           } 
         });

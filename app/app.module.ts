@@ -13,6 +13,9 @@ import { QuestionnaireViewComponent } from './components/questionnaire-view/ques
 import { SentencesListComponent } from './components/sentences-list/sentences-list.component'; 
 
 import { QuestionnaireService } from './services/questionnaire.service'
+import { SentenceService } from './services/sentence.service'
+
+
 
 import { AppRoutingModule }     from './app-routing.module';
 
@@ -42,7 +45,7 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     QuestionnaireViewComponent,
     SentenceEditComponent,
     SentencesListComponent ],
-  providers: [QuestionnaireService],
+  providers: [QuestionnaireService,SentenceService],
   bootstrap: 	[ AppComponent ]
 })
 export class AppModule { }

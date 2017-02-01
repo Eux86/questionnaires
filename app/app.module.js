@@ -20,6 +20,7 @@ var sentence_edit_component_1 = require("./components/sentence-edit/sentence-edi
 var questionnaire_view_component_1 = require("./components/questionnaire-view/questionnaire-view.component");
 var sentences_list_component_1 = require("./components/sentences-list/sentences-list.component");
 var questionnaire_service_1 = require("./services/questionnaire.service");
+var sentence_service_1 = require("./services/sentence.service");
 var app_routing_module_1 = require("./app-routing.module");
 // Imports for loading & configuring the in-memory web api
 // import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -50,7 +51,7 @@ AppModule = __decorate([
             sentence_edit_component_1.SentenceEditComponent,
             sentences_list_component_1.SentencesListComponent
         ],
-        providers: [questionnaire_service_1.QuestionnaireService],
+        providers: [questionnaire_service_1.QuestionnaireService, sentence_service_1.SentenceService],
         bootstrap: [app_component_1.AppComponent]
     }),
     __metadata("design:paramtypes", [])

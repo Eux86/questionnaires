@@ -58,10 +58,15 @@ export class QuestionnaireService{
     }
 
     create(): Promise<Questionnaire> {
+        let q = new Questionnaire();
+        q.Date = new Date();
+
         return this.http
-        .post(this.questionnaireUrl, JSON.stringify(new Questionnaire()), {headers: this.headers})
+        .post(this.questionnaireUrl, JSON.stringify(q), {headers: this.headers})
         .toPromise()
-        .then(res => res.json().data)
+        .then(res =>  {
+            return res.json()
+        })
         .catch(this.handleError);
     }
 
@@ -78,32 +83,6 @@ export class QuestionnaireService{
     checkQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire>{
         return this.getQuestionnaire(questionnaire.Id).then(q=>q);
     }
-
-    // getHero(id): Promise<Hero> {
-    //     return this.getHeroes().then(heroes=>heroes.find(hero=> hero.Id == id));
-    // }
-    // update(hero: Hero): Promise<Hero>{
-    //     const url = `${this.heroesUrl}/${hero.Id}`;
-    //     return this.http
-    //         .put(url, JSON.stringify(hero), {headers: this.headers})
-    //         .toPromise()
-    //         .then(() => hero) // sembra solo un placeholder che non fa nulla. Il catch va solo dopo il then
-    //         .catch(this.handleError);
-    // }
-    // create(name: string): Promise<Hero> {
-    //     return this.http
-    //     .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers})
-    //     .toPromise()
-    //     .then(res => res.json().data)
-    //     .catch(this.handleError);
-    // }
-    // delete(id: number): Promise<void>{
-    //     const url = `${this.heroesUrl}/${id}`;
-    //     return this.http
-    //     .delete(url, {headers: this.headers})
-    //     .toPromise().then( () => null)
-    //     .catch(this.handleError);
-    // }
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
