@@ -14,8 +14,6 @@
                 <!--<button (click)="remove(questionnaire.Sections,s);">X</button>-->
                 <button (click)="delete(section);">X</button>
             </h2>
-            <div>test: {{section.Questions[0].Sentence.Id}} - {{section.Questions[0].Sentence.Text}}</div>
-            <div>test2: {{questionnaire.Sections[0].Questions[0].Sentence.Id}} - {{questionnaire.Sections[0].Questions[0].Sentence.Text}}</div>
             <div *ngFor="let question of section.Questions; let i = index" class="question-edit">
                 <div *ngIf="!question.Deleted">
                     <div class="tools contrastBackground">
@@ -23,7 +21,6 @@
                         <button (click)="delete(question)">X</button>
                     </div>
                     <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
-                    <div>{{question.Sentence.Id}} - {{question.Sentence.Text}}</div>
                     <h3>Answers:</h3>
                     <table *ngFor="let answer of question.Answers; let a = index">
                         <tr *ngIf="!answer.Deleted" class="answer-edit" >

@@ -95,7 +95,10 @@ export class QuestionnaireEditComponent implements OnInit {
       section.Questions.forEach(question => {
         if (question.Sentence !=null && question.Sentence.Id===undefined){
           sentences.forEach(s => {
-            if (s.Text == question.Sentence.Text){
+            let sentenceText: any = question.Sentence;
+            if (s.Text == sentenceText){
+              question.Sentence = new Sentence();
+              question.Sentence.Text = sentenceText;
               question.Sentence.Id = s.Id;
             }
           });
@@ -103,7 +106,10 @@ export class QuestionnaireEditComponent implements OnInit {
         question.Answers.forEach(answer => {
           if (answer.Sentence !=null && answer.Sentence.Id===undefined){
             sentences.forEach(s => {
-            if (s.Text == answer.Sentence.Text){
+            let sentenceText: any = answer.Sentence;
+            if (s.Text == sentenceText){
+              answer.Sentence = new Sentence();
+              answer.Sentence.Text = sentenceText;
               answer.Sentence.Id = s.Id;
             }
           });

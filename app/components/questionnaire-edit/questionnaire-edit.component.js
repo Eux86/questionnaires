@@ -76,7 +76,10 @@ var QuestionnaireEditComponent = (function () {
             section.Questions.forEach(function (question) {
                 if (question.Sentence != null && question.Sentence.Id === undefined) {
                     sentences.forEach(function (s) {
-                        if (s.Text == question.Sentence.Text) {
+                        var sentenceText = question.Sentence;
+                        if (s.Text == sentenceText) {
+                            question.Sentence = new data_model_1.Sentence();
+                            question.Sentence.Text = sentenceText;
                             question.Sentence.Id = s.Id;
                         }
                     });
@@ -84,7 +87,10 @@ var QuestionnaireEditComponent = (function () {
                 question.Answers.forEach(function (answer) {
                     if (answer.Sentence != null && answer.Sentence.Id === undefined) {
                         sentences.forEach(function (s) {
-                            if (s.Text == answer.Sentence.Text) {
+                            var sentenceText = answer.Sentence;
+                            if (s.Text == sentenceText) {
+                                answer.Sentence = new data_model_1.Sentence();
+                                answer.Sentence.Text = sentenceText;
                                 answer.Sentence.Id = s.Id;
                             }
                         });
