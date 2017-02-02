@@ -75,25 +75,29 @@ var QuestionnaireEditComponent = (function () {
         questionnaire.Sections.forEach(function (section) {
             section.Questions.forEach(function (question) {
                 if (question.Sentence != null && question.Sentence.Id === undefined) {
-                    sentences.forEach(function (s) {
-                        var sentenceText = question.Sentence;
-                        if (s.Text == sentenceText) {
-                            question.Sentence = new data_model_1.Sentence();
-                            question.Sentence.Text = sentenceText;
-                            question.Sentence.Id = s.Id;
-                        }
-                    });
+                    if (sentences != null) {
+                        sentences.forEach(function (s) {
+                            var sentenceText = question.Sentence;
+                            if (s.Text == sentenceText) {
+                                question.Sentence = new data_model_1.Sentence();
+                                question.Sentence.Text = sentenceText;
+                                question.Sentence.Id = s.Id;
+                            }
+                        });
+                    }
                 }
                 question.Answers.forEach(function (answer) {
                     if (answer.Sentence != null && answer.Sentence.Id === undefined) {
-                        sentences.forEach(function (s) {
-                            var sentenceText = answer.Sentence;
-                            if (s.Text == sentenceText) {
-                                answer.Sentence = new data_model_1.Sentence();
-                                answer.Sentence.Text = sentenceText;
-                                answer.Sentence.Id = s.Id;
-                            }
-                        });
+                        if (sentences != null) {
+                            sentences.forEach(function (s) {
+                                var sentenceText = answer.Sentence;
+                                if (s.Text == sentenceText) {
+                                    answer.Sentence = new data_model_1.Sentence();
+                                    answer.Sentence.Text = sentenceText;
+                                    answer.Sentence.Id = s.Id;
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -114,6 +118,9 @@ var QuestionnaireEditComponent = (function () {
                     //--------------------------------
                     newSentences.push(sentence);
                 }
+                else if (question.Sentence != null && question.Sentence.Text === "") {
+                    question.Sentence = null;
+                }
                 question.Answers.forEach(function (answer) {
                     if (!answer.Deleted && answer.Sentence != null && answer.Sentence.Id === undefined) {
                         var sentence = new data_model_1.Sentence();
@@ -124,6 +131,9 @@ var QuestionnaireEditComponent = (function () {
                         sentence.Id = 0;
                         //--------------------------------
                         newSentences.push(sentence);
+                    }
+                    else if (answer.Sentence.Text === "") {
+                        answer.Sentence = null;
                     }
                 });
             });

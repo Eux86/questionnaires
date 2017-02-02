@@ -94,25 +94,29 @@ export class QuestionnaireEditComponent implements OnInit {
     questionnaire.Sections.forEach(section => {
       section.Questions.forEach(question => {
         if (question.Sentence !=null && question.Sentence.Id===undefined){
-          sentences.forEach(s => {
-            let sentenceText: any = question.Sentence;
-            if (s.Text == sentenceText){
-              question.Sentence = new Sentence();
-              question.Sentence.Text = sentenceText;
-              question.Sentence.Id = s.Id;
-            }
-          });
+          if (sentences!= null){
+            sentences.forEach(s => {
+              let sentenceText: any = question.Sentence;
+              if (s.Text == sentenceText){
+                question.Sentence = new Sentence();
+                question.Sentence.Text = sentenceText;
+                question.Sentence.Id = s.Id;
+              }
+            });
+          }
         }
         question.Answers.forEach(answer => {
           if (answer.Sentence !=null && answer.Sentence.Id===undefined){
-            sentences.forEach(s => {
-            let sentenceText: any = answer.Sentence;
-            if (s.Text == sentenceText){
-              answer.Sentence = new Sentence();
-              answer.Sentence.Text = sentenceText;
-              answer.Sentence.Id = s.Id;
+              if (sentences!=null){
+                sentences.forEach(s => {
+                let sentenceText: any = answer.Sentence;
+                if (s.Text == sentenceText){
+                  answer.Sentence = new Sentence();
+                  answer.Sentence.Text = sentenceText;
+                  answer.Sentence.Id = s.Id;
+                }
+              });
             }
-          });
           } 
         });
       });
@@ -133,6 +137,8 @@ export class QuestionnaireEditComponent implements OnInit {
             sentence.Id = 0;
             //--------------------------------
             newSentences.push(sentence);
+        } else if (question.Sentence!=null && question.Sentence.Text===""){
+          question.Sentence = null;
         }
         question.Answers.forEach(answer => {
           if (!answer.Deleted && answer.Sentence !=null && answer.Sentence.Id===undefined){
@@ -144,7 +150,9 @@ export class QuestionnaireEditComponent implements OnInit {
             sentence.Id = 0;
             //--------------------------------
             newSentences.push(sentence);
-          } 
+          } else if (answer.Sentence.Text===""){
+            answer.Sentence = null;
+          }
         });
       });
     });
