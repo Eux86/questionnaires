@@ -10,17 +10,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var data_model_1 = require("../../data-model");
-var questionnaire_service_1 = require("../../services/questionnaire.service");
+var sentence_service_1 = require("../../services/sentence.service");
 var SentencesListComponent = (function () {
-    function SentencesListComponent(questionnaireService) {
-        this.questionnaireService = questionnaireService;
+    function SentencesListComponent(sentenceService) {
+        this.sentenceService = sentenceService;
         this.selected = new data_model_1.Sentence();
+        this.searchText = "";
     }
     SentencesListComponent.prototype.ngOnInit = function () {
+        this.getAllSentences();
+    };
+    SentencesListComponent.prototype.getAllSentences = function () {
         var _this = this;
-        this.questionnaireService.getSentences().then(function (sentences) {
+        this.sentenceService.getAll().then(function (sentences) {
             _this.sentences = sentences;
         });
+    };
+    SentencesListComponent.prototype.onChange = function (model) {
+        var _this = this;
+        if (model == "" || model == null) {
+            this.getAllSentences();
+        }
+        else {
+            this.sentenceService.getByText(model).then(function (sentences) {
+                _this.sentences = sentences;
+            });
+        }
     };
     return SentencesListComponent;
 }());
@@ -35,7 +50,7 @@ SentencesListComponent = __decorate([
         templateUrl: 'sentences-list.component.html',
         styleUrls: ['sentences-list.component.css'],
     }),
-    __metadata("design:paramtypes", [questionnaire_service_1.QuestionnaireService])
+    __metadata("design:paramtypes", [sentence_service_1.SentenceService])
 ], SentencesListComponent);
 exports.SentencesListComponent = SentencesListComponent;
 //# sourceMappingURL=sentences-list.component.js.map

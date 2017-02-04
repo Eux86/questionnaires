@@ -39,15 +39,6 @@ var QuestionnaireService = (function () {
             return qs.find(function (q) { return q.Id == id; });
         });
     };
-    QuestionnaireService.prototype.getSentences = function () {
-        return this.http.get(this.sentencesUrl)
-            .toPromise()
-            .then(function (response) {
-            var ret = response.json();
-            return ret;
-        })
-            .catch(this.handleError);
-    };
     QuestionnaireService.prototype.update = function (questionnaire) {
         var url = this.questionnaireUrl + "/" + questionnaire.Id;
         return this.http
@@ -60,7 +51,7 @@ var QuestionnaireService = (function () {
         var q = new data_model_1.Questionnaire();
         q.Date = new Date();
         return this.http
-            .post(this.questionnaireUrl, JSON.stringify(q), { headers: this.headers })
+            .post(this.questionnaireUrl + "/create", JSON.stringify(q), { headers: this.headers })
             .toPromise()
             .then(function (res) {
             return res.json();

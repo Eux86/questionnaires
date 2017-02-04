@@ -36,6 +36,26 @@ export class SentenceService{
         .catch(this.handleError);
     }
 
+    getByText(text:string):Promise<Sentence[]> {
+        return this.http
+        .get(this.sentencesUrl+"/GetByText?text="+text, {headers: this.headers})
+        .toPromise()
+        .then(res =>  {
+            return res.json()
+        })
+        .catch(this.handleError);
+    }
+
+    getAll(): Promise<Sentence[]>{
+        return this.http.get(this.sentencesUrl+"/GetAll")
+                    .toPromise()
+                    .then(function(response) {
+                        let ret = response.json() as Sentence[];
+                        return ret;
+                    })
+                    .catch(this.handleError);
+    }
+
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);

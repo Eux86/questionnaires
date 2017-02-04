@@ -3,7 +3,7 @@ import { OnInit,OnChanges,SimpleChanges } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 
 import { Sentence } from '../../data-model';
-import { QuestionnaireService } from '../../services/questionnaire.service'
+import { SentenceService } from '../../services/sentence.service'
 
 @Component({
   moduleId: module.id,
@@ -30,12 +30,12 @@ export class SentenceEditComponent implements OnInit,OnChanges {
     }
 
     constructor(
-         private questionnaireService: QuestionnaireService,
+         private sentenceService: SentenceService,
          private router: Router,
     ) { }
 
     ngOnInit(): void {
-        this.questionnaireService.getSentences().then(
+        this.sentenceService.getAll().then(
             sentences => {
                 this.sentences = sentences;
             }

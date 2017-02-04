@@ -36,6 +36,24 @@ var SentenceService = (function () {
         })
             .catch(this.handleError);
     };
+    SentenceService.prototype.getByText = function (text) {
+        return this.http
+            .get(this.sentencesUrl + "/GetByText?text=" + text, { headers: this.headers })
+            .toPromise()
+            .then(function (res) {
+            return res.json();
+        })
+            .catch(this.handleError);
+    };
+    SentenceService.prototype.getAll = function () {
+        return this.http.get(this.sentencesUrl + "/GetAll")
+            .toPromise()
+            .then(function (response) {
+            var ret = response.json();
+            return ret;
+        })
+            .catch(this.handleError);
+    };
     SentenceService.prototype.handleError = function (error) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

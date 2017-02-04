@@ -38,16 +38,6 @@ export class QuestionnaireService{
         );
     }
 
-    getSentences(): Promise<Sentence[]>{
-        return this.http.get(this.sentencesUrl)
-                    .toPromise()
-                    .then(function(response) {
-                        let ret = response.json() as Sentence[];
-                        return ret;
-                    })
-                    .catch(this.handleError);
-    }
-
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
         const url = `${this.questionnaireUrl}/${questionnaire.Id}`;
         return this.http
@@ -62,7 +52,7 @@ export class QuestionnaireService{
         q.Date = new Date();
 
         return this.http
-        .post(this.questionnaireUrl, JSON.stringify(q), {headers: this.headers})
+        .post(this.questionnaireUrl+"/create", JSON.stringify(q), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()

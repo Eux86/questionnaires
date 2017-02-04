@@ -11,10 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var data_model_1 = require("../../data-model");
-var questionnaire_service_1 = require("../../services/questionnaire.service");
+var sentence_service_1 = require("../../services/sentence.service");
 var SentenceEditComponent = (function () {
-    function SentenceEditComponent(questionnaireService, router) {
-        this.questionnaireService = questionnaireService;
+    function SentenceEditComponent(sentenceService, router) {
+        this.sentenceService = sentenceService;
         this.router = router;
         this.sentenceValue = new data_model_1.Sentence();
         this.sentenceChange = new core_1.EventEmitter();
@@ -32,7 +32,7 @@ var SentenceEditComponent = (function () {
     });
     SentenceEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.questionnaireService.getSentences().then(function (sentences) {
+        this.sentenceService.getAll().then(function (sentences) {
             _this.sentences = sentences;
         });
         // this.selected=this.sentence;
@@ -61,7 +61,7 @@ SentenceEditComponent = __decorate([
         templateUrl: 'sentence-edit.component.html',
         styleUrls: ['sentence-edit.component.css'],
     }),
-    __metadata("design:paramtypes", [questionnaire_service_1.QuestionnaireService,
+    __metadata("design:paramtypes", [sentence_service_1.SentenceService,
         router_1.Router])
 ], SentenceEditComponent);
 exports.SentenceEditComponent = SentenceEditComponent;
