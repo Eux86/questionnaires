@@ -17,7 +17,7 @@ import { SentenceService } from '../../services/sentence.service'
 export class SentencesListComponent implements OnInit {
     @Input()
     sentences: Sentence[];
-    selected: Sentence = new Sentence();
+    selected: Sentence[] = [];
     searchText: string = "";
 
     constructor(
@@ -34,6 +34,27 @@ export class SentencesListComponent implements OnInit {
                 this.sentences = sentences;
             }
         ) 
+    }
+
+    selectionChange(sentence:Sentence):void{
+        let found = false;
+        this.selected.some((el)=>{
+            found = el.Id == sentence.Id;
+            return found;
+        });
+        if (found){
+            let index = this.selected.indexOf(sentence, 0);
+            if (index > -1) {
+                this.selected.splice(index, 1);
+            }
+        } else {
+            this.selected.push(sentence);
+        }
+        let sentences = "";
+        this.selected.forEach(sentence => {
+            sentences+=sentence.Text+"\n";
+        });
+        alert('Sentence selected: '+sentences);
     }
 
     onChange(model:string):void {

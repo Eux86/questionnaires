@@ -9,12 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var data_model_1 = require("../../data-model");
 var sentence_service_1 = require("../../services/sentence.service");
 var SentencesListComponent = (function () {
     function SentencesListComponent(sentenceService) {
         this.sentenceService = sentenceService;
-        this.selected = new data_model_1.Sentence();
+        this.selected = [];
         this.searchText = "";
     }
     SentencesListComponent.prototype.ngOnInit = function () {
@@ -25,6 +24,27 @@ var SentencesListComponent = (function () {
         this.sentenceService.getAll().then(function (sentences) {
             _this.sentences = sentences;
         });
+    };
+    SentencesListComponent.prototype.selectionChange = function (sentence) {
+        var found = false;
+        this.selected.some(function (el) {
+            found = el.Id == sentence.Id;
+            return found;
+        });
+        if (found) {
+            var index = this.selected.indexOf(sentence, 0);
+            if (index > -1) {
+                this.selected.splice(index, 1);
+            }
+        }
+        else {
+            this.selected.push(sentence);
+        }
+        var sentences = "";
+        this.selected.forEach(function (sentence) {
+            sentences += sentence.Text + "\n";
+        });
+        alert('Sentence selected: ' + sentences);
     };
     SentencesListComponent.prototype.onChange = function (model) {
         var _this = this;

@@ -5,15 +5,31 @@
 </div>
 <div style="float:right">
     <label for="ActionsInput">Actions</label>
-    <select>
-        <option value="Delete">Delete</option>
-    </select>
-    <input type="button" value="Go">
+    <span id="ActionsInput">
+        <input type="button" value="Delete" (onclick)="prepareDelete()">
+    </span>
 </div>
 <div style="clear: both"> </div>
 <hr>
 <p *ngFor="let sentence of sentences; let i = index">
-    <input type="checkbox" />
+    <input type="checkbox" (change)="selectionChange(sentence)"/>
     <span style="width:100%">"{{sentence.Text}}</span>
 </p> 
 
+<modal #modalDelete (onClose)="deleteSentences()">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Delete</h4>
+    </modal-header>
+    <modal-body>
+        Do you really want to delete the following sentences? <br />
+        <ul>
+            <li *ngFor="let sentence of selected; let i = index">
+                {{sentence.Text}}
+            </li>
+        </ul>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalDelete.close()">Yes</button>
+    </modal-footer>
+</modal>
