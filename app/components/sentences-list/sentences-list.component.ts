@@ -56,6 +56,11 @@ export class SentencesListComponent implements OnInit {
         });
     }
 
+    selectAll():void{
+        alert('not implemented');
+        this.selected = this.sentences;
+    }
+
     deleteSelected(){
         this.sentenceService.delete(this.selected).then(
             result => {

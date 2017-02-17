@@ -47,7 +47,9 @@ var QuestionnaireService = (function () {
         return this.http
             .post(this.questionnaireUrl + "/Create/" + questionnaire.Id, JSON.stringify(questionnaire), { headers: this.headers })
             .toPromise()
-            .then(function () { return questionnaire; })
+            .then(function (res) {
+            return res.json();
+        })
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.create = function () {

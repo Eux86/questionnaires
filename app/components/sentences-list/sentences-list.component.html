@@ -11,9 +11,12 @@
 </div>
 <div style="clear: both"> </div>
 <hr>
+<p>
+    <input type="checkbox" (change)="selectAll()"/>
+</p>
 <p *ngFor="let sentence of sentences; let i = index">
     <input type="checkbox" (change)="selectionChange(sentence)"/>
-    <span style="width:100%">"{{sentence.Text}}</span>
+    <span style="width:100%">{{sentence.Text}}</span>
 </p> 
 
 <modal #modalSentenceDelete (onClose)="deleteSelected()">
@@ -23,7 +26,7 @@
     <modal-body>
         Do you really want to delete the following sentences? <br />
         <ul>
-            <li *ngFor="let sentence of selected; let i = index">
+            <li *ngFor="let sentence of selected; let i = index" class="selectionCheckbox">
                 {{sentence.Text}}
             </li>
         </ul>

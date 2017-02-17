@@ -46,7 +46,9 @@ export class QuestionnaireService{
         return this.http
         .post(this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
-        .then(() => questionnaire)
+        .then(res =>  {
+            return res.json()
+        })
         .catch(this.handleError);
     }
 

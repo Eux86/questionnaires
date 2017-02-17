@@ -45,6 +45,10 @@ var SentencesListComponent = (function () {
             sentences += sentence.Text + "\n";
         });
     };
+    SentencesListComponent.prototype.selectAll = function () {
+        alert('not implemented');
+        this.selected = this.sentences;
+    };
     SentencesListComponent.prototype.deleteSelected = function () {
         var _this = this;
         this.sentenceService.delete(this.selected).then(function (result) {
