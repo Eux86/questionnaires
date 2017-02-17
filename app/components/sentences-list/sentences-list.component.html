@@ -6,7 +6,7 @@
 <div style="float:right">
     <label for="ActionsInput">Actions</label>
     <span id="ActionsInput">
-        <input type="button" value="Delete" (onclick)="prepareDelete()">
+        <input type="button" value="Delete" (click)="modalSentenceDelete.open()">
     </span>
 </div>
 <div style="clear: both"> </div>
@@ -16,7 +16,7 @@
     <span style="width:100%">"{{sentence.Text}}</span>
 </p> 
 
-<modal #modalDelete (onClose)="deleteSentences()">
+<modal #modalSentenceDelete (onClose)="deleteSelected()">
     <modal-header [show-close]="true">
         <h4 class="modal-title">Delete</h4>
     </modal-header>
@@ -29,7 +29,7 @@
         </ul>
     </modal-body>
     <modal-footer>
-        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalDelete.close()">Yes</button>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSentenceDelete.dismiss()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalSentenceDelete.close()">Yes</button>
     </modal-footer>
 </modal>

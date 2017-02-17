@@ -54,7 +54,14 @@ export class SentencesListComponent implements OnInit {
         this.selected.forEach(sentence => {
             sentences+=sentence.Text+"\n";
         });
-        alert('Sentence selected: '+sentences);
+    }
+
+    deleteSelected(){
+        this.sentenceService.delete(this.selected).then(
+            result => {
+                this.getAllSentences();
+            }
+        );
     }
 
     onChange(model:string):void {

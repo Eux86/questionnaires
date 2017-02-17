@@ -5,16 +5,16 @@
         <h2 class="description">
             <span>{{section.Description}}</span>
         </h2>
-        <div *ngFor="let question of section.questions; let i = index" class="question-view">
+        <div *ngFor="let question of section.Questions; let i = index" class="question-view">
             <div class="questionHeader contrastBackground">
                 <span>Question n. {{i+1}}</span>
             </div>
-            <p>{{question.sentence.text}}</p>
+            <p>{{question.Sentence.Text}}</p>
             <div class="answer-view clearFloat" 
-                *ngFor="let answer of question.answers; let a = index"
+                *ngFor="let answer of question.Answers; let a = index"
                  [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
-                <input type="checkbox" [(ngModel)]="answer.selected" />
-                <div>{{answer.sentence.text}} <span>{{answer.IsCorrect}}</span></div>
+                <input type="checkbox" [(ngModel)]="answer.Selected" />
+                <div>{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
             </div>
         </div>
     </div>

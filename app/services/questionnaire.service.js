@@ -35,14 +35,17 @@ var QuestionnaireService = (function () {
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     QuestionnaireService.prototype.getQuestionnaire = function (id) {
-        return this.getQuestionnaires().then(function (qs) {
-            return qs.find(function (q) { return q.Id == id; });
-        });
+        return this.http.get(this.questionnaireUrl + '/Get/' + id)
+            .toPromise()
+            .then(function (response) {
+            var ret = response.json();
+            return ret;
+        })
+            .catch(this.handleError);
     };
     QuestionnaireService.prototype.update = function (questionnaire) {
-        var url = this.questionnaireUrl + "/Get?id=" + questionnaire.Id;
         return this.http
-            .post(this.questionnaireUrl, JSON.stringify(questionnaire), { headers: this.headers })
+            .post(this.questionnaireUrl + "/Create/" + questionnaire.Id, JSON.stringify(questionnaire), { headers: this.headers })
             .toPromise()
             .then(function () { return questionnaire; })
             .catch(this.handleError);
@@ -51,7 +54,7 @@ var QuestionnaireService = (function () {
         var q = new data_model_1.Questionnaire();
         q.Date = new Date();
         return this.http
-            .post(this.questionnaireUrl + "/create", JSON.stringify(q), { headers: this.headers })
+            .post(this.questionnaireUrl + "/Create", JSON.stringify(q), { headers: this.headers })
             .toPromise()
             .then(function (res) {
             return res.json();
@@ -59,7 +62,7 @@ var QuestionnaireService = (function () {
             .catch(this.handleError);
     };
     QuestionnaireService.prototype.delete = function (id) {
-        var url = this.questionnaireUrl + "/" + id;
+        var url = this.questionnaireUrl + "/Delete/" + id;
         return this.http
             .delete(url, {
             headers: this.headers,

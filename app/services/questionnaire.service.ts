@@ -33,15 +33,18 @@ export class QuestionnaireService{
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     getQuestionnaire(id: Number): Promise<Questionnaire>{
-        return this.getQuestionnaires().then(qs=>
-            qs.find(q=> q.Id == id)
-        );
+        return this.http.get(this.questionnaireUrl+'/Get/'+id)
+                .toPromise()
+                .then(function(response) {
+                    let ret = response.json() as Questionnaire;
+                    return ret;
+                })
+                .catch(this.handleError);
     }
 
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
-        const url = `${this.questionnaireUrl}/Get?id=${questionnaire.Id}`;
         return this.http
-        .post(this.questionnaireUrl, JSON.stringify(questionnaire), {headers: this.headers})
+        .post(this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
         .then(() => questionnaire)
         .catch(this.handleError);
@@ -52,7 +55,7 @@ export class QuestionnaireService{
         q.Date = new Date();
 
         return this.http
-        .post(this.questionnaireUrl+"/create", JSON.stringify(q), {headers: this.headers})
+        .post(this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -61,7 +64,7 @@ export class QuestionnaireService{
     }
 
     delete(id: number): Promise<void>{
-        const url = `${this.questionnaireUrl}/${id}`;
+        const url = `${this.questionnaireUrl}/Delete/${id}`;
         return this.http
         .delete(url, {
             headers: this.headers,
@@ -71,7 +74,7 @@ export class QuestionnaireService{
     }
 
     checkQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire>{
-        return this.getQuestionnaire(questionnaire.Id).then(q=>q);
+        return this.getQuestionnaire(questionnaire.Id).then(q=> { return q });
     }
 
     private handleError(error: any): Promise<any> {

@@ -44,7 +44,12 @@ var SentencesListComponent = (function () {
         this.selected.forEach(function (sentence) {
             sentences += sentence.Text + "\n";
         });
-        alert('Sentence selected: ' + sentences);
+    };
+    SentencesListComponent.prototype.deleteSelected = function () {
+        var _this = this;
+        this.sentenceService.delete(this.selected).then(function (result) {
+            _this.getAllSentences();
+        });
     };
     SentencesListComponent.prototype.onChange = function (model) {
         var _this = this;

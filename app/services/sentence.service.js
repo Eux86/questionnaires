@@ -54,6 +54,15 @@ var SentenceService = (function () {
         })
             .catch(this.handleError);
     };
+    SentenceService.prototype.delete = function (sentences) {
+        return this.http
+            .post(this.sentencesUrl + "/Delete", JSON.stringify(sentences), { headers: this.headers })
+            .toPromise()
+            .then(function (res) {
+            return res.json();
+        })
+            .catch(this.handleError);
+    };
     SentenceService.prototype.handleError = function (error) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);

@@ -56,6 +56,16 @@ export class SentenceService{
                     .catch(this.handleError);
     }
 
+    delete(sentences: Sentence[]):Promise<boolean>{
+        return this.http
+                .post(this.sentencesUrl+"/Delete",JSON.stringify(sentences), {headers: this.headers})
+                .toPromise()
+                .then(res=>{
+                    return res.json();
+                })
+                .catch(this.handleError);
+    }
+
 
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
