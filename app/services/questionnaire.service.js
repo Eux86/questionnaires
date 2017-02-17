@@ -24,7 +24,7 @@ var QuestionnaireService = (function () {
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     QuestionnaireService.prototype.getQuestionnaires = function () {
-        return this.http.get(this.questionnaireUrl)
+        return this.http.get(this.questionnaireUrl + '/GetAll')
             .toPromise()
             .then(function (response) {
             var ret = response.json();
@@ -40,7 +40,7 @@ var QuestionnaireService = (function () {
         });
     };
     QuestionnaireService.prototype.update = function (questionnaire) {
-        var url = this.questionnaireUrl + "/" + questionnaire.Id;
+        var url = this.questionnaireUrl + "/Get?id=" + questionnaire.Id;
         return this.http
             .post(this.questionnaireUrl, JSON.stringify(questionnaire), { headers: this.headers })
             .toPromise()

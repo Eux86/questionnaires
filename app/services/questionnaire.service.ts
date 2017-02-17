@@ -21,7 +21,7 @@ export class QuestionnaireService{
     constructor (private http: Http) {}
 
     getQuestionnaires(): Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl)
+        return this.http.get(this.questionnaireUrl+'/GetAll')
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -39,7 +39,7 @@ export class QuestionnaireService{
     }
 
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
-        const url = `${this.questionnaireUrl}/${questionnaire.Id}`;
+        const url = `${this.questionnaireUrl}/Get?id=${questionnaire.Id}`;
         return this.http
         .post(this.questionnaireUrl, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
