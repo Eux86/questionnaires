@@ -17,7 +17,6 @@ import { SentenceService } from '../../services/sentence.service'
 export class SentencesListComponent implements OnInit {
     @Input()
     sentences: Sentence[];
-    selected: Sentence[] = [];
     searchText: string = "";
 
     constructor(
@@ -36,33 +35,53 @@ export class SentencesListComponent implements OnInit {
         ) 
     }
 
-    selectionChange(sentence:Sentence):void{
-        let found = false;
-        this.selected.some((el)=>{
-            found = el.Id == sentence.Id;
-            return found;
-        });
-        if (found){
-            let index = this.selected.indexOf(sentence, 0);
-            if (index > -1) {
-                this.selected.splice(index, 1);
-            }
-        } else {
-            this.selected.push(sentence);
-        }
-        let sentences = "";
-        this.selected.forEach(sentence => {
-            sentences+=sentence.Text+"\n";
+    // selectionChange(sentence:Sentence):void{
+    //     let found = false;
+    //     let selected:Sentence[] = [];
+    //     this.sentences.forEach(sentence => {
+    //         let s:any = sentence;
+    //         if (s.Selected == true){
+    //             selected.push(sentence);
+    //         }
+    //     }); 
+    //     selected.some((el)=>{
+    //         found = el.Id == sentence.Id;
+    //         return found;
+    //     });
+    //     if (found){
+    //         let index =selected.indexOf(sentence, 0);
+    //         if (index > -1) {
+    //             selected.splice(index, 1);
+    //         }
+    //     } else {
+    //         selected.push(sentence);
+    //     }
+    //     let sentences = "";
+    //     selected.forEach(sentence => {
+    //         sentences+=sentence.Text+"\n";
+    //     });
+    // }
+
+    selectAll(value: boolean):void{
+        this.sentences.forEach(sentence => {
+            let s:any = sentence;
+            s.Selected = value;
         });
     }
 
-    selectAll():void{
-        alert('not implemented');
-        this.selected = this.sentences;
+    getSelected():Sentence[]{
+        let selected:Sentence[] = [];
+        this.sentences.forEach(sentence => {
+            let s:any = sentence;
+            if (s.Selected == true){
+                selected.push(sentence);
+            }
+        }); 
+        return selected;
     }
 
     deleteSelected(){
-        this.sentenceService.delete(this.selected).then(
+        this.sentenceService.delete(this.getSelected()).then(
             result => {
                 this.getAllSentences();
             }

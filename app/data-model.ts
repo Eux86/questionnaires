@@ -8,19 +8,19 @@ export class Sentence  extends Deletable {
 }
 export class Answer  extends Deletable {
 	Id: number;
-	Sentence: Sentence = new Sentence();
+	Sentence: Sentence;
     IsCorrect: boolean;
 	Selected: boolean;
 }
 export class Question  extends Deletable {
 	Id: number;
-	Sentence: Sentence = new Sentence();
-    Answers: Answer[] = [new Answer()];
+	Sentence: Sentence;
+    Answers: Answer[];
 }
 export class Section  extends Deletable {
 	Id: number;
 	Description: string;
-    Questions: Question[] = [new Question()];
+    Questions: Question[];
 }
 export class Questionnaire extends Deletable {
 	Id: number ;

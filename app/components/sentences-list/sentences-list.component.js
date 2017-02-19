@@ -13,7 +13,6 @@ var sentence_service_1 = require("../../services/sentence.service");
 var SentencesListComponent = (function () {
     function SentencesListComponent(sentenceService) {
         this.sentenceService = sentenceService;
-        this.selected = [];
         this.searchText = "";
     }
     SentencesListComponent.prototype.ngOnInit = function () {
@@ -25,33 +24,51 @@ var SentencesListComponent = (function () {
             _this.sentences = sentences;
         });
     };
-    SentencesListComponent.prototype.selectionChange = function (sentence) {
-        var found = false;
-        this.selected.some(function (el) {
-            found = el.Id == sentence.Id;
-            return found;
-        });
-        if (found) {
-            var index = this.selected.indexOf(sentence, 0);
-            if (index > -1) {
-                this.selected.splice(index, 1);
-            }
-        }
-        else {
-            this.selected.push(sentence);
-        }
-        var sentences = "";
-        this.selected.forEach(function (sentence) {
-            sentences += sentence.Text + "\n";
+    // selectionChange(sentence:Sentence):void{
+    //     let found = false;
+    //     let selected:Sentence[] = [];
+    //     this.sentences.forEach(sentence => {
+    //         let s:any = sentence;
+    //         if (s.Selected == true){
+    //             selected.push(sentence);
+    //         }
+    //     }); 
+    //     selected.some((el)=>{
+    //         found = el.Id == sentence.Id;
+    //         return found;
+    //     });
+    //     if (found){
+    //         let index =selected.indexOf(sentence, 0);
+    //         if (index > -1) {
+    //             selected.splice(index, 1);
+    //         }
+    //     } else {
+    //         selected.push(sentence);
+    //     }
+    //     let sentences = "";
+    //     selected.forEach(sentence => {
+    //         sentences+=sentence.Text+"\n";
+    //     });
+    // }
+    SentencesListComponent.prototype.selectAll = function (value) {
+        this.sentences.forEach(function (sentence) {
+            var s = sentence;
+            s.Selected = value;
         });
     };
-    SentencesListComponent.prototype.selectAll = function () {
-        alert('not implemented');
-        this.selected = this.sentences;
+    SentencesListComponent.prototype.getSelected = function () {
+        var selected = [];
+        this.sentences.forEach(function (sentence) {
+            var s = sentence;
+            if (s.Selected == true) {
+                selected.push(sentence);
+            }
+        });
+        return selected;
     };
     SentencesListComponent.prototype.deleteSelected = function () {
         var _this = this;
-        this.sentenceService.delete(this.selected).then(function (result) {
+        this.sentenceService.delete(this.getSelected()).then(function (result) {
             _this.getAllSentences();
         });
     };

@@ -50,10 +50,12 @@ export class QuestionnaireEditComponent implements OnInit {
   }
 
   addQuestion(section: Section): void {
+    if (section.Questions==null) section.Questions= [];
     section.Questions.push(new Question())
   }
 
   addAnswer(question: Question): void {
+    if (question.Answers==null) question.Answers = [];
     question.Answers.push(new Answer())
   }
 
@@ -92,34 +94,40 @@ export class QuestionnaireEditComponent implements OnInit {
 
   updateSentenceId(questionnaire: Questionnaire, sentences: Sentence[]):Questionnaire{
     questionnaire.Sections.forEach(section => {
-      section.Questions.forEach(question => {
-        if (question.Sentence !=null && question.Sentence.Id===undefined){
-          if (sentences!= null){
-            sentences.forEach(s => {
-              let sentenceText: any = question.Sentence;
-              if (s.Text == sentenceText){
-                question.Sentence = new Sentence();
-                question.Sentence.Text = sentenceText;
-                question.Sentence.Id = s.Id;
-              }
-            });
-          }
-        }
-        question.Answers.forEach(answer => {
-          if (answer.Sentence !=null && answer.Sentence.Id===undefined){
-              if (sentences!=null){
-                sentences.forEach(s => {
-                let sentenceText: any = answer.Sentence;
+      if (section.Questions!=null)
+      {
+        section.Questions.forEach(question => {
+          if (question.Sentence !=null && question.Sentence.Id===undefined){
+            if (sentences!= null){
+              sentences.forEach(s => {
+                let sentenceText: any = question.Sentence;
                 if (s.Text == sentenceText){
-                  answer.Sentence = new Sentence();
-                  answer.Sentence.Text = sentenceText;
-                  answer.Sentence.Id = s.Id;
+                  question.Sentence = new Sentence();
+                  question.Sentence.Text = sentenceText;
+                  question.Sentence.Id = s.Id;
                 }
               });
             }
-          } 
+          }
+          if (question.Answers!=null) 
+          {
+            question.Answers.forEach(answer => {
+              if (answer.Sentence !=null && answer.Sentence.Id===undefined){
+                  if (sentences!=null){
+                    sentences.forEach(s => {
+                    let sentenceText: any = answer.Sentence;
+                    if (s.Text == sentenceText){
+                      answer.Sentence = new Sentence();
+                      answer.Sentence.Text = sentenceText;
+                      answer.Sentence.Id = s.Id;
+                    }
+                  });
+                }
+              } 
+            });
+          }
         });
-      });
+      }
     });
     return questionnaire;
   }
@@ -127,34 +135,39 @@ export class QuestionnaireEditComponent implements OnInit {
   getNewSentences(questionnaire: Questionnaire):Sentence[]{
     let newSentences = [];
     questionnaire.Sections.forEach(section => {
-      section.Questions.forEach(question => {
-        if (!question.Deleted && question.Sentence !=null && question.Sentence.Id===undefined){
-          let sentence = new Sentence();
-            // I know that if it's new it is a string
-            let temp:any;
-            temp = question.Sentence;
-            sentence.Text = temp;
-            sentence.Id = 0;
-            //--------------------------------
-            newSentences.push(sentence);
-        } else if (question.Sentence!=null && question.Sentence.Text===""){
-          question.Sentence = null;
-        }
-        question.Answers.forEach(answer => {
-          if (!answer.Deleted && answer.Sentence !=null && answer.Sentence.Id===undefined){
+      if (section.Questions!=null){
+        section.Questions.forEach(question => {
+          if (!question.Deleted && question.Sentence !=null && question.Sentence.Id===undefined){
             let sentence = new Sentence();
-            // I know that if it's new it is a string
-            let temp:any;
-            temp = answer.Sentence;
-            sentence.Text = temp;
-            sentence.Id = 0;
-            //--------------------------------
-            newSentences.push(sentence);
-          } else if (answer.Sentence.Text===""){
-            answer.Sentence = null;
+              // I know that if it's new it is a string
+              let temp:any;
+              temp = question.Sentence;
+              sentence.Text = temp;
+              sentence.Id = 0;
+              //--------------------------------
+              newSentences.push(sentence);
+          } else if (question.Sentence!=null && question.Sentence.Text===""){
+            question.Sentence = null;
+          }
+          if (question.Answers!=null)
+          {
+            question.Answers.forEach(answer => {
+              if (!answer.Deleted && answer.Sentence !=null && answer.Sentence.Id===undefined){
+                let sentence = new Sentence();
+                // I know that if it's new it is a string
+                let temp:any;
+                temp = answer.Sentence;
+                sentence.Text = temp;
+                sentence.Id = 0;
+                //--------------------------------
+                newSentences.push(sentence);
+              } else if (answer.Sentence!=null && answer.Sentence.Text===""){
+                answer.Sentence = null;
+              }
+            });
           }
         });
-      });
+      }
     });
     return newSentences;
   }

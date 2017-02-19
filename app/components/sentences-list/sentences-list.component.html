@@ -12,10 +12,10 @@
 <div style="clear: both"> </div>
 <hr>
 <p>
-    <input type="checkbox" (change)="selectAll()"/>
+    <input #selectall type="checkbox" (change)="selectAll(selectall.checked)"/> All
 </p>
 <p *ngFor="let sentence of sentences; let i = index">
-    <input type="checkbox" (change)="selectionChange(sentence)"/>
+    <input type="checkbox" [(ngModel)]="sentence.Selected" />
     <span style="width:100%">{{sentence.Text}}</span>
 </p> 
 

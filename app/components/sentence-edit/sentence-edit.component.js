@@ -48,7 +48,7 @@ var SentenceEditComponent = (function () {
 __decorate([
     core_1.Input(),
     __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [])
 ], SentenceEditComponent.prototype, "sentence", null);
 __decorate([
     core_1.Output(),

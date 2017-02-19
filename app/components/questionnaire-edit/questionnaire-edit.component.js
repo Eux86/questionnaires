@@ -37,9 +37,13 @@ var QuestionnaireEditComponent = (function () {
         questionnaire.Sections.push(new data_model_1.Section());
     };
     QuestionnaireEditComponent.prototype.addQuestion = function (section) {
+        if (section.Questions == null)
+            section.Questions = [];
         section.Questions.push(new data_model_1.Question());
     };
     QuestionnaireEditComponent.prototype.addAnswer = function (question) {
+        if (question.Answers == null)
+            question.Answers = [];
         question.Answers.push(new data_model_1.Answer());
     };
     QuestionnaireEditComponent.prototype.delete = function (deletable) {
@@ -73,70 +77,78 @@ var QuestionnaireEditComponent = (function () {
     };
     QuestionnaireEditComponent.prototype.updateSentenceId = function (questionnaire, sentences) {
         questionnaire.Sections.forEach(function (section) {
-            section.Questions.forEach(function (question) {
-                if (question.Sentence != null && question.Sentence.Id === undefined) {
-                    if (sentences != null) {
-                        sentences.forEach(function (s) {
-                            var sentenceText = question.Sentence;
-                            if (s.Text == sentenceText) {
-                                question.Sentence = new data_model_1.Sentence();
-                                question.Sentence.Text = sentenceText;
-                                question.Sentence.Id = s.Id;
-                            }
-                        });
-                    }
-                }
-                question.Answers.forEach(function (answer) {
-                    if (answer.Sentence != null && answer.Sentence.Id === undefined) {
+            if (section.Questions != null) {
+                section.Questions.forEach(function (question) {
+                    if (question.Sentence != null && question.Sentence.Id === undefined) {
                         if (sentences != null) {
                             sentences.forEach(function (s) {
-                                var sentenceText = answer.Sentence;
+                                var sentenceText = question.Sentence;
                                 if (s.Text == sentenceText) {
-                                    answer.Sentence = new data_model_1.Sentence();
-                                    answer.Sentence.Text = sentenceText;
-                                    answer.Sentence.Id = s.Id;
+                                    question.Sentence = new data_model_1.Sentence();
+                                    question.Sentence.Text = sentenceText;
+                                    question.Sentence.Id = s.Id;
                                 }
                             });
                         }
                     }
+                    if (question.Answers != null) {
+                        question.Answers.forEach(function (answer) {
+                            if (answer.Sentence != null && answer.Sentence.Id === undefined) {
+                                if (sentences != null) {
+                                    sentences.forEach(function (s) {
+                                        var sentenceText = answer.Sentence;
+                                        if (s.Text == sentenceText) {
+                                            answer.Sentence = new data_model_1.Sentence();
+                                            answer.Sentence.Text = sentenceText;
+                                            answer.Sentence.Id = s.Id;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                 });
-            });
+            }
         });
         return questionnaire;
     };
     QuestionnaireEditComponent.prototype.getNewSentences = function (questionnaire) {
         var newSentences = [];
         questionnaire.Sections.forEach(function (section) {
-            section.Questions.forEach(function (question) {
-                if (!question.Deleted && question.Sentence != null && question.Sentence.Id === undefined) {
-                    var sentence = new data_model_1.Sentence();
-                    // I know that if it's new it is a string
-                    var temp = void 0;
-                    temp = question.Sentence;
-                    sentence.Text = temp;
-                    sentence.Id = 0;
-                    //--------------------------------
-                    newSentences.push(sentence);
-                }
-                else if (question.Sentence != null && question.Sentence.Text === "") {
-                    question.Sentence = null;
-                }
-                question.Answers.forEach(function (answer) {
-                    if (!answer.Deleted && answer.Sentence != null && answer.Sentence.Id === undefined) {
+            if (section.Questions != null) {
+                section.Questions.forEach(function (question) {
+                    if (!question.Deleted && question.Sentence != null && question.Sentence.Id === undefined) {
                         var sentence = new data_model_1.Sentence();
                         // I know that if it's new it is a string
                         var temp = void 0;
-                        temp = answer.Sentence;
+                        temp = question.Sentence;
                         sentence.Text = temp;
                         sentence.Id = 0;
                         //--------------------------------
                         newSentences.push(sentence);
                     }
-                    else if (answer.Sentence.Text === "") {
-                        answer.Sentence = null;
+                    else if (question.Sentence != null && question.Sentence.Text === "") {
+                        question.Sentence = null;
+                    }
+                    if (question.Answers != null) {
+                        question.Answers.forEach(function (answer) {
+                            if (!answer.Deleted && answer.Sentence != null && answer.Sentence.Id === undefined) {
+                                var sentence = new data_model_1.Sentence();
+                                // I know that if it's new it is a string
+                                var temp = void 0;
+                                temp = answer.Sentence;
+                                sentence.Text = temp;
+                                sentence.Id = 0;
+                                //--------------------------------
+                                newSentences.push(sentence);
+                            }
+                            else if (answer.Sentence != null && answer.Sentence.Text === "") {
+                                answer.Sentence = null;
+                            }
+                        });
                     }
                 });
-            });
+            }
         });
         return newSentences;
     };
