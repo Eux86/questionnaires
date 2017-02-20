@@ -1,6 +1,30 @@
-<div>
-    <button (click)="createQuestionnaire()" class="btn btn-default" style="float: right">Create new questionnaire</button>
-</div>
+    <div class="input-group" style="margin-bottom: 15px; width: 70%;float: right">
+        <input type="text" class="form-control" placeholder="Search">
+        <div class="input-group-btn">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search" style="height: 20px"></span>
+                </button>
+            </span>
+
+            <div class="input-group-btn">
+                <button class="btn btn-default dropdown-toggle" 
+                    type="button" id="dropdownMenu1" 
+                    data-toggle="dropdown" 
+                    aria-haspopup="true"
+                    aria-expanded="true">
+                    Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a (click)="createQuestionnaire()">New Questionnaire</a></li>
+                    <li><a href="#">Delete Selected</a></li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
 <table class="table">
     <tr *ngFor="let questionnaire of questionnaires">
         <td>
@@ -11,10 +35,6 @@
         </td>
     </tr>
 </table>
-<div>
-    <button (click)="createQuestionnaire()" class="btn btn-default" style="float: right">Create new questionnaire</button>
-</div>
-
 
 
 <modal #modalDelete (onClose)="delete(selected)">
@@ -22,7 +42,7 @@
         <h4 class="modal-title">Deleting:</h4>
     </modal-header>
     <modal-body>
-        Are you sure you want to delete selected questionnaire?<br/> ({{selected.id}}) {{selected.description}}
+        Are you sure you want to delete selected questionnaire?<br/> ({{selected.Id}}) {{selected.Description}}
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Cancel</button>

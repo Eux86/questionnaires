@@ -19,8 +19,8 @@ AppComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'my-app',
-        template: "\n        <nav class=\"navbar navbar-inverse navbar-fixed-top\">\n            <div class=\"container\">\n                <div class=\"navbar-header\">\n                <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">\n                    <span class=\"sr-only\">Toggle navigation</span>\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n                </button>\n                <a class=\"navbar-brand\" href=\"#\">{{title}}</a>\n                </div>\n                <div id=\"navbar\" class=\"collapse navbar-collapse\">\n                <ul class=\"nav navbar-nav\">\n                    <li routerLinkActive=\"active\"><a routerLink=\"/list\" >Questionnaires List</a></li>\n                    <li routerLinkActive=\"active\"><a routerLink=\"/sentences\" >Sentences</a></li>\n                </ul>\n                </div><!--/.nav-collapse -->\n            </div>\n        </nav>\n        <div class=\"container\">\n\n            <router-outlet></router-outlet>\n\n        </div>\n       \n        \n    ",
-        styleUrls: ['app.component.css'],
+        templateUrl: 'app.component.html',
+        styleUrls: ['app.component.css']
     }),
     __metadata("design:paramtypes", [])
 ], AppComponent);
