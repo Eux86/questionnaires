@@ -1,11 +1,14 @@
 <h1 style="margin-bottom:30px">Questionnaires List</h1>
 <div class="container">
     <div class="row">
-        <div class="col-sm-6">
-            <div class="btn-group btn-group-sm" role="group" aria-label="Questionnaire List Toolbar" >
-                <button type="button" class="btn btn-default glyphicon glyphicon-plus" aria-label="Add" (click)="createQuestionnaire()"></button>
-                <button type="button" class="btn btn-default glyphicon glyphicon-trash" aria-label="Delete" (click)="deleteSelected()"></button>
-                <button type="button" class="btn btn-default glyphicon glyphicon-pencil" aria-label="Edit" (click)="editSelected()"></button>
+        <div  class="col-sm-6">
+            <div *ngIf="isAdmin"  class="btn-group btn-group-sm" role="group" aria-label="Questionnaire List Toolbar" >
+                <button type="button" class="btn btn-default glyphicon glyphicon-plus"
+                    aria-label="Add" (click)="createQuestionnaire()"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-pencil" 
+                    aria-label="Edit" (click)="editSelected()" [disabled]="!isEditEnabled"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-trash" 
+                    aria-label="Delete" (click)="modalDelete.open()" [disabled]="!isDeleteEnabled"></button>
             </div>
         </div>
         <div class="col-sm-6">
@@ -35,9 +38,10 @@
             </tr>
                 <tr *ngFor="let questionnaire of questionnaires">
                     <td>
-                        <button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
-                        <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
+                        <!--<button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
+                        <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>-->
                         <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
+                        <input *ngIf="isAdmin" type="checkbox" [(ngModel)]="questionnaire.Selected" (change)="onSelectionChange(questionnaire)" />
                         <span><a (click)="gotoView(questionnaire)">{{questionnaire.Description}}</a></span>
                     </td>
                     <td>
@@ -48,14 +52,39 @@
         </div>
     </div>
 </div>
-    
 
-<modal #modalDelete (onClose)="delete(selected)">
+
+<h3>Debug stuff</h3>
+<input type="checkbox" [(ngModel)]="isAdmin" />Admin mode
+<ul>
+    <li>IsEditEnabled: {{isEditEnabled}}</li>
+    <li>IsDeleteEnabled: {{isDeleteEnabled}}</li>
+    <li *ngFor="let q of selected">Selected: {{q.Description}}</li>
+</ul>
+
+<br>
+Create example Questionnaires
+<code>
+DECLARE @cnt INT = 0;
+
+WHILE @cnt < 100
+BEGIN
+   insert into Questionnaire (Description,CreateDate,Date) values
+   ('Example questionnaire n. '+CAST(@cnt AS VARCHAR(16)), GETDATE(), GETDATE())
+   SET @cnt = @cnt + 1;
+END;
+</code>
+
+
+<modal #modalDelete (onClose)="confirmDelete()">
     <modal-header [show-close]="true">
         <h4 class="modal-title">Deleting:</h4>
     </modal-header>
     <modal-body>
-        Are you sure you want to delete selected questionnaire?<br/> ({{selected.Id}}) {{selected.Description}}
+        Are you sure you want to delete selected questionnaires?<br/> 
+        <p *ngFor="let q of selected">
+            ({{q.Id}}) {{q.Description}}
+        </p>
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Cancel</button>

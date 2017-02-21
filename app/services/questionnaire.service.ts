@@ -75,6 +75,21 @@ export class QuestionnaireService{
         .catch(this.handleError);
     }
 
+    deleteList(list: Questionnaire[]): Promise<void>{
+        var ids: number[] = [];
+        list.forEach(q => {
+            ids.push(q.Id);
+        });
+        const url = `${this.questionnaireUrl}/DeleteList`;
+        return this.http
+        .post(url, JSON.stringify(ids),
+        {
+            headers: this.headers,
+        })
+        .toPromise().then( () => null)
+        .catch(this.handleError);
+    }
+
     checkQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire>{
         return this.getQuestionnaire(questionnaire.Id).then(q=> { return q });
     }

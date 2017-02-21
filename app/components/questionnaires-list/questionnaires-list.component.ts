@@ -24,7 +24,11 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   questionnaires: Questionnaire[];
-  selected: Questionnaire = new Questionnaire();
+  selected: Questionnaire[] =[];
+  isDeleteEnabled: boolean = false;
+  isEditEnabled: boolean = false;
+
+  isAdmin: Boolean = true;
 
   ngOnInit(): void {
     this.getList();
@@ -49,12 +53,10 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
 
-  delete (questionnaire: Questionnaire): void{
-    this.questionnaireService.delete(questionnaire.Id).then(()=>{
-      var index = this.questionnaires.indexOf(questionnaire, 0);
-      if (index > -1) {
-        this.questionnaires.splice(index, 1);
-      }
+  confirmDelete (): void{
+    this.questionnaireService.deleteList(this.selected).then(()=>{
+      this.getList();
+      this.selected=[];
     });
   }
 
@@ -66,33 +68,26 @@ export class QuestionnaireListComponent implements OnInit {
     this.router.navigate(['/view',questionnaire.Id]);
   }
 
-//   onSelect(hero: Hero): void {
-//     this.selectedHero = hero;
-//   }
+  onSelectionChange(questionnaire:Questionnaire){
+    let q: any = questionnaire;
+    if (!q.Selected){
+      this.selected.push(questionnaire);
+    } else {
+      let index = -1;
+      for(let i=0; i< this.selected.length; i++){
+        if (this.selected[i].Id==questionnaire.Id){
+          index=i;
+          break;
+        }
+      }
+      if (index!=-1){
+        this.selected.splice(index,1);
+      }
+    }
+    this.isEditEnabled = this.selected.length==1;
+    this.isDeleteEnabled = this.selected.length>0;
+  }
 
-//   gotoDetail(): void {
-//     this.router.navigate(['/detail',this.selectedHero.Id]);
-//   }
-
-//   add(name: string): void {
-//     name = name.trim();
-//     if (!name) {return; }
-//     this.heroService.create(name)
-//       .then(hero=>{
-//         this.heroes.push(hero);
-//         this.selectedHero = null;
-//       });
-//   }
-
-//   delete (hero: Hero): void{
-//     this.heroService
-//         .delete(hero.Id).then(()=> {
-//           this.heroes = this.heroes.filter(h=>h !== hero);
-//           if (this.selectedHero === hero) {
-//             this.selectedHero = null;
-//           }
-//         });
-//   }
 
 }
 
