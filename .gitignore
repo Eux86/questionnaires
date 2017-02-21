@@ -34,5 +34,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-*.map
-*.map
+app/**/*.js
+app/**/*.map
+node_modules
