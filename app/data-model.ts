@@ -1,28 +1,29 @@
-export class Deletable {
+export class GeneralTable {
 	Deleted: Boolean;
+	CreateDate: Date;
 }
 
-export class Sentence  extends Deletable {
+export class Sentence  extends GeneralTable {
 	Id: number;
 	Text: string = "";
 }
-export class Answer  extends Deletable {
+export class Answer  extends GeneralTable {
 	Id: number;
 	Sentence: Sentence;
     IsCorrect: boolean;
 	Selected: boolean;
 }
-export class Question  extends Deletable {
+export class Question  extends GeneralTable {
 	Id: number;
 	Sentence: Sentence;
     Answers: Answer[];
 }
-export class Section  extends Deletable {
+export class Section  extends GeneralTable {
 	Id: number;
 	Description: string;
     Questions: Question[];
 }
-export class Questionnaire extends Deletable {
+export class Questionnaire extends GeneralTable {
 	Id: number ;
 	Date: Date;
 	Description: string;

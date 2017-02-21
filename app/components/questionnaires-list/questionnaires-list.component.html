@@ -1,41 +1,54 @@
-    <div class="input-group" style="margin-bottom: 15px; width: 70%;float: right">
-        <input type="text" class="form-control" placeholder="Search">
-        <div class="input-group-btn">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button">
-                    <span class="glyphicon glyphicon-search" style="height: 20px"></span>
-                </button>
-            </span>
-
-            <div class="input-group-btn">
-                <button class="btn btn-default dropdown-toggle" 
-                    type="button" id="dropdownMenu1" 
-                    data-toggle="dropdown" 
-                    aria-haspopup="true"
-                    aria-expanded="true">
-                    Actions
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a (click)="createQuestionnaire()">New Questionnaire</a></li>
-                    <li><a href="#">Delete Selected</a></li>
-                </ul>
+<h1 style="margin-bottom:30px">Questionnaires List</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Questionnaire List Toolbar" >
+                <button type="button" class="btn btn-default glyphicon glyphicon-plus" aria-label="Add" (click)="createQuestionnaire()"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-trash" aria-label="Delete" (click)="deleteSelected()"></button>
+                <button type="button" class="btn btn-default glyphicon glyphicon-pencil" aria-label="Edit" (click)="editSelected()"></button>
             </div>
         </div>
-        
+        <div class="col-sm-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search">
+                <div class="input-group-btn">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-search" style="height: 20px"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
-
-<table class="table">
-    <tr *ngFor="let questionnaire of questionnaires">
-        <td>
-            <button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
-            <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
-            <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
-            <span><a (click)="gotoView(questionnaire)">{{questionnaire.Description}}</a></span>
-        </td>
-    </tr>
-</table>
-
+    <div class="row">&nbsp;</div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-sm-12">
+            <table class="table">
+                <tr>
+                    <th>
+                Description
+            </th>
+            <th>
+                Date created
+            </th>
+            </tr>
+                <tr *ngFor="let questionnaire of questionnaires">
+                    <td>
+                        <button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
+                        <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>
+                        <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
+                        <span><a (click)="gotoView(questionnaire)">{{questionnaire.Description}}</a></span>
+                    </td>
+                    <td>
+                        {{questionnaire.CreateDate | date:'dd/MM/y'}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+    
 
 <modal #modalDelete (onClose)="delete(selected)">
     <modal-header [show-close]="true">
