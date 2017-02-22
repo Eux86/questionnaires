@@ -9,12 +9,12 @@
             <div class="questionHeader contrastBackground">
                 <span>Question n. {{i+1}}</span>
             </div>
-            <p>{{question.Sentence.Text}}</p>
+            <p *ngIf="question.Sentence">{{question.Sentence.Text}}</p>
             <div class="answer-view clearFloat" 
                 *ngFor="let answer of question.Answers; let a = index"
                  [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
                 <input type="checkbox" [(ngModel)]="answer.Selected" />
-                <div>{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
+                <div *ngIf="answer.Sentence">{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
             </div>
         </div>
     </div>

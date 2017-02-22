@@ -20,11 +20,21 @@ export class QuestionnaireService{
     
     constructor (private http: Http) {}
 
-    getQuestionnaires(): Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl+'/GetAll')
+    getQuestionnaires(startIndex: Number, quantity: Number): Promise<Questionnaire[]>{
+        return this.http.get(this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity)
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
+                    return ret;
+                })
+                .catch(this.handleError);
+    }
+
+    getTotalNumber():Promise<number>{
+        return this.http.get(this.questionnaireUrl+'/GetCount')
+                .toPromise()
+                .then(function(response) {
+                    let ret = response.json() as number;
                     return ret;
                 })
                 .catch(this.handleError);

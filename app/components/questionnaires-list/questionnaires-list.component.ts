@@ -13,7 +13,6 @@ declare var BootstrapDialog: any;
   templateUrl: 'questionnaires-list.component.html',
   styleUrls: ['questionnaires-list.component.css'],
 })
-
 export class QuestionnaireListComponent implements OnInit {
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -28,6 +27,13 @@ export class QuestionnaireListComponent implements OnInit {
   isDeleteEnabled: boolean = false;
   isEditEnabled: boolean = false;
 
+  // Paging
+  startIndex:number = 0;
+  quantity:number = 10;
+  totalNumber:number = 0;
+  currentPage:number = 1;
+  pages: Page[] = [];
+
   isAdmin: Boolean = true;
 
   ngOnInit(): void {
@@ -37,9 +43,28 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   getList(): void {
-    this.questionnaireService.getQuestionnaires().then(
+    this.questionnaireService.getQuestionnaires(this.startIndex,this.quantity).then(
       questionnaires => {
         this.questionnaires = questionnaires;
+      }
+    )
+    this.getTotalNumber();
+  }
+
+  calculatePaging():void{
+    let numberOfPages = this.totalNumber/this.quantity;
+    this.pages = [];
+    for (let i=0;i<numberOfPages;i++){
+      this.pages.push({ Text: (i+1)+"", Link:"#"});
+    }
+  }
+
+  getTotalNumber():void{
+    this.questionnaireService.getTotalNumber().then(
+      total=> 
+      {
+        this.totalNumber=total;
+        this.calculatePaging();
       }
     )
   }
@@ -92,3 +117,8 @@ export class QuestionnaireListComponent implements OnInit {
 }
 
 
+
+export class Page{
+  Link: string = "";
+  Text: string = "";
+}
