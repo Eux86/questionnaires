@@ -12,16 +12,20 @@
             </div>
         </div>
         <div class="col-sm-6">
+            
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" class="form-control" placeholder="Search" 
+                    (keyup.enter)="confirmSearch()"
+                    (keyup)="onChangeSearchQuery()"
+                    [(ngModel)]="searchQuery">
                 <div class="input-group-btn">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <span class="glyphicon glyphicon-search" style="height: 20px"></span>
-                        </button>
-                    </span>
+                    <button class="btn btn-default" type="button" (click)="confirmSearch()">
+                        <span class="glyphicon glyphicon-search" style="height: 20px"></span>
+                    </button>
                 </div>
             </div>
+            <span id="searchclear" class="glyphicon glyphicon-remove-circle" (click)="clearSearch()" *ngIf="isShowingSearchResult"></span>
+            
         </div>
     </div>
     <div class="row">&nbsp;</div>
@@ -38,9 +42,6 @@
             </tr>
                 <tr *ngFor="let questionnaire of questionnaires">
                     <td>
-                        <!--<button class="btn btn-xs btn-default" (click)="selected=questionnaire;modalDelete.open()">DEL</button>
-                        <button class="btn btn-xs btn-default" (click)="gotoEdit(questionnaire)">EDIT</button>-->
-                        <!--<button class="btn btn-xs btn-default" (click)="gotoView(questionnaire)">VIEW</button>-->
                         <input *ngIf="isAdmin" type="checkbox" [(ngModel)]="questionnaire.Selected" (change)="onSelectionChange(questionnaire)" />
                         <span><a (click)="gotoView(questionnaire)">{{questionnaire.Description}}</a></span>
                     </td>
@@ -52,18 +53,18 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" *ngIf="!isShowingSearchResult">
         <div class="col-sm-12 ">
             <nav aria-label="Page navigation" class="text-center">
                 <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
+                    <li [ngClass]="{'disabled': !isPreviousEnabled }">
+                        <a (click)="gotoPreviousPage()" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li *ngFor="let page of pages"><a href="{{page.Link}}">{{page.Text}}</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
+                    <li *ngFor="let page of pages" [ngClass]="{'active': currentIndex==page.Index }"><a (click)="gotoPage(page.Index)">{{page.Text}}</a></li>
+                    <li [ngClass]="{'disabled': !isNextEnabled }">
+                        <a (click)="gotoNextPage()" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -79,6 +80,8 @@
 <ul>
     <li>IsEditEnabled: {{isEditEnabled}}</li>
     <li>IsDeleteEnabled: {{isDeleteEnabled}}</li>
+    <li>CurrentIndex: {{currentIndex}}</li>
+    <li>isShowingSearchResult: {{this.isShowingSearchResult}} </li>
     <li *ngFor="let q of selected">Selected: {{q.Description}}</li>
 </ul>
 

@@ -27,23 +27,26 @@ export class QuestionnaireListComponent implements OnInit {
   isDeleteEnabled: boolean = false;
   isEditEnabled: boolean = false;
 
+  // Search
+  searchQuery: string = "";
+  isShowingSearchResult: boolean = false;
+
   // Paging
-  startIndex:number = 0;
+  currentIndex:number = 0;
   quantity:number = 10;
   totalNumber:number = 0;
-  currentPage:number = 1;
   pages: Page[] = [];
+  isPreviousEnabled: boolean = false;
+  isNextEnabled: boolean = true;
 
   isAdmin: Boolean = true;
 
   ngOnInit(): void {
     this.getList();
-
-    // COPIA IN QUESTIONNAIRE-EDIT
   }
 
   getList(): void {
-    this.questionnaireService.getQuestionnaires(this.startIndex,this.quantity).then(
+    this.questionnaireService.getQuestionnaires(this.currentIndex*this.quantity,this.quantity).then(
       questionnaires => {
         this.questionnaires = questionnaires;
       }
@@ -55,8 +58,49 @@ export class QuestionnaireListComponent implements OnInit {
     let numberOfPages = this.totalNumber/this.quantity;
     this.pages = [];
     for (let i=0;i<numberOfPages;i++){
-      this.pages.push({ Text: (i+1)+"", Link:"#"});
+      this.pages.push({ Text: (i+1)+"", Index:i});
     }
+  }
+
+  gotoPage(index:number):void{
+    this.currentIndex = index;
+    if (index<1) 
+      this.isPreviousEnabled=false;
+    else
+      this.isPreviousEnabled=true;
+    if (index>(this.totalNumber/this.quantity)-1)
+      this.isNextEnabled=false;
+    else
+      this.isNextEnabled=true;
+    this.getList();
+  }
+  gotoPreviousPage():void{
+    if (this.currentIndex<0) return;
+    this.gotoPage(this.currentIndex-1);
+  }
+  gotoNextPage():void{
+    if (this.currentIndex>this.totalNumber) return;
+    this.gotoPage(this.currentIndex+1);
+  }
+
+  confirmSearch():void{
+    this.questionnaireService.getQuestionnaireBySearchText(this.searchQuery).then(
+      res=> 
+      {
+        this.questionnaires = res;
+      }
+    )
+    this.isShowingSearchResult = true;
+  }
+  onChangeSearchQuery():void{
+    if (this.searchQuery==""){
+      this.isShowingSearchResult = false;
+    }
+  }
+  clearSearch():void{
+    this.searchQuery="";
+    this.isShowingSearchResult=false;
+    this.getList();
   }
 
   getTotalNumber():void{
@@ -85,8 +129,8 @@ export class QuestionnaireListComponent implements OnInit {
     });
   }
 
-  gotoEdit(questionnaire: Questionnaire){
-    this.router.navigate(['/edit',questionnaire.Id]);
+  editSelected(){
+    this.router.navigate(['/edit',this.selected[0].Id]);
   }
 
   gotoView(questionnaire: Questionnaire){
@@ -113,12 +157,12 @@ export class QuestionnaireListComponent implements OnInit {
     this.isDeleteEnabled = this.selected.length>0;
   }
 
-
+  
 }
 
 
 
 export class Page{
-  Link: string = "";
   Text: string = "";
+  Index: number = 0;
 }

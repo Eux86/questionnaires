@@ -52,6 +52,16 @@ export class QuestionnaireService{
                 .catch(this.handleError);
     }
 
+    getQuestionnaireBySearchText(text:string):Promise<Questionnaire[]>{
+        return this.http.get(this.questionnaireUrl+'/GetBySearchText?searchText='+text)
+                .toPromise()
+                .then(function(response) {
+                    let ret = response.json() as Questionnaire[];
+                    return ret;
+                })
+                .catch(this.handleError);
+    }
+
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
         return this.http
         .post(this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
