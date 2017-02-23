@@ -1,4 +1,12 @@
-
+.questionIndex {
+    position: absolute;
+    z-index: 999;
+    margin-left: -40px;
+    margin-top: -12px;
+    font-weight: bold;
+    font-size: 26px;
+    text-align: right;
+}
 .questionnaire-edit{
     margin: 0 auto;
 }

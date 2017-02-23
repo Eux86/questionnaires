@@ -13,7 +13,7 @@ import { QuestionnaireService } from '../../services/questionnaire.service'
 })
 export class QuestionnaireViewComponent implements OnInit {
   questionnaire: Questionnaire = new Questionnaire();
-  showCheckResults: boolean = false;
+  isShowingResults: boolean = false;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -38,21 +38,48 @@ export class QuestionnaireViewComponent implements OnInit {
     this.questionnaireService.checkQuestionnaire(questionnaire).then(correct=>{
       questionnaire.Sections.forEach((section,sectionIndex) => {
         section.Questions.forEach((question,questionIndex) => {
+          question.IsCorrect = true;
           question.Answers.forEach((answer,answerIndex) => {
             answer.IsCorrect = correct.Sections[sectionIndex]
                                       .Questions[questionIndex]
                                       .Answers[answerIndex].IsCorrect;
+            if (!answer.IsCorrect && answer.Selected){
+              question.IsCorrect = false;
+            }
           });
         });
       });
+      this.calculateReport();
     });
-    this.showCheckResults = true;
+    this.isShowingResults = true;
+  }
+
+  calculateReport():void{
+    var totalQuesitons = 0;
+    var totalCorrectQuestions = 0;
+    this.questionnaire.Sections.forEach((section,sectionIndex) => {
+      var correctQuestions: number = 0;
+      section.Questions.forEach((question,questionIndex) => {
+        if (question.IsCorrect){
+          correctQuestions+=1;
+          totalCorrectQuestions+=1;
+        }
+        totalQuesitons +=1;
+      });
+      section.Score = correctQuestions/section.Questions.length*100;
+    });
+    this.questionnaire.Score = totalCorrectQuestions/totalQuesitons*100;
   }
 
   isRighAnswer(answer: Answer):boolean{
-    return answer.IsCorrect && this.showCheckResults;
+    return answer.IsCorrect && this.isShowingResults;
   }
   isWrongAnswer(answer: Answer):boolean{
-    return answer.Selected && !answer.IsCorrect && this.showCheckResults;
+    return answer.Selected && !answer.IsCorrect && this.isShowingResults;
   }
+}
+
+export class SectionScore {
+  SectionDescription: string;
+  Score: number;
 }

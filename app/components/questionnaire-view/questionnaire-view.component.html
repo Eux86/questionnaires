@@ -1,24 +1,68 @@
-<div class="questionnaire-view">
-    <label>Description: </label>
-    <span>{{questionnaire.Description}}</span>
-    <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-view">
-        <h2 class="description">
-            <span>{{section.Description}}</span>
-        </h2>
-        <div *ngFor="let question of section.Questions; let i = index" class="question-view">
-            <div class="questionHeader contrastBackground">
-                <span>Question n. {{i+1}}</span>
-            </div>
-            <p *ngIf="question.Sentence">{{question.Sentence.Text}}</p>
-            <div class="answer-view clearFloat" 
-                *ngFor="let answer of question.Answers; let a = index"
-                 [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
-                <input type="checkbox" [(ngModel)]="answer.Selected" />
-                <div *ngIf="answer.Sentence">{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
+<h1 style="margin-bottom: 30px">Run Questionnaire: <small>{{questionnaire.Description}}</small></h1>
+<div class="container" style="margin-bottom: 100px;">
+    <div class="row" *ngFor="let section of questionnaire.Sections; let s = index">
+        <div class="col-sm-12" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 header" >
+                        <h2>{{section.Description}}</h2>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="container">
+                                    <div class="row" *ngFor="let question of section.Questions; let i = index">
+                                        <div class="container">
+                                            <div class="row bs-callout bs-callout-info vertical-align" >
+                                                <div class="col-sm-1 " style="max-width: 50px">
+                                                    <h2><small>{{s+1}}.{{i+1}}</small></h2>
+                                                </div>
+                                                <div class="col-sm-11">
+                                                    <p *ngIf="question.Sentence">{{question.Sentence.Text}}</p>
+                                                    <div class="answer-view clearFloat" *ngFor="let answer of question.Answers; let a = index" [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
+                                                        <div class="input-group">
+                                                            <input type="checkbox" [(ngModel)]="answer.Selected" />
+                                                            <div *ngIf="answer.Sentence">{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="centerContent">
-        <button class="checkButton accentButton" (click)="checkAnswers(questionnaire)">CHECK</button>
+    <div *ngIf="!isShowingResults" class="row" style="margin-top: 30px;">
+        <div class="center-block text-center" >
+            <button class="btn btn-primary glyphicon glyphicon-ok" (click)="checkAnswers(questionnaire)"> Submit</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Questionnaire Report</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge">{{questionnaire.Score}}%</span>
+                            Total Score </li>
+                        <li class="list-group-item">Sections Score:</li>
+                        <li *ngFor="let section of questionnaire.Sections;let i=index" class="list-group-item">
+                            <span class="badge">{{section.Score}}%</span>
+                            {{section.Description}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
     </div>
 </div>
