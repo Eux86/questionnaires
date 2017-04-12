@@ -6,6 +6,8 @@ import { QuestionnaireListComponent } from './components/questionnaires-list/que
 import { QuestionnaireEditComponent } from './components/questionnaire-edit/questionnaire-edit.component'; 
 import { SentencesListComponent } from './components/sentences-list/sentences-list.component'; 
 import { QuestionnaireViewComponent } from './components/questionnaire-view/questionnaire-view.component';
+import { LoginComponent } from './components/login/login.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
@@ -13,6 +15,7 @@ const routes: Routes = [
   { path: 'edit/:id', component: QuestionnaireEditComponent },
   { path: 'sentences', component: SentencesListComponent },
   { path: 'view/:id', component: QuestionnaireViewComponent },
+  { path: 'login', component: LoginComponent },
 ];
 
 @NgModule({

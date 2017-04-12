@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service';
+import { AuthenticationService } from '../../services/authentication.service';
+
 
 declare var BootstrapDialog: any;
 
@@ -16,7 +18,8 @@ declare var BootstrapDialog: any;
 export class QuestionnaireListComponent implements OnInit {
   constructor(
     private questionnaireService: QuestionnaireService,
-    private router: Router
+    private router: Router,
+    private authService: AuthenticationService,
   ) 
   {
     
@@ -43,6 +46,7 @@ export class QuestionnaireListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getList();
+    this.isAdmin = this.authService.isAdmin();
   }
 
   getList(): void {

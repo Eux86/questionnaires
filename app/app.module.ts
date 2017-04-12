@@ -11,9 +11,12 @@ import { QuestionnaireEditComponent } from './components/questionnaire-edit/ques
 import { SentenceEditComponent } from './components/sentence-edit/sentence-edit.component';
 import { QuestionnaireViewComponent } from './components/questionnaire-view/questionnaire-view.component'; 
 import { SentencesListComponent } from './components/sentences-list/sentences-list.component'; 
+import { LoginComponent } from './components/login/login.component';
+
 
 import { QuestionnaireService } from './services/questionnaire.service'
 import { SentenceService } from './services/sentence.service'
+import { AuthenticationService } from './services/authentication.service'
 
 
 
@@ -44,8 +47,9 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     QuestionnaireEditComponent,
     QuestionnaireViewComponent,
     SentenceEditComponent,
-    SentencesListComponent ],
-  providers: [QuestionnaireService,SentenceService],
+    SentencesListComponent,
+    LoginComponent ],
+  providers: [QuestionnaireService,SentenceService,AuthenticationService],
   bootstrap: 	[ AppComponent ]
 })
 export class AppModule { }

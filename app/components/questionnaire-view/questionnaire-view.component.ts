@@ -38,14 +38,14 @@ export class QuestionnaireViewComponent implements OnInit {
     this.questionnaireService.checkQuestionnaire(questionnaire).then(correct=>{
       questionnaire.Sections.forEach((section,sectionIndex) => {
         section.Questions.forEach((question,questionIndex) => {
-          question.IsCorrect = true;
+          question.IsCorrect = false;
           question.Answers.forEach((answer,answerIndex) => {
             answer.IsCorrect = correct.Sections[sectionIndex]
                                       .Questions[questionIndex]
                                       .Answers[answerIndex].IsCorrect;
-            if (!answer.IsCorrect && answer.Selected){
-              question.IsCorrect = false;
-            }
+            if (answer.IsCorrect && answer.Selected){
+              question.IsCorrect = true;
+            } 
           });
         });
       });

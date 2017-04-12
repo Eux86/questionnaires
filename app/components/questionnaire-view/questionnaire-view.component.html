@@ -42,7 +42,7 @@
             <button class="btn btn-primary glyphicon glyphicon-ok" (click)="checkAnswers(questionnaire)"> Submit</button>
         </div>
     </div>
-    <div class="row">
+    <div *ngIf="isShowingResults" class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
             <div class="panel panel-primary">

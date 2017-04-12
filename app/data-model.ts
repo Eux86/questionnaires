@@ -9,7 +9,7 @@ export class Sentence  extends GeneralTable {
 export class Answer  extends GeneralTable {
 	Id: number;
 	Sentence: Sentence;
-    IsCorrect: boolean;
+    IsCorrect: boolean = false;
 	Selected: boolean;
 }
 export class Question  extends GeneralTable {
@@ -18,7 +18,7 @@ export class Question  extends GeneralTable {
     Answers: Answer[];
 
 	// front end only
-	IsCorrect: boolean;
+	IsCorrect: boolean = false;
 }
 export class Section  extends GeneralTable {
 	Id: number;
