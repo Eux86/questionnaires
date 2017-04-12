@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'edit/:id', component: QuestionnaireEditComponent },
   { path: 'sentences', component: SentencesListComponent },
   { path: 'view/:id', component: QuestionnaireViewComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login/:logout', component: LoginComponent },
 ];
 
 @NgModule({

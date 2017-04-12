@@ -15,17 +15,17 @@ export class AuthenticationService{
 
     login(username: string,password: string): Promise<Boolean>{
         // FAKE LOGIN
-        return new Promise(() => {
+        return new Promise((resolve, reject) => {
             localStorage.setItem("isAdmin","true");
-            true;
+            resolve(true);
         });
     }
 
-    logout(username: string,password: string): Promise<Boolean>{
+    logout(): Promise<Boolean>{
         // FAKE LOGOUT
-        return new Promise(() => {
+        return new Promise<Boolean>((resolve) => {
             localStorage.setItem("isAdmin","false");
-            true;
+            resolve(true);
         });
     }
 
