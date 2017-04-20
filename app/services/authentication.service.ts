@@ -8,12 +8,19 @@ import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 @Injectable()
 export class AuthenticationService{
+
+    loginUrl: string = "http://localhost:3010/auth2/token";
+    private headers = new Headers({'Content-Type': 'application/json','Audience':'Any'});
+
+
+    constructor (private http: Http) {}
+
     isAdmin(): Boolean{
         var isAdmin = localStorage.getItem("isAdmin");
         return isAdmin == "true";
     }
 
-    login(username: string,password: string): Promise<Boolean>{
+    loginFake(username: string,password: string): Promise<Boolean>{
         // FAKE LOGIN
         return new Promise((resolve, reject) => {
             localStorage.setItem("isAdmin","true");
@@ -28,5 +35,23 @@ export class AuthenticationService{
             resolve(true);
         });
     }
+
+    login(username: string,password: string): Promise<Boolean>{
+        let body = JSON.stringify({
+            username: username,
+            password: password,
+            grant_type: "password"
+        });
+        return this.http
+        .post(this.loginUrl+'?username='+username+'&password='+password+'&grant_type=password', JSON.stringify(body), {headers: this.headers})
+        .toPromise()
+        .then(res =>  {
+            return true
+        })
+        .catch(()=>{ 
+            return false;
+        });
+    }
+
 
 }
