@@ -10,7 +10,10 @@ import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 export class AuthenticationService{
 
     loginUrl: string = "http://localhost:3010/auth2/token";
-    private headers = new Headers({'Content-Type': 'application/json','Audience':'Any'});
+    private headers = new Headers({
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Audience':'Any', 
+                                 });
 
 
     constructor (private http: Http) {}
@@ -32,6 +35,7 @@ export class AuthenticationService{
         // FAKE LOGOUT
         return new Promise<Boolean>((resolve) => {
             localStorage.setItem("isAdmin","false");
+            localStorage.setItem("token","");
             resolve(true);
         });
     }
@@ -43,12 +47,16 @@ export class AuthenticationService{
             grant_type: "password"
         });
         return this.http
-        .post(this.loginUrl+'?username='+username+'&password='+password+'&grant_type=password', JSON.stringify(body), {headers: this.headers})
+        .post(this.loginUrl, "username="+username+"&password="+password+"&grant_type=password", {headers: this.headers})
         .toPromise()
         .then(res =>  {
+            localStorage.setItem("isAdmin","true");
+            localStorage.setItem("token",res.json().access_token);
             return true
         })
         .catch(()=>{ 
+            localStorage.setItem("isAdmin","false");
+            localStorage.setItem("token","");
             return false;
         });
     }
