@@ -20,6 +20,7 @@
                         <span>Question n. {{i+1}}</span>
                         <button (click)="delete(question)">X</button>
                     </div>
+                    <p><a (click)="fileUploadModal()">Upload Image</a></p>
                     <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
                     <h3>Answers:</h3>
                     <table *ngFor="let answer of question.Answers; let a = index">
@@ -90,3 +91,33 @@
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalNewSentences.close()">Yes</button>
     </modal-footer>
 </modal>
+
+<modal #modalFileUpload (onClose)="fileUpload()">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Upload Image</h4>
+    </modal-header>
+    <modal-body>
+        <div class="container">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <!--<label>Upload Image</label>-->
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-default btn-file">
+                                Browse… <input type="file" id="imgInp" (change)="fileInputChange($event)" >
+                            </span>
+                        </span>
+                        <input type="text" class="form-control" readonly [ngModel]="uploadingFileName" >
+                    </div>
+                    <img *ngIf="selectedFile" id='img-upload' src="{{selectedFile}}"/>
+                </div>
+            </div>
+        </div>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalNewSentences.dismiss()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalNewSentences.close()">Yes</button>
+    </modal-footer>
+</modal>
+
+

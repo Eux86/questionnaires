@@ -20,9 +20,12 @@ export class QuestionnaireEditComponent implements OnInit {
   modalSaved: ModalComponent;
   @ViewChild('modalNewSentences')
   modalNewSentences: ModalComponent;
+  @ViewChild('modalFileUpload')
+  modalFileUpload: ModalComponent;
 
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
+  selectedFile: any = null;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -172,15 +175,20 @@ export class QuestionnaireEditComponent implements OnInit {
     return newSentences;
   }
 
-  // confirmNewSentencesCreation(sentences: Sentence[]):boolean{
-  //   if (sentences!==undefined && sentences.length>0){
-  //     let message: String = 'New sentences will be created: do you want to procede?';
-  //     let i = 1;
-  //     sentences.forEach(sentence => {
-  //       message+='\n'+i++ +') '+sentence; // When it is a new sentence, the autocomplete field registers the sentence as a string, not as a Sentence
-  //     });
-  //     alert(message)
-  //   }
-  //   return true;
-  // }
+  
+  fileUploadModal():void{
+    this.modalFileUpload.open();
+  }
+  fileInputChange(fileInput: any):void{
+    if (fileInput.target.files && fileInput.target.files[0]) {
+        var reader = new FileReader();
+
+        let self = this;
+        reader.onload = function (e : any) {
+            self.selectedFile = e.target.result;
+        }
+        
+        reader.readAsDataURL(fileInput.target.files[0]);
+    }
+  }
 }
