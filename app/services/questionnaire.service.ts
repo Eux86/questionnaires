@@ -16,12 +16,13 @@ export class QuestionnaireService{
     // private questionnaireUrl = this.prefix+'questionnaires';
     // private sentencesUrl =  this.prefix+'sentences';
 
-    private headers = new Headers({'Content-Type': 'application/json'});
+    private headers = new Headers({'Content-Type': 'application/json',
+                                    'Authorization': "Bearer "+localStorage.getItem("token")});
     
     constructor (private http: Http) {}
 
     getQuestionnaires(startIndex: Number, quantity: Number): Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity)
+        return this.http.get(this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -31,7 +32,7 @@ export class QuestionnaireService{
     }
 
     getTotalNumber():Promise<number>{
-        return this.http.get(this.questionnaireUrl+'/GetCount')
+        return this.http.get(this.questionnaireUrl+'/GetCount',{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as number;
@@ -43,7 +44,7 @@ export class QuestionnaireService{
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     getQuestionnaire(id: Number): Promise<Questionnaire>{
-        return this.http.get(this.questionnaireUrl+'/Get/'+id)
+        return this.http.get(this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire;
@@ -53,7 +54,7 @@ export class QuestionnaireService{
     }
 
     getQuestionnaireBySearchText(text:string):Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl+'/GetBySearchText?searchText='+text)
+        return this.http.get(this.questionnaireUrl+'/GetBySearchText?searchText='+text,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -88,9 +89,7 @@ export class QuestionnaireService{
     delete(id: number): Promise<void>{
         const url = `${this.questionnaireUrl}/Delete/${id}`;
         return this.http
-        .delete(url, {
-            headers: this.headers,
-        })
+        .delete(url, { headers: this.headers })
         .toPromise().then( () => null)
         .catch(this.handleError);
     }
