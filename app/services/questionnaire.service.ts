@@ -17,7 +17,7 @@ export class QuestionnaireService{
     // private sentencesUrl =  this.prefix+'sentences';
 
     private headers = new Headers({'Content-Type': 'application/json',
-                                    'Authorization': "Bearer "+localStorage.getItem("token"));
+                                    'Authorization': "Bearer "+localStorage.getItem("token")});
     
     constructor (private http: Http) {}
 
@@ -89,9 +89,7 @@ export class QuestionnaireService{
     delete(id: number): Promise<void>{
         const url = `${this.questionnaireUrl}/Delete/${id}`;
         return this.http
-        .delete(url, {
-            headers: this.headers,
-        })
+        .delete(url, { headers: this.headers })
         .toPromise().then( () => null)
         .catch(this.handleError);
     }
