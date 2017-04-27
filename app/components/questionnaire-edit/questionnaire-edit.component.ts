@@ -25,7 +25,7 @@ export class QuestionnaireEditComponent implements OnInit {
 
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
-  selectedFile: any = null;
+  selectedFile: File = null;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -175,7 +175,7 @@ export class QuestionnaireEditComponent implements OnInit {
     return newSentences;
   }
 
-  
+  //File upload Modal (could be a new component)
   fileUploadModal():void{
     this.modalFileUpload.open();
   }

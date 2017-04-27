@@ -6,17 +6,24 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http'
 
 import { AppComponent } from './app.component';
+
+// Pages
 import { QuestionnaireListComponent } from './components/questionnaires-list/questionnaires-list.component'
 import { QuestionnaireEditComponent } from './components/questionnaire-edit/questionnaire-edit.component';
-import { SentenceEditComponent } from './components/sentence-edit/sentence-edit.component';
 import { QuestionnaireViewComponent } from './components/questionnaire-view/questionnaire-view.component'; 
 import { SentencesListComponent } from './components/sentences-list/sentences-list.component'; 
 import { LoginComponent } from './components/login/login.component';
 
+// Commons
+import { SentenceEditComponent } from './components/sentence-edit/sentence-edit.component';
+import { ImageUploadComponent } from './components/common/image-upload/image-upload.component';
 
+// Services
 import { QuestionnaireService } from './services/questionnaire.service'
 import { SentenceService } from './services/sentence.service'
 import { AuthenticationService } from './services/authentication.service'
+import { FileUploadService } from './services/file-upload.service'
+
 
 
 
@@ -48,8 +55,9 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     QuestionnaireViewComponent,
     SentenceEditComponent,
     SentencesListComponent,
-    LoginComponent ],
-  providers: [QuestionnaireService,SentenceService,AuthenticationService],
+    LoginComponent,
+    ImageUploadComponent ],
+  providers: [QuestionnaireService,SentenceService,AuthenticationService,FileUploadService],
   bootstrap: 	[ AppComponent ]
 })
 export class AppModule { }

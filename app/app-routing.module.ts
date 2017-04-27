@@ -8,6 +8,8 @@ import { SentencesListComponent } from './components/sentences-list/sentences-li
 import { QuestionnaireViewComponent } from './components/questionnaire-view/questionnaire-view.component';
 import { LoginComponent } from './components/login/login.component';
 
+import { ImageUploadComponent } from './components/common/image-upload/image-upload.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/list', pathMatch: 'full' },
@@ -16,6 +18,7 @@ const routes: Routes = [
   { path: 'sentences', component: SentencesListComponent },
   { path: 'view/:id', component: QuestionnaireViewComponent },
   { path: 'login/:logout', component: LoginComponent },
+  { path: 'upload', component: ImageUploadComponent },
 ];
 
 @NgModule({
