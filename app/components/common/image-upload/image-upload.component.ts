@@ -13,23 +13,28 @@ import { FileUploadService } from '../../../services/file-upload.service'
 })
 
 
-export class ImageUploadComponent implements OnInit,OnChanges {
+export class ImageUploadComponent implements OnInit {
     currentFile: File = null;
     currentFileName: String = "";
+    currentFileContent: any;
 
     @ViewChild('fileInput')
     fileInputElement: any;
 
     @Input() 
-    get file() {
-        return this.currentFile;
+    get file(): File 
+    {
+        return this.currentFile
+    }
+    @Output() fileChange = new EventEmitter<File>();
+    set file(val){
+        this.currentFile = val;
+        this.fileChange.emit(this.currentFile);
     }
 
-    @Output() fileChange = new EventEmitter();
-    set file(val) {
-      this.currentFile = val;
-      this.fileChange.emit(val);
-    }
+
+    @Input() showUploadButton = false;
+    @Output() onUpload = new EventEmitter<File>();
 
     constructor(
          private fileUploadService: FileUploadService ,
@@ -40,12 +45,9 @@ export class ImageUploadComponent implements OnInit,OnChanges {
         
     }
 
-    ngOnChanges(changes: SimpleChanges): void{
-        // this.isNew = typeof this.sentenceValue === 'string';
-    }
 
     upload(): void {
-        this.router.navigate(['/sentences']);
+        this.onUpload.emit(this.file);
     }
 
     fileInputChange(fileInput: any):void{
@@ -54,11 +56,12 @@ export class ImageUploadComponent implements OnInit,OnChanges {
 
         let self = this;
         reader.onload = function (e : any) {
-            self.currentFile = e.target.result;
+            self.currentFileContent = e.target.result;
         }
         
         reader.readAsDataURL(fileInput.target.files[0]);
-        this.currentFileName = this.fileInputElement.nativeElement.value.split("\\").pop();
+        this.file = fileInput.target.files[0];
+        this.currentFileName = this.file.name;
     }
   }
 

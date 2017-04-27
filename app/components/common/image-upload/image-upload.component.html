@@ -1,19 +1,15 @@
-<div class="container image-upload">
-    <div class="col-md-6">
-        <div class="form-group">
-            <!--<label>Upload Image</label>-->
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <span class="btn btn-default btn-file">
-                        Browse… <input #fileInput type="file" id="imgInp" (change)="fileInputChange($event)" (ngModel)="currentFile" >
-                    </span>
-                    <span *ngIf="currentFile" class="btn btn-default btn-file">
-                        Upload
-                    </span>
-                </span>
-                <input type="text" class="form-control" readonly [ngModel]="currentFileName" >
-            </div>
-            <img *ngIf="currentFile" id='img-upload' src="{{currentFile}}"/>
-        </div>
+<div class="form-group">
+    <!--<label>Upload Image</label>-->
+    <div class="input-group">
+        <span class="input-group-btn">
+            <span class="btn btn-default btn-file">
+                Browse… <input #fileInput type="file" id="imgInp" (change)="fileInputChange($event)" (ngModel)="currentFile" >
+            </span>
+            <span *ngIf="currentFile && showUploadButton" class="btn btn-default btn-file" (click)="upload()">
+                Upload
+            </span>
+        </span>
+        <input type="text" class="form-control" readonly [ngModel]="currentFileName" >
     </div>
+    <img *ngIf="currentFileContent" id='img-upload' src="{{currentFileContent}}"/>
 </div>

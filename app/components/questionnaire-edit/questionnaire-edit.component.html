@@ -92,31 +92,16 @@
     </modal-footer>
 </modal>
 
-<modal #modalFileUpload (onClose)="fileUpload()">
+<modal #modalFileUpload >
     <modal-header [show-close]="true">
         <h4 class="modal-title">Upload Image</h4>
     </modal-header>
     <modal-body>
-        <div class="container">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <!--<label>Upload Image</label>-->
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <span class="btn btn-default btn-file">
-                                Browse… <input type="file" id="imgInp" (change)="fileInputChange($event)" >
-                            </span>
-                        </span>
-                        <input type="text" class="form-control" readonly [ngModel]="uploadingFileName" >
-                    </div>
-                    <img *ngIf="selectedFile" id='img-upload' src="{{selectedFile}}"/>
-                </div>
-            </div>
-        </div>
+        <image-upload style="width: 100%" (onUpload)="uploadImage($event)" [(file)]="imageToUpload" ></image-upload>
     </modal-body>
     <modal-footer>
-        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">No</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalFileUpload.close()">Yes</button>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="fileUpload()">Upload</button>
     </modal-footer>
 </modal>
 

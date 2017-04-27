@@ -25,7 +25,7 @@ export class QuestionnaireEditComponent implements OnInit {
 
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
-  selectedFile: File = null;
+  imageToUpload: File = null;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -179,16 +179,7 @@ export class QuestionnaireEditComponent implements OnInit {
   fileUploadModal():void{
     this.modalFileUpload.open();
   }
-  fileInputChange(fileInput: any):void{
-    if (fileInput.target.files && fileInput.target.files[0]) {
-        var reader = new FileReader();
-
-        let self = this;
-        reader.onload = function (e : any) {
-            self.selectedFile = e.target.result;
-        }
-        
-        reader.readAsDataURL(fileInput.target.files[0]);
-    }
+  fileUpload(){
+    alert(this.imageToUpload.name);
   }
 }

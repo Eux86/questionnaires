@@ -32,7 +32,6 @@ export class AuthenticationService{
     }
 
     logout(): Promise<Boolean>{
-        // FAKE LOGOUT
         return new Promise<Boolean>((resolve) => {
             localStorage.setItem("isAdmin","false");
             localStorage.setItem("token","");
