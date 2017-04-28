@@ -16,6 +16,7 @@ export class Question  extends GeneralTable {
 	Id: number;
 	Sentence: Sentence;
     Answers: Answer[];
+	ImageUrl: string;
 
 	// front end only
 	IsCorrect: boolean = false;

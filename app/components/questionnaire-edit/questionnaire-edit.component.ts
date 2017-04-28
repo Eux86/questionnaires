@@ -5,6 +5,7 @@ import { Location }                         from '@angular/common';
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service'
 import { SentenceService } from '../../services/sentence.service'
+import { FileUploadService } from '../../services/file-upload.service'
 
 import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
@@ -30,6 +31,7 @@ export class QuestionnaireEditComponent implements OnInit {
   constructor(
     private questionnaireService: QuestionnaireService,
     private sentenceService: SentenceService,
+    private fileUploadService: FileUploadService,
     private route: ActivatedRoute,
 		private location: Location
   ) { 
@@ -180,6 +182,9 @@ export class QuestionnaireEditComponent implements OnInit {
     this.modalFileUpload.open();
   }
   fileUpload(){
-    alert(this.imageToUpload.name);
+    // this.fileUploadService.upload(this.imageToUpload);
+    this.fileUploadService.makeFileRequest(this.imageToUpload).subscribe(() => {
+        alert('sent');
+     });
   }
 }

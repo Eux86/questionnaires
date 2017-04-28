@@ -57,11 +57,12 @@ export class ImageUploadComponent implements OnInit {
         let self = this;
         reader.onload = function (e : any) {
             self.currentFileContent = e.target.result;
+            // self.file = e.target.result;
         }
         
         reader.readAsDataURL(fileInput.target.files[0]);
         this.file = fileInput.target.files[0];
-        this.currentFileName = this.file.name;
+        this.currentFileName = fileInput.target.files[0].name;
     }
   }
 
