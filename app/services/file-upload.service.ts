@@ -27,23 +27,6 @@ export class FileUploadService{
         }).share();
     }                             
 
-    upload(file: File):void{
-        let formData:FormData = new FormData();
-        formData.append('uploadFile', file, file.name);
-        let headers = this.headers;
-        let options = new RequestOptions({ headers: this.headers });
-        this.http.post(`${this.endpoint}`, formData, options)
-            .map(res => res.json())
-            .catch(error => Observable.throw(error))
-            .subscribe(
-                data => alert('success'),
-                error =>alert('failed\n'+error)
-            );
-    }
-
-
-
-
     // http://stackoverflow.com/questions/39131790/file-upload-using-angularjs-2-and-asp-net-mvc-web-api
 
 
