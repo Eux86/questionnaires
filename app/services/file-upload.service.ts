@@ -18,20 +18,23 @@ export class FileUploadService{
                                  });
 
 
-    progress$: any;
-    progress: any;
-    progressObserver: any;
+    public progress$: Observable<any>;
+    private progress: number =0;
+    private progressObserver: any;
+
     constructor(private http: Http) {
-        this.progress$ = Observable.create(observer => {
+        this.progress$ = new Observable(observer => {
             this.progressObserver = observer
         }).share();
     }                             
 
+    public getObserver (): Observable<number> {
+        return this.progress$;
+    }
+
     // http://stackoverflow.com/questions/39131790/file-upload-using-angularjs-2-and-asp-net-mvc-web-api
-
-
-    makeFileRequest(file: File): Observable<any> {
-        return Observable.create(observer => {
+    makeFileRequest(file: File): Promise<any> {
+        return new Promise((resolve, reject) => {
             let formData: FormData = new FormData();
             let xhr: XMLHttpRequest = new XMLHttpRequest();
 
@@ -39,20 +42,22 @@ export class FileUploadService{
 
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        observer.next(JSON.parse(xhr.response));
-                        observer.complete();
+                    if (xhr.status === 201) {
+                        resolve(JSON.parse(xhr.response));
                     } else {
-                        observer.error(xhr.response);
+                        reject(xhr.response);
                     }
                 }
             };
 
             xhr.upload.onprogress = (event) => {
                 this.progress = Math.round(event.loaded / event.total * 100);
-
-                this.progressObserver.next(this.progress);
+                console.log("Progress: "+event.loaded + "/" +event.total );
+                if (this.progressObserver!=null)
+                    this.progressObserver.next(this.progress);
             };
+            
+            setInterval(() => { }, 500); // magic hack to see updates on the subscriver's view
 
             xhr.open('POST', this.endpoint, true);
             var serverFileName = xhr.send(formData);

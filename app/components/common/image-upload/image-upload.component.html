@@ -5,11 +5,19 @@
             <span class="btn btn-default btn-file">
                 Browse… <input #fileInput type="file" id="imgInp" (change)="fileInputChange($event)" (ngModel)="currentFile" >
             </span>
-            <span *ngIf="currentFile && showUploadButton" class="btn btn-default btn-file" (click)="upload()">
+        </span>
+        <input type="text" class="form-control" readonly [ngModel]="currentFileName" >
+        <span class="input-group-btn">
+            <span *ngIf="currentFile && showUploadButton" class="btn btn-primary btn-file" (click)="upload()">
                 Upload
             </span>
         </span>
-        <input type="text" class="form-control" readonly [ngModel]="currentFileName" >
+    </div>
+    <div class="progress" *ngIf="uploadProgress>0">
+        <div class="progress-bar" role="progressbar" aria-valuenow="uploadProgress"
+        aria-valuemin="0" aria-valuemax="100" [style.width]="(uploadProgress/100)*100 + '%'">
+            {{uploadProgress}}%
+        </div>
     </div>
     <img *ngIf="currentFileContent" id='img-upload' src="{{currentFileContent}}"/>
 </div>

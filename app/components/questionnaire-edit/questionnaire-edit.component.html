@@ -1,4 +1,5 @@
 <div class="questionnaire-edit">
+    <span>Uploading... {{uploadProgress}}%</span>
     <div class="toolbar">
         <button (click)="update()" class="accentButton">Save</button>
     </div>
@@ -97,11 +98,11 @@
         <h4 class="modal-title">Upload Image</h4>
     </modal-header>
     <modal-body>
-        <image-upload style="width: 100%" (onUpload)="uploadImage($event)" [(file)]="imageToUpload" ></image-upload>
+        <image-upload style="width: 100%" showUploadButton="true" [(file)]="imageToUpload" ></image-upload>
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="fileUpload()">Upload</button>
+        <!--<button type="button" class="btn btn-primary" data-dismiss="modal" (click)="fileUpload()">Upload</button>-->
     </modal-footer>
 </modal>
 

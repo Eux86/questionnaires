@@ -1,0 +1,13 @@
+<h1>Sandbox</h1>
+<hr>
+<image-upload [(file)]="currentFile"
+              (onUploadStarted)="regEvent($event);state='onUploadStarted'"
+              (onUploadCompleted)="regEvent($event);state='onUploadCompleted'"
+              (onUploadError)="regEvent($event);state='onUploadError'"></image-upload>
+
+Debugging:
+<ul>
+    <li>Current File: {{currentFile}}</li>
+    <li>State: {{state}}</li>
+    <li>Arguments: {{argument}}</li>
+</ul>

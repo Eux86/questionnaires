@@ -18,6 +18,8 @@ export class ImageUploadComponent implements OnInit {
     currentFileName: String = "";
     currentFileContent: any;
 
+    uploadProgress: number = 0;
+
     @ViewChild('fileInput')
     fileInputElement: any;
 
@@ -33,8 +35,10 @@ export class ImageUploadComponent implements OnInit {
     }
 
 
-    @Input() showUploadButton = false;
-    @Output() onUpload = new EventEmitter<File>();
+    @Input() showUploadButton = true;
+    @Output() onUploadStarted = new EventEmitter<File>();
+    @Output() onUploadCompleted = new EventEmitter<File>();
+    @Output() onUploadError = new EventEmitter<string>();
 
     constructor(
          private fileUploadService: FileUploadService ,
@@ -47,24 +51,41 @@ export class ImageUploadComponent implements OnInit {
 
 
     upload(): void {
-        this.onUpload.emit(this.file);
+        this.onUploadStarted.emit(this.file);
+        this.uploadFile();
     }
 
     fileInputChange(fileInput: any):void{
-    if (fileInput.target.files && fileInput.target.files[0]) {
-        var reader = new FileReader();
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            var reader = new FileReader();
 
-        let self = this;
-        reader.onload = function (e : any) {
-            self.currentFileContent = e.target.result;
-            // self.file = e.target.result;
+            let self = this;
+            reader.onload = function (e : any) {
+                self.currentFileContent = e.target.result;
+                // self.file = e.target.result;
+            }
+            
+            reader.readAsDataURL(fileInput.target.files[0]);
+            this.file = fileInput.target.files[0];
+            this.currentFileName = fileInput.target.files[0].name;
         }
-        
-        reader.readAsDataURL(fileInput.target.files[0]);
-        this.file = fileInput.target.files[0];
-        this.currentFileName = fileInput.target.files[0].name;
     }
-  }
 
+    uploadFile():void{
+        // this.fileUploadService.upload(this.imageToUpload);
+        this.uploadProgress = 0;
+        this.fileUploadService.progress$.subscribe(
+        data=> {
+            this.uploadProgress = data;
+        });
+        this.fileUploadService.makeFileRequest(this.currentFile)
+        .then((uploadedFile) => {
+            console.log("uploaded");
+            this.onUploadCompleted.emit(uploadedFile);
+        }).catch((exception: string)=>{
+            console.log("error");
+            this.onUploadError.emit(exception);
+        });
+    }
     
 }

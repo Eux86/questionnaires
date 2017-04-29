@@ -14,9 +14,11 @@ import { QuestionnaireViewComponent } from './components/questionnaire-view/ques
 import { SentencesListComponent } from './components/sentences-list/sentences-list.component'; 
 import { LoginComponent } from './components/login/login.component';
 
+
 // Commons
 import { SentenceEditComponent } from './components/sentence-edit/sentence-edit.component';
 import { ImageUploadComponent } from './components/common/image-upload/image-upload.component';
+import { SandboxComponent } from './components/common/sandbox/sandbox.component';
 
 // Services
 import { QuestionnaireService } from './services/questionnaire.service'
@@ -56,7 +58,8 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     SentenceEditComponent,
     SentencesListComponent,
     LoginComponent,
-    ImageUploadComponent ],
+    ImageUploadComponent,
+    SandboxComponent ],
   providers: [QuestionnaireService,SentenceService,AuthenticationService,FileUploadService],
   bootstrap: 	[ AppComponent ]
 })

@@ -27,6 +27,7 @@ export class QuestionnaireEditComponent implements OnInit {
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
   imageToUpload: File = null;
+  uploadProgress: number = 0;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -181,10 +182,5 @@ export class QuestionnaireEditComponent implements OnInit {
   fileUploadModal():void{
     this.modalFileUpload.open();
   }
-  fileUpload(){
-    // this.fileUploadService.upload(this.imageToUpload);
-    this.fileUploadService.makeFileRequest(this.imageToUpload).subscribe(() => {
-        alert('sent');
-     });
-  }
+  
 }
