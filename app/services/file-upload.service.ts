@@ -65,4 +65,8 @@ export class FileUploadService{
         });
     }
 
+    getImageUrl(id):string{
+        return "http://localhost:3010/api/file/Get/"+id;
+    }
+
 }

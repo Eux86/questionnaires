@@ -5,6 +5,9 @@ import { Location }                         from '@angular/common';
 import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service'
 
+import { FileUploadService } from '../../services/file-upload.service'
+
+
 @Component({
   moduleId: module.id,
   selector: 'questionnaire-view',
@@ -18,7 +21,8 @@ export class QuestionnaireViewComponent implements OnInit {
   constructor(
     private questionnaireService: QuestionnaireService,
     private route: ActivatedRoute,
-	private location: Location
+	  private location: Location,
+    private fileUploadService: FileUploadService,
   ) { }
   
 

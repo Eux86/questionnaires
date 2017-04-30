@@ -3,6 +3,10 @@
     margin: 0 auto;
 }
 
+.question-image {
+    max-height: 300px;
+}
+
 /* DETAILS AREA */
 .detailsArea {
     width: 60%;

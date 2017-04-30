@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild  }         from '@angular/core';
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 import { Location }                         from '@angular/common';
 
-import { Answer,Question,Section,Sentence,Questionnaire } from '../../data-model';
+import { Answer,Question,Section,Sentence,Questionnaire, FileModel } from '../../data-model';
 import { QuestionnaireService } from '../../services/questionnaire.service'
 import { SentenceService } from '../../services/sentence.service'
 import { FileUploadService } from '../../services/file-upload.service'
@@ -23,11 +23,15 @@ export class QuestionnaireEditComponent implements OnInit {
   modalNewSentences: ModalComponent;
   @ViewChild('modalFileUpload')
   modalFileUpload: ModalComponent;
+  @ViewChild('infoModal')
+  infoModal: ModalComponent;
 
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
-  imageToUpload: File = null;
-  uploadProgress: number = 0;
+  imageUploaded: boolean = false;
+  uploadingImage: boolean = false;
+  infoModalMessage: string = "";
+  questionToAssociateImage: Question;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -178,9 +182,23 @@ export class QuestionnaireEditComponent implements OnInit {
     return newSentences;
   }
 
-  //File upload Modal (could be a new component)
-  fileUploadModal():void{
+  //############  Upload stuffs
+  uploadImageForQuestion(question:Question):void{
     this.modalFileUpload.open();
+    this.questionToAssociateImage = question;
   }
+
+
+  uploadFinished(success:boolean, argument: any){
+    if (success){
+      let file = argument as FileModel;
+      this.questionToAssociateImage.FileId = file.Id;
+      this.modalFileUpload.dismiss();
+    } else {
+      this.infoModalMessage = "Couldn't upload the file\n"+argument
+      this.infoModal.open()
+    }
+  }
+  
   
 }

@@ -13,6 +13,9 @@
                                 <div class="container">
                                     <div class="row" *ngFor="let question of section.Questions; let i = index">
                                         <div class="container">
+                                            <p>
+                                                <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
+                                            </p>
                                             <div class="row bs-callout bs-callout-info vertical-align" >
                                                 <div class="col-sm-1 " style="max-width: 50px">
                                                     <h2><small>{{s+1}}.{{i+1}}</small></h2>

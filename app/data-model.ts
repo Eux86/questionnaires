@@ -16,7 +16,7 @@ export class Question  extends GeneralTable {
 	Id: number;
 	Sentence: Sentence;
     Answers: Answer[];
-	ImageUrl: string;
+	FileId: number;
 
 	// front end only
 	IsCorrect: boolean = false;
@@ -37,6 +37,11 @@ export class Questionnaire extends GeneralTable {
 
 	// front end only
 	Score: number;
+}
+export class FileModel extends GeneralTable {
+	Id: number;
+	Name: string;
+	Path: string;
 }
 
 

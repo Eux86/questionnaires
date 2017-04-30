@@ -1,5 +1,4 @@
 <div class="questionnaire-edit">
-    <span>Uploading... {{uploadProgress}}%</span>
     <div class="toolbar">
         <button (click)="update()" class="accentButton">Save</button>
     </div>
@@ -21,7 +20,12 @@
                         <span>Question n. {{i+1}}</span>
                         <button (click)="delete(question)">X</button>
                     </div>
-                    <p><a (click)="fileUploadModal()">Upload Image</a></p>
+                    <p>
+                        <a *ngIf="!question.FileId" (click)="uploadImageForQuestion(question)">Upload Image</a>
+                        <a *ngIf="question.FileId" (click)="question.FileId=null">Remove Image</a>
+                        <br />
+                        <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
+                    </p>
                     <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
                     <h3>Answers:</h3>
                     <table *ngFor="let answer of question.Answers; let a = index">
@@ -94,15 +98,30 @@
 </modal>
 
 <modal #modalFileUpload >
-    <modal-header [show-close]="true">
+    <modal-header [show-close]="!uploadingImage">
         <h4 class="modal-title">Upload Image</h4>
     </modal-header>
     <modal-body>
-        <image-upload style="width: 100%" showUploadButton="true" [(file)]="imageToUpload" ></image-upload>
+        <image-upload style="width: 100%" showUploadButton="true" 
+                [(file)]="imageToUpload"
+                (onUploadCompleted)="uploadFinished(true,$event)" 
+                (onUploadError)="uploadFinished(false,$event)" ></image-upload>
     </modal-body>
     <modal-footer>
-        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Cancel</button>
-        <!--<button type="button" class="btn btn-primary" data-dismiss="modal" (click)="fileUpload()">Upload</button>-->
+        <button *ngIf="!imageUploaded && !uploadingImage" type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Cancel</button>
+        <button *ngIf="imageUploaded" type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Close</button>        
+    </modal-footer>
+</modal>
+
+<modal #infoModal >
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Info</h4>
+    </modal-header>
+    <modal-body>
+        {{infoModalMessage}}
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSaved.dismiss()">Ok</button>
     </modal-footer>
 </modal>
 
