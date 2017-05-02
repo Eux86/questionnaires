@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router }   from '@angular/router';
 import { Location }                         from '@angular/common';
 
 import { Answer,Question,Section,Sentence,Questionnaire, FileModel } from '../../data-model';
+import { ImageUploadComponent } from '../common/image-upload/image-upload.component';
 import { QuestionnaireService } from '../../services/questionnaire.service'
 import { SentenceService } from '../../services/sentence.service'
 import { FileUploadService } from '../../services/file-upload.service'
@@ -26,12 +27,18 @@ export class QuestionnaireEditComponent implements OnInit {
   @ViewChild('infoModal')
   infoModal: ModalComponent;
 
+  @ViewChild('uploadImageComponent')
+  uploadImageComponent: ImageUploadComponent;
+
   questionnaire: Questionnaire = new Questionnaire();
   newSentences: Sentence[];
-  imageUploaded: boolean = false;
-  uploadingImage: boolean = false;
   infoModalMessage: string = "";
   questionToAssociateImage: Question;
+
+  // Upload modal
+  imageUploaded: boolean = false;
+  uploadingImage: boolean = false;
+  imageToUpload: File = null;
 
   constructor(
     private questionnaireService: QuestionnaireService,
@@ -184,20 +191,27 @@ export class QuestionnaireEditComponent implements OnInit {
 
   //############  Upload stuffs
   uploadImageForQuestion(question:Question):void{
+    this.uploadImageComponent.reset();
     this.modalFileUpload.open();
     this.questionToAssociateImage = question;
+    this.imageToUpload = null;
   }
-
-
   uploadFinished(success:boolean, argument: any){
     if (success){
       let file = argument as FileModel;
       this.questionToAssociateImage.FileId = file.Id;
       this.modalFileUpload.dismiss();
+      this.imageUploaded = true;
     } else {
       this.infoModalMessage = "Couldn't upload the file\n"+argument
       this.infoModal.open()
+      this.imageUploaded = false;      
     }
+    this.uploadingImage = false;
+  }
+  uploadStarted():void{
+    this.imageUploaded = false;
+    this.uploadingImage = true;
   }
   
   

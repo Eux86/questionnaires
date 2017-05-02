@@ -62,7 +62,6 @@ export class ImageUploadComponent implements OnInit {
             let self = this;
             reader.onload = function (e : any) {
                 self.currentFileContent = e.target.result;
-                // self.file = e.target.result;
             }
             
             reader.readAsDataURL(fileInput.target.files[0]);
@@ -73,6 +72,7 @@ export class ImageUploadComponent implements OnInit {
 
     uploadFile():void{
         // this.fileUploadService.upload(this.imageToUpload);
+        this.showUploadButton = false;
         this.uploadProgress = 0;
         this.fileUploadService.progress$.subscribe(
         data=> {
@@ -82,10 +82,19 @@ export class ImageUploadComponent implements OnInit {
         .then((uploadedFile) => {
             console.log("uploaded");
             this.onUploadCompleted.emit(uploadedFile);
+            this.showUploadButton = true;
         }).catch((exception: string)=>{
             console.log("error");
             this.onUploadError.emit(exception);
+            this.showUploadButton = true;
         });
+    }
+
+    reset():void{
+        this.uploadProgress=0;
+        this.currentFile = null;
+        this.currentFileContent = null;
+        this.currentFileName = "";
     }
     
 }

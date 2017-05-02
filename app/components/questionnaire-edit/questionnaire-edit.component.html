@@ -1,67 +1,84 @@
 <div class="questionnaire-edit">
-    <div class="toolbar">
-        <button (click)="update()" class="accentButton">Save</button>
-    </div>
-    <div class="detailsArea">
-        <div class="contrastBackground" style="padding:5px; margin-bottom:20px;">Details:</div>
-        <label>Description: </label>
-        <input type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
-    </div>
-    <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-edit">
-        <div *ngIf="!section.Deleted">
-            <h2 class="description">
-                <input type="text" [(ngModel)]="section.Description" placeholder="Section name" />
-                <!--<button (click)="remove(questionnaire.Sections,s);">X</button>-->
-                <button (click)="delete(section);">X</button>
-            </h2>
-            <div *ngFor="let question of section.Questions; let i = index" class="question-edit">
-                <div *ngIf="!question.Deleted">
-                    <div class="tools contrastBackground">
-                        <span>Question n. {{i+1}}</span>
-                        <button (click)="delete(question)">X</button>
-                    </div>
-                    <p>
-                        <a *ngIf="!question.FileId" (click)="uploadImageForQuestion(question)">Upload Image</a>
-                        <a *ngIf="question.FileId" (click)="question.FileId=null">Remove Image</a>
-                        <br />
-                        <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
-                    </p>
-                    <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
-                    <h3>Answers:</h3>
-                    <table *ngFor="let answer of question.Answers; let a = index">
-                        <tr *ngIf="!answer.Deleted" class="answer-edit" >
-                            <td>
-                                <input type="checkbox" style="float:left" [(ngModel)]="answer.IsCorrect" />
-                            </td>
-                            <td style="width:100%"> 
-                                <sentence-edit [(sentence)]="answer.Sentence" ></sentence-edit>
-                            </td>
-                            <td>
-                                <button (click)="delete(answer)">X</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-                        style="height: 30px; margin-top:10px;"
-                        (click)="addAnswer(question)">
-                        <span>Click to add a new Answer</span>
-                    </div>
+    <div class="container" style="margin-bottom: 100px;">
+        <div class="col-sm-12" >
+            <div class="row">
+                <div class="container">
+                    <span class="pull-right">
+                        <a (click)="update()" class="btn btn-lg btn-primary">Save</a>
+                    </span>
                 </div>
-            </div>
-            <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-                style="height:80px"
-                (click)="addQuestion(section)">
-                <span>Click to add a new Question</span>
             </div>
         </div>
     </div>
-    <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-         style="height:80px"
-         (click)="addSection(questionnaire)">
-        <span>Click to add a new Section</span>
-    </div>
-    <div class="toolbar">
-        <button (click)="update()" class="accentButton">Save</button>
+</div>
+
+<div class="questionnaire-edit">
+    <div class="container" style="margin-bottom: 100px;">
+        <span class="pull-right">
+            <a (click)="update()" class="btn btn-lg btn-primary">Save</a>
+            <hr />
+        </span>
+        <div class="detailsArea">
+            <div class="contrastBackground" style="padding:5px; margin-bottom:20px;">Details:</div>
+            <label>Description: </label>
+            <input type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
+        </div>
+        <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-edit">
+            <div *ngIf="!section.Deleted">
+                <h2 class="description">
+                    <input type="text" [(ngModel)]="section.Description" placeholder="Section name" />
+                    <!--<button (click)="remove(questionnaire.Sections,s);">X</button>-->
+                    <button (click)="delete(section);">X</button>
+                </h2>
+                <div *ngFor="let question of section.Questions; let i = index" class="question-edit">
+                    <div *ngIf="!question.Deleted">
+                        <div class="tools contrastBackground">
+                            <span>Question n. {{i+1}}</span>
+                            <button (click)="delete(question)">X</button>
+                        </div>
+                        <p>
+                            <a *ngIf="!question.FileId" (click)="uploadImageForQuestion(question)">Upload Image</a>
+                            <a *ngIf="question.FileId" (click)="question.FileId=null">Remove Image</a>
+                            <br />
+                            <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
+                        </p>
+                        <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
+                        <h3>Answers:</h3>
+                        <table *ngFor="let answer of question.Answers; let a = index">
+                            <tr *ngIf="!answer.Deleted" class="answer-edit" >
+                                <td>
+                                    <input type="checkbox" style="float:left" [(ngModel)]="answer.IsCorrect" />
+                                </td>
+                                <td style="width:100%"> 
+                                    <sentence-edit [(sentence)]="answer.Sentence" ></sentence-edit>
+                                </td>
+                                <td>
+                                    <button (click)="delete(answer)">X</button>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+                            style="height: 30px; margin-top:10px;"
+                            (click)="addAnswer(question)">
+                            <span>Click to add a new Answer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+                    style="height:80px"
+                    (click)="addQuestion(section)">
+                    <span>Click to add a new Question</span>
+                </div>
+            </div>
+        </div>
+        <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
+            style="height:80px"
+            (click)="addSection(questionnaire)">
+            <span>Click to add a new Section</span>
+        </div>
+        <div class="toolbar">
+            <button (click)="update()" class="accentButton">Save</button>
+        </div>
     </div>
 </div>
 
@@ -97,13 +114,14 @@
     </modal-footer>
 </modal>
 
-<modal #modalFileUpload >
+<modal #modalFileUpload>
     <modal-header [show-close]="!uploadingImage">
         <h4 class="modal-title">Upload Image</h4>
     </modal-header>
     <modal-body>
-        <image-upload style="width: 100%" showUploadButton="true" 
+        <image-upload #uploadImageComponent style="width: 100%" showUploadButton="true" 
                 [(file)]="imageToUpload"
+                (onUploadStarted)="uploadStarted()"
                 (onUploadCompleted)="uploadFinished(true,$event)" 
                 (onUploadError)="uploadFinished(false,$event)" ></image-upload>
     </modal-body>
@@ -114,7 +132,7 @@
 </modal>
 
 <modal #infoModal >
-    <modal-header [show-close]="true">
+    <modal-header [show-close]="!uploadingImage">
         <h4 class="modal-title">Info</h4>
     </modal-header>
     <modal-body>
