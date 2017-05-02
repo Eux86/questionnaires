@@ -8,6 +8,62 @@
                     </span>
                 </div>
             </div>
+            <br /><br />
+             <div class="row form-horizontal">
+                 <div class="form-group">
+                    <label class="control-label col-sm-2" for="description">Description: </label>
+                    <div class="col-sm-8">
+                        <input id="description" class="form-control" type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
+                    </div>
+                </div>
+             </div>
+             <br /> <br />
+             <div *ngFor="let section of questionnaire.Sections; let s = index">
+                 <div class="container" *ngIf="!section.Deleted">
+                    <div class="form-horizontal col-sm-11 panel panel-default">
+                        <div class="form-group panel-body sectionPanel">
+                            <label class="control-label col-sm-2" for="section">Section: </label>
+                            <div class="col-sm-8">
+                                <input id="section" class="form-control" type="text" [(ngModel)]="section.Description" placeholder="Add a description" />
+                            </div>
+                            <br /><br />
+                            <div *ngFor="let question of section.Questions; let i = index" >
+                                <div *ngIf="!question.Deleted">
+                                    <div class="row bs-callout bs-callout-info vertical-align" style="text-align:center" >
+                                        <div class="col-sm-1" style="max-width: 50px">
+                                            <h2><small>{{s+1}}.{{i+1}}</small></h2>
+                                        </div>
+                                        <div class="col-sm-12 form-horizontal">
+                                            <div class="form-group panel-body">
+                                                <label class="control-label col-sm-2" for="section">Question: </label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" />
+                                                    <!--<sentence-edit class="form-control" [(sentence)]="question.Sentence"></sentence-edit>-->
+                                                </div>
+                                                <br /><br />
+                                                <div class="col-sm-12 form-horizontal" 
+                                                    *ngFor="let answer of question.Answers; let a = index" 
+                                                    [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <input type="checkbox" [(ngModel)]="answer.Selected">
+                                                        </span>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <a>X</a>
+                    </div>
+                 </div>
+             </div>
         </div>
     </div>
 </div>
