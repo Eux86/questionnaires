@@ -42,3 +42,7 @@ a {
     display: flex;
     align-items: center;
 }
+
+div.ng2-auto-complete {
+  width: 100%;
+}

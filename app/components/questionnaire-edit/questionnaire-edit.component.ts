@@ -63,6 +63,7 @@ export class QuestionnaireEditComponent implements OnInit {
   }
 
   addSection(questionnaire: Questionnaire): void {
+    if (questionnaire.Sections==null) questionnaire.Sections= [];
     questionnaire.Sections.push(new Section())
   }
 

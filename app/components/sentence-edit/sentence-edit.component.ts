@@ -51,5 +51,9 @@ export class SentenceEditComponent implements OnInit,OnChanges {
         this.router.navigate(['/sentences']);
     }
 
+    myListFormatter(data: Sentence): string {
+      return data.Text;
+    }
+
     
 }

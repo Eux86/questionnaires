@@ -1,6 +1,6 @@
 <div class="questionnaire-edit">
     <div class="container" style="margin-bottom: 100px;">
-        <div class="col-sm-12" >
+        <div class="col-sm-12">
             <div class="row">
                 <div class="container">
                     <span class="pull-right">
@@ -9,17 +9,18 @@
                 </div>
             </div>
             <br /><br />
-             <div class="row form-horizontal">
-                 <div class="form-group">
+            <div class="row form-horizontal">
+                <div class="form-group">
                     <label class="control-label col-sm-2" for="description">Description: </label>
                     <div class="col-sm-8">
-                        <input id="description" class="form-control" type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
+                        <input id="description" class="form-control" type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description"
+                        />
                     </div>
                 </div>
-             </div>
-             <br /> <br />
-             <div *ngFor="let section of questionnaire.Sections; let s = index">
-                 <div class="container" *ngIf="!section.Deleted">
+            </div>
+            <br /> <br />
+            <div *ngFor="let section of questionnaire.Sections; let s = index">
+                <div class="container" *ngIf="!section.Deleted">
                     <div class="form-horizontal col-sm-11 panel panel-default">
                         <div class="form-group panel-body sectionPanel">
                             <label class="control-label col-sm-2" for="section">Section: </label>
@@ -27,116 +28,79 @@
                                 <input id="section" class="form-control" type="text" [(ngModel)]="section.Description" placeholder="Add a description" />
                             </div>
                             <br /><br />
-                            <div *ngFor="let question of section.Questions; let i = index" >
-                                <div *ngIf="!question.Deleted">
-                                    <div class="row bs-callout bs-callout-info vertical-align" style="text-align:center" >
-                                        <div class="col-sm-1" style="max-width: 50px">
-                                            <h2><small>{{s+1}}.{{i+1}}</small></h2>
-                                        </div>
+                            <div *ngFor="let question of section.Questions; let i = index">
+                                <div class="row" *ngIf="!question.Deleted">
+                                    <div class="col-sm-11 bs-callout bs-callout-info" style="text-align:center">
                                         <div class="col-sm-12 form-horizontal">
-                                            <div class="form-group panel-body">
-                                                <label class="control-label col-sm-2" for="section">Question: </label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" />
-                                                    <!--<sentence-edit class="form-control" [(sentence)]="question.Sentence"></sentence-edit>-->
-                                                </div>
-                                                <br /><br />
-                                                <div class="col-sm-12 form-horizontal" 
-                                                    *ngFor="let answer of question.Answers; let a = index" 
-                                                    [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">
-                                                            <input type="checkbox" [(ngModel)]="answer.Selected">
-                                                        </span>
-                                                        <input type="text" class="form-control">
+                                            <div class="form-group">
+                                                <label class="control-label" for="questionInput">Question: </label>
+                                                <div class="row">
+                                                    <div class="col-sm-1" style="max-width: 50px">
+                                                        <h3 class="questionNumber">{{s+1}}.{{i+1}}</h3>
                                                     </div>
-                                                    
+                                                    <div class="col-sm-11">
+                                                        <!--<input id="questionInput" type="text" class="form-control" />-->
+                                                        <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
+                                                        <br />
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <a *ngIf="!question.FileId" (click)="uploadImageForQuestion(question)">Upload Image</a>
+                                                    <a *ngIf="question.FileId" (click)="question.FileId=null">Remove Image</a>
+                                                    <br />
+                                                    <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
+                                                    <br />
+                                                </div>
+                                                <br />
+                                                <div class="col-sm-12 form-horizontal container" *ngFor="let answer of question.Answers; let a = index">
+                                                    <div class="row" *ngIf="!answer.Deleted">
+                                                        <div class="col-sm-11">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon">
+                                                                    <input type="checkbox" [(ngModel)]="answer.Selected">
+                                                                </span>
+                                                                <sentence-edit [(sentence)]="answer.Sentence"></sentence-edit>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <div style="margin-top: 5px;margin-left: -50px;">
+                                                                <a (click)="delete(answer)">X</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <a (click)="addAnswer(question)">Add Answer</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-sm-1" style="margin-top:20px">
+                                        <a (click)="delete(question)">X</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a (click)="addQuestion(section)">Add Question</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-1">
-                        <a>X</a>
+                        <a (click)="delete(section)">X</a>
                     </div>
-                 </div>
-             </div>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-sm-12">
+                        <a (click)="addSection(questionnaire)">Add Section</a>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
 
-<div class="questionnaire-edit">
-    <div class="container" style="margin-bottom: 100px;">
-        <span class="pull-right">
-            <a (click)="update()" class="btn btn-lg btn-primary">Save</a>
-            <hr />
-        </span>
-        <div class="detailsArea">
-            <div class="contrastBackground" style="padding:5px; margin-bottom:20px;">Details:</div>
-            <label>Description: </label>
-            <input type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
-        </div>
-        <div *ngFor="let section of questionnaire.Sections; let s = index" class="section-edit">
-            <div *ngIf="!section.Deleted">
-                <h2 class="description">
-                    <input type="text" [(ngModel)]="section.Description" placeholder="Section name" />
-                    <!--<button (click)="remove(questionnaire.Sections,s);">X</button>-->
-                    <button (click)="delete(section);">X</button>
-                </h2>
-                <div *ngFor="let question of section.Questions; let i = index" class="question-edit">
-                    <div *ngIf="!question.Deleted">
-                        <div class="tools contrastBackground">
-                            <span>Question n. {{i+1}}</span>
-                            <button (click)="delete(question)">X</button>
-                        </div>
-                        <p>
-                            <a *ngIf="!question.FileId" (click)="uploadImageForQuestion(question)">Upload Image</a>
-                            <a *ngIf="question.FileId" (click)="question.FileId=null">Remove Image</a>
-                            <br />
-                            <img *ngIf="question.FileId" class="question-image" src="{{fileUploadService.getImageUrl(question.FileId)}}" />
-                        </p>
-                        <sentence-edit [(sentence)]="question.Sentence"></sentence-edit>
-                        <h3>Answers:</h3>
-                        <table *ngFor="let answer of question.Answers; let a = index">
-                            <tr *ngIf="!answer.Deleted" class="answer-edit" >
-                                <td>
-                                    <input type="checkbox" style="float:left" [(ngModel)]="answer.IsCorrect" />
-                                </td>
-                                <td style="width:100%"> 
-                                    <sentence-edit [(sentence)]="answer.Sentence" ></sentence-edit>
-                                </td>
-                                <td>
-                                    <button (click)="delete(answer)">X</button>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-                            style="height: 30px; margin-top:10px;"
-                            (click)="addAnswer(question)">
-                            <span>Click to add a new Answer</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-                    style="height:80px"
-                    (click)="addQuestion(section)">
-                    <span>Click to add a new Question</span>
-                </div>
-            </div>
-        </div>
-        <div class="placeholder-dashed-box unactiveContainer verticallyCenterContent" 
-            style="height:80px"
-            (click)="addSection(questionnaire)">
-            <span>Click to add a new Section</span>
-        </div>
-        <div class="toolbar">
-            <button (click)="update()" class="accentButton">Save</button>
-        </div>
-    </div>
-</div>
 
 
 
@@ -157,7 +121,7 @@
         <h4 class="modal-title">Saved</h4>
     </modal-header>
     <modal-body>
-        New sentences will be created: do you want to procede:<br/> 
+        New sentences will be created: do you want to procede:<br/>
         <ul>
             <li *ngFor="let sentence of newSentences; let i = index">
                 {{sentence.Text}}
@@ -175,19 +139,16 @@
         <h4 class="modal-title">Upload Image</h4>
     </modal-header>
     <modal-body>
-        <image-upload #uploadImageComponent style="width: 100%" showUploadButton="true" 
-                [(file)]="imageToUpload"
-                (onUploadStarted)="uploadStarted()"
-                (onUploadCompleted)="uploadFinished(true,$event)" 
-                (onUploadError)="uploadFinished(false,$event)" ></image-upload>
+        <image-upload #uploadImageComponent style="width: 100%" showUploadButton="true" [(file)]="imageToUpload" (onUploadStarted)="uploadStarted()"
+            (onUploadCompleted)="uploadFinished(true,$event)" (onUploadError)="uploadFinished(false,$event)"></image-upload>
     </modal-body>
     <modal-footer>
         <button *ngIf="!imageUploaded && !uploadingImage" type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Cancel</button>
-        <button *ngIf="imageUploaded" type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Close</button>        
+        <button *ngIf="imageUploaded" type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalFileUpload.dismiss()">Close</button>
     </modal-footer>
 </modal>
 
-<modal #infoModal >
+<modal #infoModal>
     <modal-header [show-close]="!uploadingImage">
         <h4 class="modal-title">Info</h4>
     </modal-header>
@@ -198,5 +159,3 @@
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSaved.dismiss()">Ok</button>
     </modal-footer>
 </modal>
-
-

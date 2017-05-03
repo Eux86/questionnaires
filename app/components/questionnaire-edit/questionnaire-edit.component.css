@@ -3,9 +3,16 @@
 
 .question-image {
     max-height: 300px;
+    margin: 20px;
+    max-width:80%; 
+    max-height:100%
 }
 
 .sectionPanel {
     margin-left: 30px;
     margin-right: 30px;
+}
+
+.questionNumber{
+    margin-top: 4px;
 }
