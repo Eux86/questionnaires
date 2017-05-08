@@ -18,6 +18,7 @@ export class SentencesListComponent implements OnInit {
     @Input()
     sentences: Sentence[];
     searchText: string = "";
+    selected: boolean;
 
     constructor(
         private sentenceService: SentenceService,
