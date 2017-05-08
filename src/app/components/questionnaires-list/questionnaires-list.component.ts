@@ -143,7 +143,7 @@ export class QuestionnaireListComponent implements OnInit {
 
   onSelectionChange(questionnaire:Questionnaire){
     let q: any = questionnaire;
-    if (!q.Selected){
+    if (q.Selected){
       this.selected.push(questionnaire);
     } else {
       let index = -1;

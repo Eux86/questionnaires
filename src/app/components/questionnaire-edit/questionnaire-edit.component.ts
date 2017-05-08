@@ -214,6 +214,5 @@ export class QuestionnaireEditComponent implements OnInit {
     this.imageUploaded = false;
     this.uploadingImage = true;
   }
-  
-  
+
 }

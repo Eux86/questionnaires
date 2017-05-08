@@ -25,7 +25,7 @@ export class FileUploadService{
     constructor(private http: Http) {
         this.progress$ = new Observable(observer => {
             this.progressObserver = observer
-        }).share();
+        });
     }                             
 
     public getObserver (): Observable<number> {

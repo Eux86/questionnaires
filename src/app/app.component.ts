@@ -4,7 +4,7 @@ import { AuthenticationService } from 'app/services/authentication.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'my-app',
+    selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.css']
 })

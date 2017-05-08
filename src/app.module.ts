@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http'
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './app/app.component';
 
 // Pages
 import { QuestionnaireListComponent } from 'app/components/questionnaires-list/questionnaires-list.component'
@@ -35,7 +35,7 @@ import { AppRoutingModule }     from './app-routing.module';
 // import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 // import { InMemoryQuestionnairesData }  from './mockupdb/in-memory-questionnaires.service';
 
-import { Ng2AutoCompleteModule } from 'ng2-auto-complete';
+import { NguiAutoCompleteModule  } from '@ngui/auto-complete';
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 
@@ -47,7 +47,7 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     AppRoutingModule,
     HttpModule,
     // InMemoryWebApiModule.forRoot(InMemoryQuestionnairesData),
-    Ng2AutoCompleteModule,
+    NguiAutoCompleteModule,
     Ng2Bs3ModalModule,
   ],
   declarations: [ 
