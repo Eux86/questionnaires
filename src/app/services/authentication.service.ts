@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthenticationService  implements OnInit  {
-    baseUrl: string = "http://icaroexames.ddns.net";
+    baseUrl: string = "http://localhost:3010";
     endpoint: string = "/auth2/token";
     private headers = new Headers({
                                     'Content-Type': 'application/x-www-form-urlencoded',
