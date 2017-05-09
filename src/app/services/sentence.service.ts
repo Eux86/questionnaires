@@ -4,27 +4,23 @@ import 'rxjs/add/operator/toPromise';
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 import { environment } from '../../environments/environment';
+import { GeneralService } from './general.service'
 
 
 @Injectable()
-export class SentenceService implements OnInit {
-    baseUrl: string = "http://localhost:3010";
+export class SentenceService extends GeneralService {
     private sentencesUrl =  '/api/sentence';
 
     private headers = new Headers({'Content-Type': 'application/json'});
     
-    constructor (private http: Http) {}
-
-    ngOnInit(): void {
-        if (environment.production) {
-            this.baseUrl = "http://icaroexames.ddns.net";
-        }
+    constructor (private http: Http) {
+        super();
     }
 
 
     create(sentence:Sentence): Promise<Sentence> {
         return this.http
-        .post(this.baseUrl+this.sentencesUrl, JSON.stringify(sentence), {headers: this.headers})
+        .post(this.getBaseUrl()+this.sentencesUrl, JSON.stringify(sentence), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -34,7 +30,7 @@ export class SentenceService implements OnInit {
 
     createMany(sentences:Sentence[]): Promise<Sentence[]> {
         return this.http
-        .post(this.baseUrl+this.sentencesUrl+"/CreateMany", JSON.stringify(sentences), {headers: this.headers})
+        .post(this.getBaseUrl()+this.sentencesUrl+"/CreateMany", JSON.stringify(sentences), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -44,7 +40,7 @@ export class SentenceService implements OnInit {
 
     getByText(text:string):Promise<Sentence[]> {
         return this.http
-        .get(this.baseUrl+this.sentencesUrl+"/GetByText?text="+text, {headers: this.headers})
+        .get(this.getBaseUrl()+this.sentencesUrl+"/GetByText?text="+text, {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -53,7 +49,7 @@ export class SentenceService implements OnInit {
     }
 
     getAll(): Promise<Sentence[]>{
-        return this.http.get(this.baseUrl+this.sentencesUrl+"/GetAll")
+        return this.http.get(this.getBaseUrl()+this.sentencesUrl+"/GetAll")
                     .toPromise()
                     .then(function(response) {
                         let ret = response.json() as Sentence[];
@@ -64,7 +60,7 @@ export class SentenceService implements OnInit {
 
     delete(sentences: Sentence[]):Promise<boolean>{
         return this.http
-                .post(this.baseUrl+this.sentencesUrl+"/Delete",JSON.stringify(sentences), {headers: this.headers})
+                .post(this.getBaseUrl()+this.sentencesUrl+"/Delete",JSON.stringify(sentences), {headers: this.headers})
                 .toPromise()
                 .then(res=>{
                     return res.json();

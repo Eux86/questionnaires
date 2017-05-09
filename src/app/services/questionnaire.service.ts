@@ -4,27 +4,23 @@ import 'rxjs/add/operator/toPromise';
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 import { environment } from '../../environments/environment';
+import { GeneralService } from './general.service'
 
 
 
 @Injectable()
-export class QuestionnaireService implements OnInit {
-    baseUrl: string = "http://localhost:3010";
+export class QuestionnaireService extends GeneralService {
     private questionnaireUrl = '/api/questionnaire';
-
-    ngOnInit(): void {
-        if (!environment.production) {
-            this.baseUrl = "http://icaroexames.ddns.net";
-        }
-    }
 
     private headers = new Headers({'Content-Type': 'application/json',
                                     'Authorization': "Bearer "+localStorage.getItem("token")});
     
-    constructor (private http: Http) {}
+    constructor (private http: Http) {
+        super();
+    }
 
     getQuestionnaires(startIndex: Number, quantity: Number): Promise<Questionnaire[]>{
-        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
+        return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -34,7 +30,7 @@ export class QuestionnaireService implements OnInit {
     }
 
     getTotalNumber():Promise<number>{
-        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetCount',{headers: this.headers})
+        return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/GetCount',{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as number;
@@ -46,7 +42,7 @@ export class QuestionnaireService implements OnInit {
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     getQuestionnaire(id: Number): Promise<Questionnaire>{
-        return this.http.get(this.baseUrl+this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
+        return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire;
@@ -56,7 +52,7 @@ export class QuestionnaireService implements OnInit {
     }
 
     getQuestionnaireBySearchText(text:string):Promise<Questionnaire[]>{
-        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetBySearchText?searchText='+text,{headers: this.headers})
+        return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/GetBySearchText?searchText='+text,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -67,7 +63,7 @@ export class QuestionnaireService implements OnInit {
 
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
         return this.http
-        .post(this.baseUrl+this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
+        .post(this.getBaseUrl()+this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -80,7 +76,7 @@ export class QuestionnaireService implements OnInit {
         q.Date = new Date();
 
         return this.http
-        .post(this.baseUrl+this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
+        .post(this.getBaseUrl()+this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -89,7 +85,7 @@ export class QuestionnaireService implements OnInit {
     }
 
     delete(id: number): Promise<void>{
-        const url = `${this.baseUrl+this.questionnaireUrl}/Delete/${id}`;
+        const url = `${this.getBaseUrl()+this.questionnaireUrl}/Delete/${id}`;
         return this.http
         .delete(url, { headers: this.headers })
         .toPromise().then( () => null)
@@ -101,7 +97,7 @@ export class QuestionnaireService implements OnInit {
         list.forEach(q => {
             ids.push(q.Id);
         });
-        const url = `${this.baseUrl+this.questionnaireUrl}/DeleteList`;
+        const url = `${this.getBaseUrl()+this.questionnaireUrl}/DeleteList`;
         return this.http
         .post(url, JSON.stringify(ids),
         {

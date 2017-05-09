@@ -13,8 +13,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="description">Description: </label>
                     <div class="col-sm-8">
-                        <input id="description" class="form-control" type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description"
-                        />
+                        <input id="description" class="form-control" type="text" [(ngModel)]="questionnaire.Description" placeholder="Add a description" />
                     </div>
                 </div>
             </div>
@@ -57,7 +56,7 @@
                                                         <div class="col-sm-11">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">
-                                                                    <input type="checkbox" [(ngModel)]="answer.Selected">
+                                                                    <input type="checkbox" [(ngModel)]="answer.Selected" (ngModelChange)="convertBool(answer.Selected)">
                                                                     {{answer.Selected}}
                                                                 </span>
                                                                 <sentence-edit [(sentence)]="answer.Sentence"></sentence-edit>
