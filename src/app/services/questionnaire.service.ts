@@ -1,20 +1,22 @@
-import { Injectable } from '@angular/core'
+import { Injectable, isDevMode, OnInit } from '@angular/core'
 import { Http, Headers } from '@angular/http'
-
 import 'rxjs/add/operator/toPromise';
-
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
+
+import { environment } from '../../environments/environment';
+
 
 
 @Injectable()
-export class QuestionnaireService{
-    private prefix = 'http://localhost:3010/api/'; //app/
-    private questionnaireUrl = this.prefix+'questionnaire';
-    private sentencesUrl =  this.prefix+'sentence';
+export class QuestionnaireService implements OnInit {
+    baseUrl: string = "http://localhost:3010";
+    private questionnaireUrl = '/api/questionnaire';
 
-    // private prefix = 'http://localhost:53464/api/'; //app/
-    // private questionnaireUrl = this.prefix+'questionnaires';
-    // private sentencesUrl =  this.prefix+'sentences';
+    ngOnInit(): void {
+        if (!environment.production) {
+            this.baseUrl = "http://icaroexames.ddns.net";
+        }
+    }
 
     private headers = new Headers({'Content-Type': 'application/json',
                                     'Authorization': "Bearer "+localStorage.getItem("token")});
@@ -22,7 +24,7 @@ export class QuestionnaireService{
     constructor (private http: Http) {}
 
     getQuestionnaires(startIndex: Number, quantity: Number): Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
+        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -32,7 +34,7 @@ export class QuestionnaireService{
     }
 
     getTotalNumber():Promise<number>{
-        return this.http.get(this.questionnaireUrl+'/GetCount',{headers: this.headers})
+        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetCount',{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as number;
@@ -44,7 +46,7 @@ export class QuestionnaireService{
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
     getQuestionnaire(id: Number): Promise<Questionnaire>{
-        return this.http.get(this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
+        return this.http.get(this.baseUrl+this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire;
@@ -54,7 +56,7 @@ export class QuestionnaireService{
     }
 
     getQuestionnaireBySearchText(text:string):Promise<Questionnaire[]>{
-        return this.http.get(this.questionnaireUrl+'/GetBySearchText?searchText='+text,{headers: this.headers})
+        return this.http.get(this.baseUrl+this.questionnaireUrl+'/GetBySearchText?searchText='+text,{headers: this.headers})
                 .toPromise()
                 .then(function(response) {
                     let ret = response.json() as Questionnaire[];
@@ -65,7 +67,7 @@ export class QuestionnaireService{
 
     update(questionnaire: Questionnaire): Promise<Questionnaire> {
         return this.http
-        .post(this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
+        .post(this.baseUrl+this.questionnaireUrl+"/Create/"+questionnaire.Id, JSON.stringify(questionnaire), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -78,7 +80,7 @@ export class QuestionnaireService{
         q.Date = new Date();
 
         return this.http
-        .post(this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
+        .post(this.baseUrl+this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -87,7 +89,7 @@ export class QuestionnaireService{
     }
 
     delete(id: number): Promise<void>{
-        const url = `${this.questionnaireUrl}/Delete/${id}`;
+        const url = `${this.baseUrl+this.questionnaireUrl}/Delete/${id}`;
         return this.http
         .delete(url, { headers: this.headers })
         .toPromise().then( () => null)
@@ -99,7 +101,7 @@ export class QuestionnaireService{
         list.forEach(q => {
             ids.push(q.Id);
         });
-        const url = `${this.questionnaireUrl}/DeleteList`;
+        const url = `${this.baseUrl+this.questionnaireUrl}/DeleteList`;
         return this.http
         .post(url, JSON.stringify(ids),
         {

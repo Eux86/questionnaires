@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core'
+import { Injectable, isDevMode, OnInit } from '@angular/core'
 import { Observable } from 'rxjs/Observable';
 import { Http, Headers,RequestOptions } from '@angular/http'
+
+import { environment } from '../../environments/environment';
+
 
 import 'rxjs/add/operator/toPromise';
 
@@ -8,15 +11,20 @@ import 'rxjs/add/operator/toPromise';
 
 
 @Injectable()
-export class FileUploadService{
-
-    endpoint: string = "http://localhost:3010/api/file/Upload";
+export class FileUploadService implements OnInit {
+    baseUrl: string = "http://localhost:3010";
+    endpoint: string = "/api/file/Upload";
     private headers = new Headers({
                                     'Content-Type': 'multipart/form-data',
                                     'Accept': 'application/json', 
                                     // 'Authorization': "Bearer "+localStorage.getItem("token"),
                                  });
 
+    ngOnInit(): void {
+        if (environment.production) {
+            this.baseUrl = "http://icaroexames.ddns.net";
+        }
+    }
 
     public progress$: Observable<any>;
     private progress: number =0;
@@ -59,7 +67,7 @@ export class FileUploadService{
             
             setInterval(() => { }, 500); // magic hack to see updates on the subscriver's view
 
-            xhr.open('POST', this.endpoint, true);
+            xhr.open('POST', this.baseUrl+this.endpoint, true);
             var serverFileName = xhr.send(formData);
             return serverFileName;
         });

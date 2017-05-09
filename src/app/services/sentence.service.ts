@@ -1,24 +1,30 @@
-import { Injectable } from '@angular/core'
+import { Injectable, isDevMode, OnInit } from '@angular/core'
 import { Http, Headers } from '@angular/http'
-
 import 'rxjs/add/operator/toPromise';
-
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
+
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
-export class SentenceService{
-    private prefix = 'http://localhost:3010/api/'; //app/
-    private sentencesUrl =  this.prefix+'sentence';
+export class SentenceService implements OnInit {
+    baseUrl: string = "http://localhost:3010";
+    private sentencesUrl =  '/api/sentence';
 
     private headers = new Headers({'Content-Type': 'application/json'});
     
     constructor (private http: Http) {}
 
+    ngOnInit(): void {
+        if (environment.production) {
+            this.baseUrl = "http://icaroexames.ddns.net";
+        }
+    }
+
 
     create(sentence:Sentence): Promise<Sentence> {
         return this.http
-        .post(this.sentencesUrl, JSON.stringify(sentence), {headers: this.headers})
+        .post(this.baseUrl+this.sentencesUrl, JSON.stringify(sentence), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -28,7 +34,7 @@ export class SentenceService{
 
     createMany(sentences:Sentence[]): Promise<Sentence[]> {
         return this.http
-        .post(this.sentencesUrl+"/CreateMany", JSON.stringify(sentences), {headers: this.headers})
+        .post(this.baseUrl+this.sentencesUrl+"/CreateMany", JSON.stringify(sentences), {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -38,7 +44,7 @@ export class SentenceService{
 
     getByText(text:string):Promise<Sentence[]> {
         return this.http
-        .get(this.sentencesUrl+"/GetByText?text="+text, {headers: this.headers})
+        .get(this.baseUrl+this.sentencesUrl+"/GetByText?text="+text, {headers: this.headers})
         .toPromise()
         .then(res =>  {
             return res.json()
@@ -47,7 +53,7 @@ export class SentenceService{
     }
 
     getAll(): Promise<Sentence[]>{
-        return this.http.get(this.sentencesUrl+"/GetAll")
+        return this.http.get(this.baseUrl+this.sentencesUrl+"/GetAll")
                     .toPromise()
                     .then(function(response) {
                         let ret = response.json() as Sentence[];
@@ -58,7 +64,7 @@ export class SentenceService{
 
     delete(sentences: Sentence[]):Promise<boolean>{
         return this.http
-                .post(this.sentencesUrl+"/Delete",JSON.stringify(sentences), {headers: this.headers})
+                .post(this.baseUrl+this.sentencesUrl+"/Delete",JSON.stringify(sentences), {headers: this.headers})
                 .toPromise()
                 .then(res=>{
                     return res.json();

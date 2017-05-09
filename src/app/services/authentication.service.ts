@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core'
+import { Injectable, isDevMode, OnInit } from '@angular/core'
 import { Http, Headers } from '@angular/http'
-
 import 'rxjs/add/operator/toPromise';
-
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
+
+import { environment } from '../../environments/environment';
+
 
 
 @Injectable()
-export class AuthenticationService{
-
-    loginUrl: string = "http://localhost:3010/auth2/token";
+export class AuthenticationService  implements OnInit  {
+    baseUrl: string = "http://icaroexames.ddns.net";
+    endpoint: string = "/auth2/token";
     private headers = new Headers({
                                     'Content-Type': 'application/x-www-form-urlencoded',
                                     'Audience':'Any', 
@@ -17,6 +18,12 @@ export class AuthenticationService{
 
 
     constructor (private http: Http) {}
+
+    ngOnInit(): void {
+        if (environment.production) {
+            this.baseUrl = "http://icaroexames.ddns.net";
+        }
+    }
 
     isAdmin(): Boolean{
         var isAdmin = localStorage.getItem("isAdmin");
@@ -46,7 +53,7 @@ export class AuthenticationService{
             grant_type: "password"
         });
         return this.http
-        .post(this.loginUrl, "username="+username+"&password="+password+"&grant_type=password", {headers: this.headers})
+        .post(this.baseUrl+this.endpoint, "username="+username+"&password="+password+"&grant_type=password", {headers: this.headers})
         .toPromise()
         .then(res =>  {
             localStorage.setItem("isAdmin","true");

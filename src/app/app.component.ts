@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/services/authentication.service';
+import { environment } from '../environments/environment';
+
 
 @Component({
     moduleId: module.id,
