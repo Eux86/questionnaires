@@ -56,8 +56,7 @@
                                                         <div class="col-sm-11">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon">
-                                                                    <input type="checkbox" [(ngModel)]="answer.Selected" (ngModelChange)="convertBool(answer.Selected)">
-                                                                    {{answer.Selected}}
+                                                                    <input type="checkbox" [(ngModel)]="answer.IsCorrect" >
                                                                 </span>
                                                                 <sentence-edit [(sentence)]="answer.Sentence"></sentence-edit>
                                                             </div>

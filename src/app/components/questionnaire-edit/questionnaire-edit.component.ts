@@ -190,13 +190,6 @@ export class QuestionnaireEditComponent implements OnInit {
     return newSentences;
   }
 
-  convertBool(value: any):void{
-    if (value=="true")
-      value=1;
-    else 
-      value =0;
-  }
-
   //############  Upload stuffs
   uploadImageForQuestion(question:Question):void{
     this.uploadImageComponent.reset();
