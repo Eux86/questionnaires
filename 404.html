@@ -8,7 +8,7 @@ permalink: /404.html
     and then redirects all 404 responses to the app’s index.html page -->
     <!-- See http://www.backalleycoder.com/2016/05/13/sghpa-the-single-page-app-hack-for-github-pages/ -->
     <script>
-      sessionStorage.redirect = location.href;
+      sessionStorage.redirect = this.href.substr(this.href.lastIndexOf('/') + 1)//location.href;
     </script>
     <meta http-equiv="refresh" content="0;URL='https://eux86.github.io/questionnaires'"></meta>
   </head>
