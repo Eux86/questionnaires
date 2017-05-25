@@ -20,6 +20,9 @@ export class AuthenticationService  implements OnInit  {
     constructor (private http: Http) {}
 
     ngOnInit(): void {
+        console.log("ON INIT"); 
+        console.log("Environment: "+environment.production);
+
         if (environment.production) {
             this.baseUrl = "http://icaroexames.ddns.net";
         }

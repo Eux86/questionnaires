@@ -12,7 +12,8 @@ export class QuestionnaireService implements OnInit {
     baseUrl: string = "http://localhost:3010";
     private questionnaireUrl = '/api/questionnaire';
 
-    ngOnInit(): void {
+    ngOnInit(): void { 
+        alert('asd');
         if (!environment.production) {
             this.baseUrl = "http://icaroexames.ddns.net";
         }
