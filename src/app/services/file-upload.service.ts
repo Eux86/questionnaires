@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http, Headers,RequestOptions } from '@angular/http'
 
 import { environment } from '../../environments/environment';
-
+import { GeneralService } from './general.service';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,8 +11,7 @@ import 'rxjs/add/operator/toPromise';
 
 
 @Injectable()
-export class FileUploadService implements OnInit {
-    baseUrl: string = "http://localhost:3010";
+export class FileUploadService extends GeneralService {
     endpoint: string = "/api/file/Upload";
     private headers = new Headers({
                                     'Content-Type': 'multipart/form-data',
@@ -20,17 +19,12 @@ export class FileUploadService implements OnInit {
                                     // 'Authorization': "Bearer "+localStorage.getItem("token"),
                                  });
 
-    ngOnInit(): void {
-        if (environment.production) {
-            this.baseUrl = "http://icaroexames.ddns.net";
-        }
-    }
-
     public progress$: Observable<any>;
     private progress: number =0;
     private progressObserver: any;
 
     constructor(private http: Http) {
+        super();
         this.progress$ = new Observable(observer => {
             this.progressObserver = observer
         });
@@ -67,14 +61,14 @@ export class FileUploadService implements OnInit {
             
             setInterval(() => { }, 500); // magic hack to see updates on the subscriver's view
 
-            xhr.open('POST', this.baseUrl+this.endpoint, true);
+            xhr.open('POST', this.getBaseUrl()+this.endpoint, true);
             var serverFileName = xhr.send(formData);
             return serverFileName;
         });
     }
 
     getImageUrl(id):string{
-        return "http://localhost:3010/api/file/Get/"+id;
+        return this.getBaseUrl()+"/api/file/Get/"+id;
     }
 
 }

@@ -1,15 +1,14 @@
-import { Injectable, isDevMode, OnInit } from '@angular/core'
+import { Injectable, isDevMode } from '@angular/core'
 import { Http, Headers } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
-import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
+import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model';
+import { GeneralService } from './general.service';
 
-import { environment } from '../../environments/environment';
 
 
 
 @Injectable()
-export class AuthenticationService  implements OnInit  {
-    baseUrl: string = "http://localhost:3010";
+export class AuthenticationService extends GeneralService   {
     endpoint: string = "/auth2/token";
     private headers = new Headers({
                                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -17,15 +16,8 @@ export class AuthenticationService  implements OnInit  {
                                  });
 
 
-    constructor (private http: Http) {}
-
-    ngOnInit(): void {
-        console.log("ON INIT"); 
-        console.log("Environment: "+environment.production);
-
-        if (environment.production) {
-            this.baseUrl = "http://icaroexames.ddns.net";
-        }
+    constructor (private http: Http) {
+        super();
     }
 
     isAdmin(): Boolean{
@@ -56,7 +48,7 @@ export class AuthenticationService  implements OnInit  {
             grant_type: "password"
         });
         return this.http
-        .post(this.baseUrl+this.endpoint, "username="+username+"&password="+password+"&grant_type=password", {headers: this.headers})
+        .post(this.getBaseUrl()+this.endpoint, "username="+username+"&password="+password+"&grant_type=password", {headers: this.headers})
         .toPromise()
         .then(res =>  {
             localStorage.setItem("isAdmin","true");
