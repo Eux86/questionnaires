@@ -1,6 +1,8 @@
 import { Injectable, isDevMode, OnInit } from '@angular/core'
-import { Http, Headers } from '@angular/http'
+import { Http, Headers, Response } from '@angular/http'
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map'
+import { Observable } from 'rxjs/Observable';
 import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 import { environment } from '../../environments/environment';
@@ -19,36 +21,24 @@ export class QuestionnaireService extends GeneralService {
         super();
     }
 
-    getQuestionnaires(startIndex: Number, quantity: Number): Promise<Questionnaire[]>{
+    getQuestionnaires(startIndex: Number, quantity: Number): Observable<Questionnaire[]>{
         return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/GetPaginated?startIndex='+startIndex+'&quantity='+quantity,{headers: this.headers})
-                .toPromise()
-                .then(function(response) {
-                    let ret = response.json() as Questionnaire[];
-                    return ret;
-                })
-                .catch(this.handleError);
+                .map((res:Response)=>res.json());
     }
 
-    getTotalNumber():Promise<number>{
+    getTotalNumber():Observable<number>{
         return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/GetCount',{headers: this.headers})
-                .toPromise()
-                .then(function(response) {
-                    let ret = response.json() as number;
-                    return ret;
-                })
-                .catch(this.handleError);
+                .map((res:Response)=>res.json());
     }
+
+    // SHOULD CONVERT EVERYTHING TO OBSERVABLE ------------------------------------------- 
+    
     
     // There should be 2 different method that return a questionnaire
     // and one of them should NOT return the IsCorrect field of the answers
-    getQuestionnaire(id: Number): Promise<Questionnaire>{
+    getQuestionnaire(id: Number): Observable<Questionnaire>{
         return this.http.get(this.getBaseUrl()+this.questionnaireUrl+'/Get/'+id,{headers: this.headers})
-                .toPromise()
-                .then(function(response) {
-                    let ret = response.json() as Questionnaire;
-                    return ret;
-                })
-                .catch(this.handleError);
+                .map((res:Response)=>res.json());
     }
 
     getQuestionnaireBySearchText(text:string):Promise<Questionnaire[]>{
@@ -107,8 +97,8 @@ export class QuestionnaireService extends GeneralService {
         .catch(this.handleError);
     }
 
-    checkQuestionnaire(questionnaire: Questionnaire): Promise<Questionnaire>{
-        return this.getQuestionnaire(questionnaire.Id).then(q=> { return q });
+    checkQuestionnaire(questionnaire: Questionnaire): Observable<Questionnaire>{
+        return this.getQuestionnaire(questionnaire.Id);
     }
 
     private handleError(error: any): Promise<any> {

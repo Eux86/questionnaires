@@ -50,10 +50,10 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   getList(): void {
-    this.questionnaireService.getQuestionnaires(this.currentIndex*this.quantity,this.quantity).then(
-      questionnaires => {
-        this.questionnaires = questionnaires;
-      }
+    this.questionnaireService.getQuestionnaires(this.currentIndex*this.quantity,this.quantity).subscribe(
+      questionnaires => this.questionnaires = questionnaires,
+      ()=>{}, // error
+      ()=>{} // completed
     )
     this.getTotalNumber();
   }
@@ -108,12 +108,14 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   getTotalNumber():void{
-    this.questionnaireService.getTotalNumber().then(
+    this.questionnaireService.getTotalNumber().subscribe(
       total=> 
       {
         this.totalNumber=total;
         this.calculatePaging();
-      }
+      },
+      ()=>{}, // Error
+      ()=>{} // Complete
     )
   }
 

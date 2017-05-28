@@ -56,8 +56,11 @@ export class QuestionnaireEditComponent implements OnInit {
       if (params['id'] !== undefined) {
         let id: string = params['id'];
                                             //TODO: check if ID is numeric
-        this.questionnaireService.getQuestionnaire(+id).then(q=>this.questionnaire=q);
-        //this.questionnaireService.getQuestionnaire(+id).then(q=>console.log(JSON.stringify(q)));
+        this.questionnaireService.getQuestionnaire(+id).subscribe(
+          q => this.questionnaire = q,
+          () => { }, // Error
+          () => { } // Complete
+        );
       }
 		})
   }
