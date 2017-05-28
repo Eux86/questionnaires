@@ -5,6 +5,7 @@ import { Question,Questionnaire,Answer,Section,Sentence } from '../data-model'
 
 import { environment } from '../../environments/environment';
 import { GeneralService } from './general.service'
+import { HttpOverride  } from 'HttpOverride'
 
 
 
@@ -15,7 +16,7 @@ export class QuestionnaireService extends GeneralService {
     private headers = new Headers({'Content-Type': 'application/json',
                                     'Authorization': "Bearer "+localStorage.getItem("token")});
     
-    constructor (private http: Http) {
+    constructor (private http: HttpOverride) {
         super();
     }
 

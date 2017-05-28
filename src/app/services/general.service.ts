@@ -9,7 +9,7 @@ export abstract class GeneralService   {
     //                              });
 
     protected getBaseUrl():string{
-        if (environment.production)
+        if (environment.production || environment.useRemoteApi)
             return this.prodBaseUrl;
         else 
             return this.localhostBaseUrl;
