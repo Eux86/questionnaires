@@ -19,12 +19,14 @@ import { LoginComponent } from 'app/components/login/login.component';
 import { SentenceEditComponent } from 'app/components/sentence-edit/sentence-edit.component';
 import { ImageUploadComponent } from 'app/components/common/image-upload/image-upload.component';
 import { SandboxComponent } from 'app/components/common/sandbox/sandbox.component';
+import { SpinnerComponent } from 'app/components/common/spinner/spinner.component';
 
 // Services
 import { QuestionnaireService } from 'app/services/questionnaire.service'
 import { SentenceService } from 'app/services/sentence.service'
 import { AuthenticationService } from 'app/services/authentication.service'
 import { FileUploadService } from 'app/services/file-upload.service'
+import { SpinnerService } from 'app/services/spinner.service'
 
 
 
@@ -38,6 +40,9 @@ import { AppRoutingModule }     from './app-routing.module';
 import { NguiAutoCompleteModule  } from '@ngui/auto-complete';
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
+// Override HTTP to show spinner when waiting for api response
+import { HttpOverride } from 'HttpOverride';
+import { Http, RequestOptions, XHRBackend,ConnectionBackend } from '@angular/http';
 
 
 @NgModule({
@@ -59,8 +64,23 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
     SentencesListComponent,
     LoginComponent,
     ImageUploadComponent,
-    SandboxComponent ],
-  providers: [QuestionnaireService,SentenceService,AuthenticationService,FileUploadService],
+    SandboxComponent,
+    SpinnerComponent ],
+  providers: [
+    QuestionnaireService,
+    SentenceService,
+    AuthenticationService,
+    FileUploadService,
+    SpinnerService,
+    { 
+      provide: HttpOverride,
+      useFactory: (backend: XHRBackend, options: RequestOptions) => {
+        return new HttpOverride(backend, options);
+      },
+      deps: [XHRBackend, RequestOptions],
+
+    },
+  ],
   bootstrap: 	[ AppComponent ]
 })
 export class AppModule { }
