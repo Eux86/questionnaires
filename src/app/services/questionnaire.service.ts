@@ -32,6 +32,21 @@ export class QuestionnaireService extends GeneralService {
                 .map((res:Response)=>res.json());
     }
 
+    create(): Observable<Questionnaire> {
+        let q = new Questionnaire();
+        q.Date = new Date();
+
+        return this.http
+        .post(this.getBaseUrl()+this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
+        .map((res:Response)=>res.json());
+
+        // .toPromise()
+        // .then(res =>  {
+        //     return res!=null?res.json():null
+        // })
+        // .catch(this.handleError);
+    }
+
     // SHOULD CONVERT EVERYTHING TO OBSERVABLE ------------------------------------------- 
     
     
@@ -62,18 +77,7 @@ export class QuestionnaireService extends GeneralService {
         .catch(this.handleError);
     }
 
-    create(): Promise<Questionnaire> {
-        let q = new Questionnaire();
-        q.Date = new Date();
-
-        return this.http
-        .post(this.getBaseUrl()+this.questionnaireUrl+"/Create", JSON.stringify(q), {headers: this.headers})
-        .toPromise()
-        .then(res =>  {
-            return res.json()
-        })
-        .catch(this.handleError);
-    }
+    
 
     delete(id: number): Promise<void>{
         const url = `${this.getBaseUrl()+this.questionnaireUrl}/Delete/${id}`;

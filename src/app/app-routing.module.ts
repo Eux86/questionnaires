@@ -7,7 +7,7 @@ import { QuestionnaireEditComponent } from 'app/components/questionnaire-edit/qu
 import { SentencesListComponent } from 'app/components/sentences-list/sentences-list.component'; 
 import { QuestionnaireViewComponent } from 'app/components/questionnaire-view/questionnaire-view.component';
 import { LoginComponent } from 'app/components/login/login.component';
-
+import { ErrorComponent } from 'app/components/error/error.component';
 import { SandboxComponent } from 'app/components/common/sandbox/sandbox.component';
 
 
@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'view/:id', component: QuestionnaireViewComponent },
   { path: 'login/:logout', component: LoginComponent },
   { path: 'sandbox', component: SandboxComponent },
+  { path: 'error', component: ErrorComponent },
 ];
 
 @NgModule({

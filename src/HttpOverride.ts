@@ -1,30 +1,43 @@
+///
+/// https://www.illucit.com/blog/2016/03/angular2-http-authentication-interceptor/
+///
+
 import { Injectable } from '@angular/core'
 import { Http,ConnectionBackend,RequestOptionsArgs,RequestOptions,Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable';
 import { Subscriber } from 'rxjs/Subscriber';
 import 'rxjs/Rx';
-
+import { Router} from '@angular/router';
 
 @Injectable()
 export class HttpOverride extends Http {
-
-    private pendingObserver: Subscriber<{}>;
     public pendingObservable: Observable<boolean>;
+    
+    private pendingObserver: Subscriber<{}>;
+    private pending:number = 0;
+    private showingSpinner:boolean = false;
+    // private _router: Router;
 
-    pending:number = 0;
-    showingSpinner:boolean = false;
-
-    constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+    constructor(
+        private backend: ConnectionBackend, 
+        private defaultOptions: RequestOptions,
+        private router:Router) 
+    {
         super(backend, defaultOptions);
+        
         this.pendingObservable = new Observable(observer => {
             this.pendingObserver = observer;
         }).share();
-        
+
+        // this._router = router;
     }
 
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        console.log('get...');
         return this.intercept(super.get(url, options));
+    }
+
+    post(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {   
+        return this.intercept(super.post(url, body,options));        
     }
 
     intercept(observable: Observable<Response>): Observable<Response> {
@@ -32,13 +45,11 @@ export class HttpOverride extends Http {
         return observable
             .catch((err, source) => {
                 console.log("Caught error: " + err);
-                this.removePending();
-                return null;                                            // TODO: What should I return here?
-                // return source;
+                this.handleError(err);
+                return Observable.empty();                                            
             })
             .do((res: Response) => {
                 console.log("Response: " + res);
-                this.removePending();
             }, (err: any) => {
                 console.log("Caught error. Spinner Off: " + err);
                 this.removePending();
@@ -51,16 +62,25 @@ export class HttpOverride extends Http {
 
     addPending(){
         this.pending++;
-        this.showingSpinner == this.pending>0;
+        this.showingSpinner = this.pending>0;
         console.log('Add pending: '+this.pending);        
         if (this.pendingObserver!=null)
             this.pendingObserver.next(this.showingSpinner);
     }
     removePending(){
         this.pending--;
-        this.showingSpinner == this.pending>0;
+        this.showingSpinner = this.pending>0;
         console.log('Remove pending: '+this.pending);                
         if (this.pendingObserver!=null)
             this.pendingObserver.next(this.showingSpinner);
+    }
+
+    handleError(err:Response){
+        if (err.status==0){
+            this.router.navigate(['/error']);
+        } 
+        if (err.status==401){
+            this.router.navigate(['/login',true]);
+        }
     }
 }
