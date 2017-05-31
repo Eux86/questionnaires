@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  allowUserCreation: false
+  allowUserCreation: false,
+  useRemoteApi: true
 };

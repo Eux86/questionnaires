@@ -14,7 +14,7 @@ declare var Spinner: any;
 })
 export class SpinnerComponent implements OnInit, OnDestroy {
     private DELAY_BEFORE_SPINNING = 200; // ms
-    private spinning: boolean = false;
+    public spinning: boolean = false;
     private shouldSpin: boolean = false;3
     private spinner: any;
 
