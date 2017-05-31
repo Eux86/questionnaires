@@ -1,0 +1,28 @@
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { AuthenticationService } from 'app/services/authentication.service';
+import { environment } from '../environments/environment';
+
+
+@Component({
+    moduleId: module.id,
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.css']
+})
+
+export class AppComponent implements OnInit {
+  constructor(
+      private authService: AuthenticationService
+    )   
+    {
+        
+    }
+
+    title = 'Questionnaires';
+    isLogged: Boolean = false;
+
+    ngOnInit(): void {
+        this.isLogged = this.authService.isAdmin();
+    }
+}
