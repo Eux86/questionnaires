@@ -1,0 +1,1 @@
+ng build --prod --base-href "https://eux86.github.io/questionnaires/" & ngh

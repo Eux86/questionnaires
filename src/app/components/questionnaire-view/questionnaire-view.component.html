@@ -25,7 +25,7 @@
                                                     <div class="answer-view clearFloat" *ngFor="let answer of question.Answers; let a = index" [ngClass]="{rightAnswer: isRighAnswer(answer), wrongAnswer: isWrongAnswer(answer)}">
                                                         <div class="input-group">
                                                             <input type="checkbox" [(ngModel)]="answer.Selected" />
-                                                            <div *ngIf="answer.Sentence">{{answer.Sentence.Text}} <span>{{answer.IsCorrect}}</span></div>
+                                                            <div *ngIf="answer.Sentence">{{answer.Sentence.Text}} </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -120,13 +120,7 @@ export class QuestionnaireListComponent implements OnInit {
   }
 
   createQuestionnaire(){
-    this.questionnaireService.create().subscribe(
-      newQuest => {
-        this.router.navigate(['/edit/',newQuest.Id]);
-      },
-      ()=>{}, // Error
-      ()=>{} // Complete
-    )
+    this.router.navigate(['/edit/','']);
   }
 
 

@@ -26,7 +26,6 @@ export class QuestionnaireEditComponent implements OnInit {
   modalFileUpload: ModalComponent;
   @ViewChild('infoModal')
   infoModal: ModalComponent;
-
   @ViewChild('uploadImageComponent')
   uploadImageComponent: ImageUploadComponent;
 
@@ -34,6 +33,7 @@ export class QuestionnaireEditComponent implements OnInit {
   newSentences: Sentence[];
   infoModalMessage: string = "";
   questionToAssociateImage: Question;
+  isNew: boolean = false;
 
   // Upload modal
   imageUploaded: boolean = false;
@@ -45,7 +45,8 @@ export class QuestionnaireEditComponent implements OnInit {
     private sentenceService: SentenceService,
     private fileUploadService: FileUploadService,
     private route: ActivatedRoute,
-		private location: Location
+		private location: Location,
+    public router:Router
   ) { 
   }
   
@@ -53,7 +54,7 @@ export class QuestionnaireEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => 
     {
-      if (params['id'] !== undefined) {
+      if (params['id'] !== undefined && params['id']!=="") {
         let id: string = params['id'];
                                             //TODO: check if ID is numeric
         this.questionnaireService.getQuestionnaire(+id).subscribe(
@@ -61,6 +62,9 @@ export class QuestionnaireEditComponent implements OnInit {
           () => { }, // Error
           () => { } // Complete
         );
+        this.isNew = false;
+      } else {
+        this.isNew = true;
       }
 		})
   }
@@ -93,7 +97,11 @@ export class QuestionnaireEditComponent implements OnInit {
 
   update():void{
     this.newSentences = this.getNewSentences(this.questionnaire);
-    this.modalNewSentences.open();
+    if (this.newSentences!=undefined && this.newSentences.length>0){
+      this.modalNewSentences.open();
+    } else {
+      this.updateConfirm();
+    }
     // if (this.confirmNewSentencesCreation(newSentences)){
     //   this.questionnaireService.update(this.questionnaire).then(q=>{
     //     this.questionnaire = q;

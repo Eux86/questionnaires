@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.authService.login(this.username, this.password).then((response) => {
       if (response) {
-        window.location.href = '/';   
+        this.router.navigate(['/']);
       } else {
         alert("couldn't login");
       }
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
   logout():void{
     this.authService.logout().then((response) => {
       if (response) {
-        window.location.href = '/';   
+        this.router.navigate(['/']);
       } else {
         alert("couldn't logout");
       }

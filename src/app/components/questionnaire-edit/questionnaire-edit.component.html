@@ -4,7 +4,8 @@
             <div class="row">
                 <div class="container">
                     <span class="pull-right">
-                        <a (click)="update()" class="btn btn-lg btn-primary">Save</a>
+                        <a (click)="modalCancelEdit.open()" class="btn btn-default">Cancel</a>
+                        <a (click)="update()" class="btn btn-default btn-primary">Save</a>
                     </span>
                 </div>
             </div>
@@ -120,12 +121,14 @@
         <h4 class="modal-title">Saved</h4>
     </modal-header>
     <modal-body>
-        New sentences will be created: do you want to procede:<br/>
+        New sentences will be created:<br/>
         <ul>
             <li *ngFor="let sentence of newSentences; let i = index">
                 {{sentence.Text}}
             </li>
         </ul>
+        <br />
+        do you want to procede?
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalNewSentences.dismiss()">No</button>
@@ -155,6 +158,19 @@
         {{infoModalMessage}}
     </modal-body>
     <modal-footer>
-        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSaved.dismiss()">Ok</button>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="infoModal.dismiss()">Ok</button>
+    </modal-footer>
+</modal>
+
+<modal #modalCancelEdit>
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Cancel <span *ngIf="isNew">new Questionnaire</span><span *ngIf="!isNew">edits</span></h4>
+    </modal-header>
+    <modal-body>
+        All unsaved changes will be lost. Do you want to continue?
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalCancelEdit.dismiss()">No</button>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="router.navigate(['/'])">Yes</button>
     </modal-footer>
 </modal>
