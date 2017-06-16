@@ -22,19 +22,26 @@ import { SandboxComponent } from 'app/components/common/sandbox/sandbox.componen
 import { SpinnerComponent } from 'app/components/common/spinner/spinner.component';
 
 // Services
-import { QuestionnaireService } from 'app/services/questionnaire.service'
-import { SentenceService } from 'app/services/sentence.service'
-import { AuthenticationService } from 'app/services/authentication.service'
-import { FileUploadService } from 'app/services/file-upload.service'
-import { SpinnerService } from 'app/services/spinner.service'
-
-import { NguiAutoCompleteModule  } from '@ngui/auto-complete';
-import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { QuestionnaireService } from 'app/services/questionnaire.service';
+import { SentenceService } from 'app/services/sentence.service';
+import { AuthenticationService } from 'app/services/authentication.service';
+import { FileUploadService } from 'app/services/file-upload.service';
+import { SpinnerService } from 'app/services/spinner.service';
+import { TranslationService } from 'app/services/translation.service';
 
 // Override HTTP to show spinner when waiting for api response
 import { HttpOverride } from 'HttpOverride';
 import { Http, RequestOptions, XHRBackend,ConnectionBackend } from '@angular/http';
 import { ErrorComponent } from './components/error/error.component';
+
+// Pipes
+import { TranslatePipe } from './pipes/translate.pipe';
+
+// External
+import { NguiAutoCompleteModule  } from '@ngui/auto-complete';
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { TranslationComponent } from './components/translation/translation.component';
+
 
 @NgModule({
   imports: [ 
@@ -56,13 +63,16 @@ import { ErrorComponent } from './components/error/error.component';
     ImageUploadComponent,
     SandboxComponent,
     SpinnerComponent,
-    ErrorComponent ],
+    ErrorComponent,
+    TranslatePipe,
+    TranslationComponent ],
   providers: [
     QuestionnaireService,
     SentenceService,
     AuthenticationService,
     FileUploadService,
     SpinnerService,
+    TranslationService,
     { 
       provide: HttpOverride,
       useFactory: httpFactory,

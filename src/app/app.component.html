@@ -13,6 +13,7 @@
         <ul class="nav navbar-nav">
             <li routerLinkActive="active"><a (click)="router.navigate(['/list'])" data-toggle="collapse" data-target=".navbar-collapse" >Questionnaires</a></li>
             <li routerLinkActive="active" *ngIf="isLogged"><a (click)="router.navigate(['/sentences'])" data-toggle="collapse" data-target=".navbar-collapse" >Sentences</a></li>
+            <li routerLinkActive="active" *ngIf="isLogged"><a (click)="router.navigate(['/translation'])" data-toggle="collapse" data-target=".navbar-collapse" >Translation</a></li>
         </ul>
         <ul class="nav navbar-nav pull-right">
             <li *ngIf="!isLogged" routerLinkActive="active"><a (click)="router.navigate(['/login', true])" data-toggle="collapse" data-target=".navbar-collapse">Login</a></li>

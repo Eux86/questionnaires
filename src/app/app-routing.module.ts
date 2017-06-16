@@ -9,6 +9,7 @@ import { QuestionnaireViewComponent } from 'app/components/questionnaire-view/qu
 import { LoginComponent } from 'app/components/login/login.component';
 import { ErrorComponent } from 'app/components/error/error.component';
 import { SandboxComponent } from 'app/components/common/sandbox/sandbox.component';
+import { TranslationComponent } from 'app/components/translation/translation.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'login/:logout', component: LoginComponent },
   { path: 'sandbox', component: SandboxComponent },
   { path: 'error', component: ErrorComponent },
+  { path: 'translation', component: TranslationComponent },
 ];
 
 @NgModule({

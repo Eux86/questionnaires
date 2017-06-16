@@ -28,8 +28,6 @@ export class HttpOverride extends Http {
         this.pendingObservable = new Observable(observer => {
             this.pendingObserver = observer;
         }).share();
-
-        // this._router = router;
     }
 
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
@@ -40,24 +38,31 @@ export class HttpOverride extends Http {
         return this.intercept(super.post(url, body,options));        
     }
 
-    intercept(observable: Observable<Response>): Observable<Response> {
-        this.addPending();
-        return observable
-            .catch((err, source) => {
-                console.log("Caught error: " + err);
-                this.handleError(err);
-                return Observable.empty();                                            
-            })
-            .do((res: Response) => {
-                console.log("Response: " + res);
-            }, (err: any) => {
-                console.log("Caught error. Spinner Off: " + err);
-                this.removePending();
-            })
-            .finally(() => {
-                console.log("Finally.. Spinner off")
-                this.removePending();
-            });
+    intercept(httpObs: Observable<Response>): Observable<Response> {   
+        return new Observable((subscriber)=>{
+            this.addPending();
+            const sub = httpObs.subscribe(
+                (res)=>subscriber.next(res),
+                (err)=> subscriber.error(err),
+                ()=> subscriber.complete()
+            )
+        })
+        .catch((err, source) => {
+            console.log("Caught error: " + err);
+            this.handleError(err);
+            return httpObs;                                            
+        })
+        .do((res: Response) => {
+            console.log("Response: " + res);
+        }, (err: any) => {
+            console.log("Caught error. Spinner Off: " + err);
+            // this.removePending();
+        })
+        .finally(() => {
+            console.log("Finally.. Spinner off")
+            this.removePending();
+        });
+         
     }
 
     addPending(){

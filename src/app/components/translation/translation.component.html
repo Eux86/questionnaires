@@ -1,0 +1,108 @@
+<div class="container">
+  <div class="row">
+    <h2>Translation settings</h2>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <label for="languageSelector">Selected site language:</label>
+      <select [(ngModel)]="selectedLanguage" id="languageSelector">
+          <option *ngFor="let c of languages" [ngValue]="c">{{c}}</option>
+      </select>
+      <button type="button" class="btn btn-xs btn-primary" aria-label="Update" style="margin-left:5px">Update</button>
+      <p style="margin-bottom:20px;margin-top:10px">
+        Below there is the list of all the translation used in the application. Any update will be immediately applied to the site
+        end will be visible to the users.
+      </p>
+      <div class="col-sm-10">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Questionnaire List Toolbar">
+          <button type="button" class="btn btn-default glyphicon glyphicon-plus" aria-label="Add" (click)="addNewTranslation()"></button>
+          <button type="button" class="btn btn-default glyphicon glyphicon-trash" aria-label="Delete" (click)="onDeleteSelected()"
+           [disabled]="selectedTranslationsNumber==0" ></button>
+        </div>
+      </div>
+      <div class="col-sm-2" style="margin-bottom:2px">
+        <button type="button" class="btn btn-primary" aria-label="Save" (click)="modalSave.open()" [disabled]="changed.length==0 && deleted.length==0" >Save</button>
+        <button type="button" class="btn btn-danger" aria-label="Undo" (click)="modalUndo.open()" [disabled]="changed.length==0 && deleted.length==0" >Undo edits</button>
+      </div>
+      <table class="table">
+        <tr>
+          <th></th>
+          <th>Translation Key</th>
+          <th>Value</th>
+        </tr>
+        <tr *ngFor="let t of translations; let i = index">
+          <td *ngIf="!t.Deleted">
+            <input type="checkbox" [(ngModel)]="t.Selected" (change)="onSelectionChange(t)" />
+          </td>
+          <td *ngIf="!t.Deleted">
+            <label for="value{{i}}">{{t.Key}}</label>
+            <!--<input class="form-control" type="text" [(ngModel)]="t.Key" />-->
+          </td>
+          <td *ngIf="!t.Deleted">
+            <input id="value{{i}}" class="form-control" type="text" [(ngModel)]="t.Value" (change)="onContentChange(t)" [ngClass]="{'changed':t.Changed}" />
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<modal #modalSave (onClose)="onSave()">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Saving:</h4>
+    </modal-header>
+    <modal-body>
+        Are you sure you want to apply the following changes?<br/> <br />
+        <div *ngIf="deleted.length>0">
+          <b>Deleted translations:</b>
+          <ul>
+            <li *ngFor="let q of deleted">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="changed.length>0">
+          <b>Changed translations:</b>
+          <ul>
+            <li *ngFor="let q of changed">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSave.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalSave.close()">Yes</button>
+    </modal-footer>
+</modal>
+
+<modal #modalUndo (onClose)="onUndo()">
+    <modal-header [show-close]="true">
+        <h4 class="modal-title">Undo edits:</h4>
+    </modal-header>
+    <modal-body>
+        Are you sure you want to cancel the following changes?<br/> <br />
+        <div *ngIf="deleted.length>0">
+          <b>Deleted translations:</b>
+          <ul>
+            <li *ngFor="let q of deleted">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="changed.length>0">
+          <b>Changed translations:</b>
+          <ul>
+            <li *ngFor="let q of changed">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalUndo.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="modalUndo.close()">Yes</button>
+    </modal-footer>
+</modal>

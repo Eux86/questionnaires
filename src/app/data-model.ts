@@ -45,3 +45,17 @@ export class FileModel extends GeneralTable {
 }
 
 
+
+
+
+// Common
+export class KeyValuePair{
+  public Key:string;
+  public Value:string;
+
+  constructor(key:string, value:string){
+    this.Key = key;
+    this.Value = value;
+  }
+}
+
