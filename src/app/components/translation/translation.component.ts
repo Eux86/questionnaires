@@ -22,16 +22,7 @@ export class TranslationComponent implements OnInit {
   constructor(private translator: TranslationService) {
     this.translator.getAll().subscribe(
       (translations) => {
-        this.translations = translations;
-        for (let i = 0; i < this.translations.length; i++) {
-          let translation: any = this.translations[i];
-          if (translation.Changed) {
-            this.changed.push(translation);
-          }
-          if (translation.Deleted) {
-            this.deleted.push(translation);
-          }
-        }
+        this.reload(translations);
       },
       () => { }, //ERROR
       () => { } //FINALLY
@@ -48,7 +39,10 @@ export class TranslationComponent implements OnInit {
 
   private addNewTranslation(){
     let tempName = "key"+(this.translations.length+1);
-    this.translations.push(new KeyValuePair(tempName,"MISSING_KEY:"+tempName));
+    let newTranslation: any = new KeyValuePair(tempName,"MISSING_KEY:"+tempName);
+    newTranslation.Added=true;
+    this.translations.push(newTranslation);
+    this.added.push(newTranslation);
   }
 
   private onSelectionChange(translation:any){
@@ -60,8 +54,10 @@ export class TranslationComponent implements OnInit {
   }
 
   private onContentChange(translation:any){
-    translation.Changed = true;
-    this.changed.push(translation);
+    if (!translation.Added){
+      translation.Changed = true;
+      this.changed.push(translation);
+    }
   }
 
   private onDeleteSelected(){
@@ -72,17 +68,15 @@ export class TranslationComponent implements OnInit {
         t.Deleted = true;
       }
     }
-    // for (let i=0;i<this.deleted.length;i++){
-    //   var index = this.translations.indexOf(this.deleted[i], 0);
-    //   if (index > -1) {
-    //     this.translations.splice(index, 1);
-    //   }
-    // }
   }
 
   private onSave(){
     this.translator.crud(this.deleted,this.changed,this.added).subscribe(
-      translations=> {this.translations=translations},
+      translations=> {
+        this.translator.reload().subscribe(
+          translations=>this.reload(translations)
+        )
+      },
       err=>{
         alert("There was an error saving the changes: \n"+err);
       }, // Error
@@ -98,6 +92,25 @@ export class TranslationComponent implements OnInit {
       },
       ()=>{}
     )
+  }
+
+  private reload(translations: KeyValuePair[]) {
+    this.translations = translations;
+    this.deleted=[];
+    this.added=[];
+    this.changed=[];
+    for (let i = 0; i < this.translations.length; i++) {
+      let translation: any = this.translations[i];
+      if (translation.Changed) {
+        this.changed.push(translation);
+      }
+      if (translation.Deleted) {
+        this.deleted.push(translation);
+      }
+      if (translation.Added) {
+        this.added.push(translation);
+      }
+    }
   }
 
 

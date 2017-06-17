@@ -21,8 +21,8 @@
         </div>
       </div>
       <div class="col-sm-2" style="margin-bottom:2px">
-        <button type="button" class="btn btn-primary" aria-label="Save" (click)="modalSave.open()" [disabled]="changed.length==0 && deleted.length==0" >Save</button>
-        <button type="button" class="btn btn-danger" aria-label="Undo" (click)="modalUndo.open()" [disabled]="changed.length==0 && deleted.length==0" >Undo edits</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" (click)="modalSave.open()" [disabled]="changed.length==0 && deleted.length==0 && added.length==0" >Save</button>
+        <button type="button" class="btn btn-danger" aria-label="Undo" (click)="modalUndo.open()" [disabled]="changed.length==0 && deleted.length==0 && added.length==0" >Undo edits</button>
       </div>
       <table class="table">
         <tr>
@@ -39,7 +39,7 @@
             <!--<input class="form-control" type="text" [(ngModel)]="t.Key" />-->
           </td>
           <td *ngIf="!t.Deleted">
-            <input id="value{{i}}" class="form-control" type="text" [(ngModel)]="t.Value" (change)="onContentChange(t)" [ngClass]="{'changed':t.Changed}" />
+            <input id="value{{i}}" class="form-control" type="text" [(ngModel)]="t.Value" (change)="onContentChange(t)" [ngClass]="{'changed':t.Changed,'added':t.Added}" />
           </td>
         </tr>
       </table>
@@ -71,6 +71,14 @@
             </li>
           </ul>
         </div>
+        <div *ngIf="added.length>0">
+          <b>Added translations:</b>
+          <ul>
+            <li *ngFor="let q of added">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalSave.dismiss()">Cancel</button>
@@ -96,6 +104,14 @@
           <b>Changed translations:</b>
           <ul>
             <li *ngFor="let q of changed">
+              {{q.Key}} - {{q.Value}}
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="added.length>0">
+          <b>Added translations:</b>
+          <ul>
+            <li *ngFor="let q of added">
               {{q.Key}} - {{q.Value}}
             </li>
           </ul>

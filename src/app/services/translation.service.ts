@@ -35,7 +35,9 @@ export class TranslationService extends GeneralService {
           // If a sentence key is missing, i'll add it locally so it's easier to track missing key in the admin panel 
           if (!sentenceValue){
             sentenceValue = "MISSING_KEY:"+sentenceKey;
-            translations.push(new KeyValuePair(sentenceKey,sentenceValue));
+            let newTranslation: any = new KeyValuePair(sentenceKey,sentenceValue);
+            newTranslation.Added = true;
+            translations.push(newTranslation);
           }
           subscriber.next(sentenceValue);
         }
@@ -70,9 +72,8 @@ export class TranslationService extends GeneralService {
     const del$ = this.delete(deleted);
     const upd$ = this.update(changed);
     const add$ = this.add(added);
-    const reload$ = this.getAll();
 
-    return Observable.concat(del$,upd$,add$,reload$);    
+    return Observable.concat(del$,upd$,add$);    
   }
 
   public reload():Observable<KeyValuePair[]>{
