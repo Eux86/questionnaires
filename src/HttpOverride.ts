@@ -81,7 +81,7 @@ export class HttpOverride extends Http {
     }
 
     handleError(err:Response){
-        if (err.status==0){
+        if (err.status==0 || err.status==500){
             this.router.navigate(['/error']);
         } 
         if (err.status==401){

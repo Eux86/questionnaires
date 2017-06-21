@@ -1,4 +1,4 @@
-<h1 style="margin-bottom: 30px">Questionnaire: <small>{{questionnaire.Description}}</small></h1>
+<h1 style="margin-bottom: 30px">{{ "Quest_View_Title" | translate:"Questionnaire:" | async }}<small>{{questionnaire.Description}}</small></h1>
 <div class="container" style="margin-bottom: 100px;">
     <div class="row" *ngFor="let section of questionnaire.Sections; let s = index">
         <div class="col-sm-12" >
@@ -42,7 +42,7 @@
     </div>
     <div *ngIf="!isShowingResults" class="row" style="margin-top: 30px;">
         <div class="center-block text-center" >
-            <button class="btn btn-primary glyphicon glyphicon-ok" (click)="checkAnswers(questionnaire)"> Submit</button>
+            <button class="btn btn-primary glyphicon glyphicon-ok" (click)="checkAnswers(questionnaire)"> {{ "Quest_View_Submit_Button" | translate:"Sumbit" | async }}</button>
         </div>
     </div>
     <div *ngIf="isShowingResults" class="row">
@@ -50,14 +50,14 @@
         <div class="col-sm-8">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Questionnaire Report</h3>
+                    <h3 class="panel-title">{{ "Quest_View_Report_Title" | translate:"Questionnaire Report" | async }}</h3>
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <span class="badge">{{questionnaire.Score}}%</span>
-                            Total Score </li>
-                        <li class="list-group-item">Sections Score:</li>
+                            {{ "Quest_View_Score_Total" | translate:"Total Score::" | async }} </li>
+                        <li class="list-group-item">{{ "Quest_View_Score_Sections" | translate:"Sections Score:" | async }}</li>
                         <li *ngFor="let section of questionnaire.Sections;let i=index" class="list-group-item">
                             <span class="badge">{{section.Score}}%</span>
                             {{section.Description}}

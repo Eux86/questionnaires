@@ -43,6 +43,11 @@ export class FileModel extends GeneralTable {
 	Name: string;
 	Path: string;
 }
+export class Language extends GeneralTable {
+	Id: number;
+	Name: string;
+	Active: boolean;
+}
 
 
 

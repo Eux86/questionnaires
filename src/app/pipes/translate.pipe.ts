@@ -8,8 +8,8 @@ export class TranslatePipe implements PipeTransform {
 
   constructor(private translator:TranslationService){}
 
-  transform(value: string): any {
-    return this.translator.translate(value);
+  transform(value: string, defaultValue: string): any {
+    return this.translator.translate(value, defaultValue);
   }
 
 }

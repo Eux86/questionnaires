@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { KeyValuePair} from '../../data-model'
+import { KeyValuePair,Language} from '../../data-model'
 import { TranslationService} from '../../services/translation.service';
+import { LanguagesService } from '../../services/languages.service';
 
 @Component({
   selector: 'app-translation',
@@ -9,35 +10,50 @@ import { TranslationService} from '../../services/translation.service';
 })
 export class TranslationComponent implements OnInit {
 
-  private selectedLanguage:string = "";
-  private languages: string[];
-  private translations: KeyValuePair[];
+  public selectedLanguage:Language;
+  public languages: Language[];
+  public translations: KeyValuePair[];
 
 
-  private deleted: KeyValuePair[] = [];
-  private changed: KeyValuePair[] = [];
-  private added: KeyValuePair[] = [];
-  private selectedTranslationsNumber:number= 0;
+  public deleted: KeyValuePair[] = [];
+  public changed: KeyValuePair[] = [];
+  public added: KeyValuePair[] = [];
+  public selectedTranslationsNumber:number= 0;
 
-  constructor(private translator: TranslationService) {
-    this.translator.getAll().subscribe(
-      (translations) => {
-        this.reload(translations);
-      },
-      () => { }, //ERROR
-      () => { } //FINALLY
-    );
+  public newLanguageName: string = "";
 
-    // should be loaded from api
-    this.languages = ["default", "example1"];
-    this.selectedLanguage = "default";
+  constructor(private translatorService: TranslationService,private languagesService: LanguagesService) {
+    this.loadTranslations();
+    this.loadLanguages();
     // -------------
   }
 
   ngOnInit() {
   }
 
-  private addNewTranslation(){
+  public loadTranslations(){
+    this.translatorService.getAll().subscribe(
+      (translations) => {
+        this.reload(translations);
+      },
+      () => { }, //ERROR
+      () => { } //FINALLY
+    );
+  }
+  public loadLanguages(){
+    this.languagesService.getAll().subscribe(
+      languages=>{
+        this.languages = languages;
+        for (let i=0;i<this.languages.length;i++){
+          if (this.languages[i].Active){
+            this.selectedLanguage=this.languages[i];
+          }
+        }
+      }
+    )
+  }
+
+  public addNewTranslation(){
     let tempName = "key"+(this.translations.length+1);
     let newTranslation: any = new KeyValuePair(tempName,"MISSING_KEY:"+tempName);
     newTranslation.Added=true;
@@ -45,7 +61,7 @@ export class TranslationComponent implements OnInit {
     this.added.push(newTranslation);
   }
 
-  private onSelectionChange(translation:any){
+  public onSelectionChange(translation:any){
     if (translation.Selected)
       this.selectedTranslationsNumber+=1;
     else 
@@ -53,14 +69,14 @@ export class TranslationComponent implements OnInit {
     console.log(this.selectedTranslationsNumber);
   }
 
-  private onContentChange(translation:any){
+  public onContentChange(translation:any){
     if (!translation.Added){
       translation.Changed = true;
       this.changed.push(translation);
     }
   }
 
-  private onDeleteSelected(){
+  public onDeleteSelected(){
     for (let i=0;i<this.translations.length;i++){
       let t:any=this.translations[i];
       if (t.Selected){
@@ -70,10 +86,14 @@ export class TranslationComponent implements OnInit {
     }
   }
 
-  private onSave(){
-    this.translator.crud(this.deleted,this.changed,this.added).subscribe(
+  public onSave(){
+    for (let i=0;i<this.added.length;i++){
+      let translation:any=this.added[i];
+      translation.languageId=this.selectedLanguage.Id;
+    }
+    this.translatorService.crud(this.deleted,this.changed,this.added).subscribe(
       translations=> {
-        this.translator.reload().subscribe(
+        this.translatorService.reload().subscribe(
           translations=>this.reload(translations)
         )
       },
@@ -84,8 +104,8 @@ export class TranslationComponent implements OnInit {
     )
   }
 
-  private onUndo(){
-    this.translator.reload().subscribe(
+  public onUndo(){
+    this.translatorService.reload().subscribe(
       translations => this.translations=translations,
       err=>{
         alert("There was en error reloading the translations: \n"+err);
@@ -94,7 +114,76 @@ export class TranslationComponent implements OnInit {
     )
   }
 
+  public onActivateLanguage(){
+    this.languagesService.SetActive(this.selectedLanguage).subscribe(
+      activated=>{
+        this.translatorService.reload().subscribe(
+          (translations) => {
+            this.reload(translations);
+          },
+          () => { }, //ERROR
+          () => { } //FINALLY
+        );
+        this.loadTranslations();
+      },
+      ()=>{},
+      ()=>{}
+    );
+  }
+
+  public onAddLanguage(){
+    let newLanguage:Language = new Language();
+    newLanguage.Name = this.newLanguageName;
+    this.languagesService.Add(newLanguage).subscribe(
+      added=>{
+        this.languages.push(added);
+        let selected:Language;
+        for (let i=0; i<this.languages.length;i++){
+          if (this.languages[i].Id == added.Id) selected=this.languages[i];
+        }
+        this.selectedLanguage = selected;
+      },
+      ()=>{},
+      ()=>{}
+    );
+  }
+  
+  public onDeleteLanguage(){
+    this.languagesService.Delete(this.selectedLanguage).subscribe(
+      deleted=>{
+        var index = -1;
+        for (let i=0;i<this.languages.length;i++){
+          if (this.languages[i].Id == deleted.Id){
+            index = i;
+          }
+        }
+        if (index > -1) {
+            this.languages.splice(index, 1);
+        }
+        let active:Language;
+        for (let i=0; i<this.languages.length;i++){
+          if (this.languages[i].Active) active=this.languages[i];
+        }
+        this.selectedLanguage = active;
+      },
+      ()=>{},
+      ()=>{}
+    );
+  }
+
+  public onSelectedLanguageChange():void{
+    this.translatorService.getAllLang(this.selectedLanguage.Id).subscribe(
+      translations=>
+      {
+        this.translations = translations;
+      },
+      ()=>{},
+      ()=>{}
+    )
+  }
+
   private reload(translations: KeyValuePair[]) {
+    if (translations===null) translations=[];
     this.translations = translations;
     this.deleted=[];
     this.added=[];
@@ -112,6 +201,7 @@ export class TranslationComponent implements OnInit {
       }
     }
   }
+  
 
 
 }

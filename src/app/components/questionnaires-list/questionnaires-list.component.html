@@ -1,4 +1,4 @@
-<h1 style="margin-bottom:30px">{{ "Questionnaires_Title" | translate | async }}</h1>
+<h1 style="margin-bottom:30px">{{ "Quest_List_Title" | translate:"Questionnaires" | async }}</h1>
 <div class="container">
     <div class="row">
         <div  class="col-sm-6">
@@ -14,7 +14,7 @@
         <div class="col-sm-6">
             
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" 
+                <input type="text" class="form-control" placeholder='{{ "Quest_List_Search_Placeholder" | translate:"Search" | async }}'
                     (keyup.enter)="confirmSearch()"
                     (keyup)="onChangeSearchQuery()"
                     [(ngModel)]="searchQuery">
@@ -34,10 +34,10 @@
             <table class="table">
                 <tr>
                     <th>
-                Description
+                {{ "Quest_List_Table_Description" | translate:"Description" | async }}
             </th>
             <th>
-                Date created
+                {{ "Quest_List_Table_Date_Created" | translate:"Date Created" | async }}
             </th>
             </tr>
                 <tr *ngFor="let questionnaire of questionnaires">
@@ -101,13 +101,14 @@ END;
 
 <modal #modalDelete (onClose)="confirmDelete()">
     <modal-header [show-close]="true">
-        <h4 class="modal-title">Deleting:</h4>
+        <h4 class="modal-title">{{ "Quest_List_Delete_Popup_Title" | translate:"Deleting" | async }}</h4>
     </modal-header>
     <modal-body>
-        Are you sure you want to delete selected questionnaires?<br/> 
-        <p *ngFor="let q of selected">
-            ({{q.Id}}) {{q.Description}}
-        </p>
+        {{ "Quest_List_Delete_Popup_Are_you_sure" | translate:"Are you sure you want to delete selected questionnaires?" | async }}
+        <br/> 
+            <ul>
+                <li *ngFor="let q of selected"> {{q.Description}}</li>
+            </ul>
     </modal-body>
     <modal-footer>
         <button type="button" class="btn btn-default" autofocus data-dismiss="modal" (click)="modalDelete.dismiss()">Cancel</button>

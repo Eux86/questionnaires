@@ -28,6 +28,7 @@ import { AuthenticationService } from 'app/services/authentication.service';
 import { FileUploadService } from 'app/services/file-upload.service';
 import { SpinnerService } from 'app/services/spinner.service';
 import { TranslationService } from 'app/services/translation.service';
+import { LanguagesService } from 'app/services/languages.service';
 
 // Override HTTP to show spinner when waiting for api response
 import { HttpOverride } from 'HttpOverride';
@@ -73,6 +74,7 @@ import { TranslationComponent } from './components/translation/translation.compo
     FileUploadService,
     SpinnerService,
     TranslationService,
+    LanguagesService,
     { 
       provide: HttpOverride,
       useFactory: httpFactory,

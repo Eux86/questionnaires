@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service'
-import { KeyValuePair } from '../data-model';
+import { KeyValuePair,Language } from '../data-model';
 
 import { Observable } from 'rxjs/Observable';
 import { Headers, Response } from '@angular/http'
@@ -20,21 +20,27 @@ export class TranslationService extends GeneralService {
         super();
   }
 
-  public translate(sentenceKey:string):Observable<string>{
+  public translate(sentenceKey:string, defaultvalue:string = null):Observable<string>{
     return new Observable(subscriber=>{
       this.loadTranslations().subscribe(
         (translations:KeyValuePair[])=>{
           let sentenceValue:string;
-          for (let i=0;i<translations.length;i++){
-            let t: KeyValuePair = translations[i];
-            if (t.Key==sentenceKey){
-              sentenceValue = t.Value;
+          if (translations!==null){
+            for (let i=0;i<translations.length;i++){
+              let t: KeyValuePair = translations[i];
+              if (t.Key==sentenceKey){
+                sentenceValue = t.Value;
+              }
             }
-          }
+          } 
 
           // If a sentence key is missing, i'll add it locally so it's easier to track missing key in the admin panel 
           if (!sentenceValue){
-            sentenceValue = "MISSING_KEY:"+sentenceKey;
+            if (defaultvalue!==null){
+              sentenceValue = defaultvalue;
+            } else {
+              sentenceValue = "MISSING_KEY:"+sentenceKey;
+            }
             let newTranslation: any = new KeyValuePair(sentenceKey,sentenceValue);
             newTranslation.Added = true;
             translations.push(newTranslation);
@@ -48,6 +54,10 @@ export class TranslationService extends GeneralService {
 
   public getAll():Observable<KeyValuePair[]>{
     return this.loadTranslations();
+  }
+
+  public getAllLang(languageId:number):Observable<KeyValuePair[]>{
+    return this.loadTranslationsFromServer(languageId);
   }
 
   public delete(translations:KeyValuePair[]):Observable<KeyValuePair[]>{
@@ -83,10 +93,10 @@ export class TranslationService extends GeneralService {
     return this.loadTranslations();
   }
 
-
-
-  private loadTranslations(): Observable<KeyValuePair[]> {
-    return new Observable(subscriber => {
+  private loadingObservable: Observable<KeyValuePair[]>;
+  private loadTranslations(languageId:number = null): Observable<KeyValuePair[]> {
+    if (this.loadingObservable!=null) return this.loadingObservable;
+    this.loadingObservable = new Observable(subscriber => {
       if (!this.translations || this.translations==undefined) {
         // I never loaded translation in this session
         let localTranslations = localStorage.getItem("translations")
@@ -98,8 +108,9 @@ export class TranslationService extends GeneralService {
             let translationVersion: Date = new Date(localStorage.getItem("translationsVersion"));
             if (lastUpdatedOnServer.getTime() > translationVersion.getTime()) {
               // Local translations outdated, will load updated version from server
-              this.loadTranslationsFromServer().subscribe(
+              this.loadTranslationsFromServer(languageId).subscribe(
                 translations => {
+                  if (translations===null) translations=[];
                   localStorage.setItem("translations", JSON.stringify(translations));
                   localStorage.setItem("translationsVersion", lastUpdatedOnServer + "");
                   this.translations = translations;
@@ -109,27 +120,38 @@ export class TranslationService extends GeneralService {
                 },
                 () => {
                   subscriber.next(this.translations);
+                  subscriber.complete();
                 }
               );
             } else {
               // Local translations still valid
               let localTranslations = this.loadTranslationsFromLocalStorage();
               subscriber.next(localTranslations)
+              subscriber.complete();
             }
           },
           (error) => { subscriber.error = error },
-          () => { }
+          () => { this.loadingObservable=null; }
           );
       } else {
         // Already loaded the translations, will reuse the loaded ones
         subscriber.next(this.translations);
+        subscriber.complete();
+        this.loadingObservable=null;
       }
-    });
+    }).share();
+    return this.loadingObservable;
   }
 
-  private loadTranslationsFromServer():Observable<KeyValuePair[]> {
+  private loadTranslationsFromServer(languageId:number):Observable<KeyValuePair[]> {
+    let method="";
+    if (languageId){
+      method = "/GetAllLang?languageId="+languageId;
+    } else {
+      method = "/GetAll";
+    }
     return this.http
-        .get(this.getBaseUrl() + this.endpoint + "/GetAll", { headers: this.headers })
+        .get(this.getBaseUrl() + this.endpoint + method, { headers: this.headers })
         .map((res: Response) => res.json());
   }
 
