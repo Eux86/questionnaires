@@ -48,19 +48,15 @@ export class Language extends GeneralTable {
 	Name: string;
 	Active: boolean;
 }
+export class Translation{
+	public Id:string;
+	public Key:string;
+	public Value:string;
+	public LatestUpdate:Date;
 
-
-
-
-
-// Common
-export class KeyValuePair{
-  public Key:string;
-  public Value:string;
-
-  constructor(key:string, value:string){
-    this.Key = key;
-    this.Value = value;
-  }
+	constructor(key:string, value:string){
+		this.Key = key;
+		this.Value = value;
+	}
 }
 

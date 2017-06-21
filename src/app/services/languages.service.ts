@@ -51,8 +51,10 @@ export class LanguagesService extends GeneralService {
             for (let i=0; i<languages.length;i++){
               if (languages[i].Active){
                 active=languages[i];
+                break;
               }
             }
+            this.activeLanguage=active;
             subscriber.next(this.activeLanguage);
             subscriber.complete();
             this.getActiveObservable=null;

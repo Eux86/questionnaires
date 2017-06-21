@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service'
-import { KeyValuePair,Language } from '../data-model';
+import { Translation,Language } from '../data-model';
 
 import { Observable } from 'rxjs/Observable';
 import { Headers, Response } from '@angular/http'
 import { HttpOverride } from './../../HttpOverride';
+
+import { LanguagesService } from './languages.service'
 
 
 @Injectable()
@@ -14,20 +16,21 @@ export class TranslationService extends GeneralService {
   private headers = new Headers({'Content-Type': 'application/json',
                                     'Authorization': "Bearer "+localStorage.getItem("token")});
 
-  private translations: KeyValuePair[];
+  public translations: Translation[];
+  public missing: Translation[] = [];
 
-  constructor (private http: HttpOverride) {
+  constructor (private http: HttpOverride,private languagesService:LanguagesService) {
         super();
   }
 
   public translate(sentenceKey:string, defaultvalue:string = null):Observable<string>{
     return new Observable(subscriber=>{
       this.loadTranslations().subscribe(
-        (translations:KeyValuePair[])=>{
+        (done)=>{
           let sentenceValue:string;
-          if (translations!==null){
-            for (let i=0;i<translations.length;i++){
-              let t: KeyValuePair = translations[i];
+          if (this.translations!==null){
+            for (let i=0;i<this.translations.length;i++){
+              let t: Translation = this.translations[i];
               if (t.Key==sentenceKey){
                 sentenceValue = t.Value;
               }
@@ -41,9 +44,18 @@ export class TranslationService extends GeneralService {
             } else {
               sentenceValue = "MISSING_KEY:"+sentenceKey;
             }
-            let newTranslation: any = new KeyValuePair(sentenceKey,sentenceValue);
+            let newTranslation: any = new Translation(sentenceKey,sentenceValue);
             newTranslation.Added = true;
-            translations.push(newTranslation);
+            this.missing.push(newTranslation);
+          } else {
+            let index = -1;
+            for (let i = 0; i<this.missing.length;i++){
+              if (this.missing[i].Key==sentenceKey){
+                index = i;
+                break;
+              }
+            }
+            this.missing.splice(index,1);
           }
           subscriber.next(sentenceValue);
         }
@@ -52,33 +64,35 @@ export class TranslationService extends GeneralService {
     
   }
 
-  public getAll():Observable<KeyValuePair[]>{
-    return this.loadTranslations();
+  public getAll():Observable<Translation[]>{
+    return this.http.get(this.getBaseUrl() + this.endpoint + "/GetAll", { headers: this.headers })
+            .map((res: Response) => res.json());
   }
 
-  public getAllLang(languageId:number):Observable<KeyValuePair[]>{
-    return this.loadTranslationsFromServer(languageId);
+  public getAllLang(languageId:number):Observable<Translation[]>{
+    return this.http.get(this.getBaseUrl() + this.endpoint + "/GetAllLang?languageId="+languageId, { headers: this.headers })
+            .map((res: Response) => res.json());
   }
 
-  public delete(translations:KeyValuePair[]):Observable<KeyValuePair[]>{
+  public delete(translations:Translation[]):Observable<Translation[]>{
     return this.http
         .post(this.getBaseUrl()+this.endpoint+"/DeleteList", JSON.stringify(translations), {headers: this.headers})
         .map((res:Response)=>res.json());
   }
 
-  public update(translations:KeyValuePair[]):Observable<KeyValuePair[]>{
+  public update(translations:Translation[]):Observable<Translation[]>{
     return this.http
         .post(this.getBaseUrl()+this.endpoint+"/UpdateList", JSON.stringify(translations), {headers: this.headers})
         .map((res:Response)=>res.json());
   }
 
-  public add(translations:KeyValuePair[]):Observable<KeyValuePair[]>{
+  public add(translations:Translation[]):Observable<Translation[]>{
     return this.http
         .post(this.getBaseUrl()+this.endpoint+"/AddList", JSON.stringify(translations), {headers: this.headers})
         .map((res:Response)=>res.json());
   }
 
-  public crud(deleted:KeyValuePair[],changed:KeyValuePair[], added:KeyValuePair[]):Observable<KeyValuePair[]>{
+  public crud(deleted:Translation[],changed:Translation[], added:Translation[]):Observable<Translation[]>{
     const del$ = this.delete(deleted);
     const upd$ = this.update(changed);
     const add$ = this.add(added);
@@ -86,64 +100,68 @@ export class TranslationService extends GeneralService {
     return Observable.concat(del$,upd$,add$);    
   }
 
-  public reload():Observable<KeyValuePair[]>{
+  public reload():Observable<Translation[]>{
     this.translations = null;
     localStorage.removeItem("translations");
     localStorage.removeItem("translationsVersion");
+    localStorage.removeItem("languageId");
     return this.loadTranslations();
   }
 
-  private loadingObservable: Observable<KeyValuePair[]>;
-  private loadTranslations(languageId:number = null): Observable<KeyValuePair[]> {
+  private loadingObservable: Observable<Translation[]>;
+  private loadTranslations(languageId:number = null): Observable<Translation[]> {
     if (this.loadingObservable!=null) return this.loadingObservable;
     this.loadingObservable = new Observable(subscriber => {
-      if (!this.translations || this.translations==undefined) {
-        // I never loaded translation in this session
-        let localTranslations = localStorage.getItem("translations")
-        // Translations exist in the local storage, i'll check if it is the latest version from the server
-        this.http.get(this.getBaseUrl() + this.endpoint + "/GetVersion", { headers: this.headers })
-          .map((res: Response) => res.json()).subscribe(
-          v => {
-            let lastUpdatedOnServer = new Date(v);
-            let translationVersion: Date = new Date(localStorage.getItem("translationsVersion"));
-            if (lastUpdatedOnServer.getTime() > translationVersion.getTime()) {
-              // Local translations outdated, will load updated version from server
-              this.loadTranslationsFromServer(languageId).subscribe(
-                translations => {
-                  if (translations===null) translations=[];
-                  localStorage.setItem("translations", JSON.stringify(translations));
-                  localStorage.setItem("translationsVersion", lastUpdatedOnServer + "");
-                  this.translations = translations;
-                },
-                () => {
-                  alert("Couldn't load translations");
-                },
-                () => {
-                  subscriber.next(this.translations);
-                  subscriber.complete();
-                }
-              );
-            } else {
-              // Local translations still valid
-              let localTranslations = this.loadTranslationsFromLocalStorage();
-              subscriber.next(localTranslations)
-              subscriber.complete();
-            }
-          },
-          (error) => { subscriber.error = error },
-          () => { this.loadingObservable=null; }
-          );
-      } else {
-        // Already loaded the translations, will reuse the loaded ones
+
+      // Complete if I already have translations loaded
+      if (this.translations!=undefined) {
         subscriber.next(this.translations);
         subscriber.complete();
-        this.loadingObservable=null;
+        this.loadingObservable = null;
+        
+      } else {
+        // Get current active language and latest version
+        this.languagesService.GetActive().subscribe(
+          active=>{
+            let localLanguageId = localStorage.getItem("languageId");
+
+            // Language mismatch: need to reload everything
+            if (active.Id!= +localLanguageId){    
+              this.refreshLocalStorageFromServer(active.Id).subscribe(
+                x=>{
+                  subscriber.next(this.translations);
+                  subscriber.complete();
+                  this.loadingObservable = null;
+                }
+              )
+            } else { 
+              
+              // Language is OK, gonna check latest update version
+              this.http.get(this.getBaseUrl() + this.endpoint + "/GetVersion", { headers: this.headers })
+              .map((res: Response) => res.json()).subscribe(
+                latestVersionString => {
+                  let latestVersion = new Date(latestVersionString);
+                  let localVersion: Date = new Date(localStorage.getItem("translationsVersion"));
+                  if (latestVersion.getTime() > localVersion.getTime()) {
+                    this.refreshLocalStorageFromServer(active.Id).subscribe(
+                      x=>{
+                        subscriber.next(this.translations);
+                        subscriber.complete();
+                        this.loadingObservable = null;
+                      }
+                    )
+                  }
+                }
+              );
+            }
+          }
+        )
       }
     }).share();
     return this.loadingObservable;
   }
 
-  private loadTranslationsFromServer(languageId:number):Observable<KeyValuePair[]> {
+  private loadTranslationsFromServer(languageId:number):Observable<Translation[]> {
     let method="";
     if (languageId){
       method = "/GetAllLang?languageId="+languageId;
@@ -155,10 +173,41 @@ export class TranslationService extends GeneralService {
         .map((res: Response) => res.json());
   }
 
-  private loadTranslationsFromLocalStorage():KeyValuePair[] {
+  private loadTranslationsFromLocalStorage():Translation[] {
     let localTranslations = localStorage.getItem("translations");
     this.translations = JSON.parse(localTranslations);
     return JSON.parse(localTranslations);
+  }
+
+  private refreshingLocalStorageObservable:Observable<null>;
+  private refreshLocalStorageFromServer(languageId:number):Observable<null>{
+    if (this.refreshingLocalStorageObservable!=null) return this.refreshingLocalStorageObservable;
+    this.refreshingLocalStorageObservable = new Observable<null>(subscriber=>
+    {
+      this.loadTranslationsFromServer(languageId).subscribe(
+        translations => {
+          if (translations===null) translations=[];
+          let latestVersion:Date = new Date(0);
+          for (let i=0;i<translations.length;i++){
+            if (latestVersion.getTime()<new Date(translations[i].LatestUpdate).getTime()){
+              latestVersion = new Date(translations[i].LatestUpdate);
+            }
+          }
+          localStorage.setItem("translations", JSON.stringify(translations));
+          localStorage.setItem("translationsVersion", latestVersion + "");
+          localStorage.setItem("languageId", languageId+"");
+          this.translations = translations;
+        },
+        () => {
+          alert("Couldn't load translations");
+        },
+        () => {
+          subscriber.next();
+          subscriber.complete();
+        }
+      );
+    }).share();
+    return this.refreshingLocalStorageObservable;
   }
 
 
