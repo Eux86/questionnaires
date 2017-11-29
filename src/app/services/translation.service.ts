@@ -108,7 +108,7 @@ export class TranslationService extends GeneralService {
     return this.loadTranslations();
   }
 
-  private loadingObservable: Observable<Translation[]>;
+  private loadingObservable: Observable<any>;
   private loadTranslations(languageId:number = null): Observable<Translation[]> {
     if (this.loadingObservable!=null) return this.loadingObservable;
     this.loadingObservable = new Observable(subscriber => {

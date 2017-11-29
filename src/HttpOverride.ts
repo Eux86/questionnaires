@@ -11,7 +11,7 @@ import { Router} from '@angular/router';
 
 @Injectable()
 export class HttpOverride extends Http {
-    public pendingObservable: Observable<boolean>;
+    public pendingObservable: Observable<any>;
     
     private pendingObserver: Subscriber<{}>;
     private pending:number = 0;
@@ -38,7 +38,7 @@ export class HttpOverride extends Http {
         return this.intercept(super.post(url, body,options));        
     }
 
-    intercept(httpObs: Observable<Response>): Observable<Response> {   
+    intercept(httpObs: Observable<Response>): Observable<any> {   
         return new Observable((subscriber)=>{
             this.addPending();
             const sub = httpObs.subscribe(

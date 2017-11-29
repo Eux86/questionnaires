@@ -40,7 +40,7 @@ export class LanguagesService extends GeneralService {
           .map((res: Response) => res.json());
   }
 
-  public getActiveObservable:Observable<Language>;
+  public getActiveObservable:Observable<any>;
   public GetActive():Observable<Language>{
     if (this.getActiveObservable) return this.getActiveObservable;
     this.getActiveObservable = new Observable(subscriber=>{

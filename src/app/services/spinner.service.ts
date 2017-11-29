@@ -12,7 +12,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class SpinnerService extends GeneralService {
     private pendingObserver: Subscriber<{}>;
-    public pendingObservable: Observable<boolean>;
+    public pendingObservable: Observable<any>;
 
     
     constructor (private httpOverride: HttpOverride) {

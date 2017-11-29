@@ -12,7 +12,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class AuthenticationService extends GeneralService   {
     private isAdminObserver: Subscriber<{}>;
-    public isAdminObservable: Observable<boolean>;
+    public isAdminObservable: Observable<any>;
 
     endpoint: string = "/auth2/token";
     private headers = new Headers({
